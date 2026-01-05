@@ -1,0 +1,38 @@
+# ======================
+# GLOBAL GITIGNORE
+# ======================
+
+# Environment files (global)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# Temp files
+.tmp/
+.temp/
+
+# Runtime / PID
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage (global tool)
+coverage/
+.nyc_output/
+
+# Build output (generic)
+dist/
+build/
+out/

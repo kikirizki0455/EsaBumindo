@@ -1,0 +1,28 @@
+# ======================
+# NESTJS / BACKEND
+# ======================
+
+# Dependencies
+node_modules/
+
+# Compiled output
+dist/
+build/
+
+# Logs
+logs/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Tests
+coverage/
+
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Temp
+.tmp/
+.temp/
