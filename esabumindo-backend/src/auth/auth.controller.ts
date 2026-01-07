@@ -1,10 +1,29 @@
-import { Post, Body, Controller, Res } from '@nestjs/common';
+import {
+  Post,
+  Body,
+  Controller,
+  Res,
+  Delete,
+  UseGuards,
+  Param,
+  ParseIntPipe,
+  Get,
+  Req,
+} from '@nestjs/common';
+import { JwtAuthGuard } from './jwt-auth.guard';
 import { AuthService } from './auth.service';
 import type { Response } from 'express';
+import { Role } from '@prisma/client';
+import { UserService } from 'src/user/user.service';
+import { Roles } from './decorator/roles.decorator';
+import { RolesGuard } from './guard/roles.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+  ) {}
 
   @Post('register')
   register(
@@ -13,6 +32,7 @@ export class AuthController {
       email: string;
       password: string;
       name: string;
+      role: Role;
     },
   ) {
     return this.authService.register(body);
@@ -31,7 +51,34 @@ export class AuthController {
       sameSite: 'lax',
       maxAge: 24 * 60 * 60 * 1000,
     });
+    return {
+      message: 'login berhasil',
+      data: {
+        id: result.user.id,
+        email: result.user.email,
+        name: result.user.name,
+      },
+    };
+  }
 
-    return { message: 'Login berhasil' };
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('access_token');
+    return {
+      message: 'berhasil keluar',
+    };
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  getProfile(@Req() req) {
+    return this.authService.findById(req.user.id);
+  }
+
+  @Delete(':id')
+  @Roles(Role.DIREKTUR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async deleteUser(@Param('id', ParseIntPipe) id: number, @Req() req) {
+    return this.authService.deleteUser(id, req.user);
   }
 }

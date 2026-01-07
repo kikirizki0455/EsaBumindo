@@ -5,11 +5,11 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
-import { AdminModule } from './admin/admin.module';
+import { UserModule } from './user/user.module';
 @Module({
   imports: [
     PrismaModule,
-    AdminModule,
+    UserModule,
     AuthModule,
     ConfigModule.forRoot({
       isGlobal: true, // supaya bisa di pakai di mana saja
