@@ -5,9 +5,9 @@ import Footer from "@/pages/footer";
 export default function App({ Component, pageProps }) {
   return (
     <>
-      <Navigation />
+      {/* <Navigation /> */}
       <Component {...pageProps} />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
