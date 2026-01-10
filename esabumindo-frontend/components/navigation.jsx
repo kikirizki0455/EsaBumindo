@@ -71,7 +71,7 @@ const Navigation = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 md:h-20">
             {/* Logo */}
-            <div className="flex-shrink-0">
+            <div className="shrink">
               <a href="#home" className="flex items-center gap-2 group">
                 <Image
                   src="/asset/image/esabumindo.svg"
@@ -105,7 +105,7 @@ const Navigation = () => {
                         className="transition-transform duration-200 group-hover:rotate-180"
                       />
                     )}
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#060771] to-[#ff4136] group-hover:w-full transition-all duration-300"></span>
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-[#060771] to-[#ff4136] group-hover:w-full transition-all duration-300"></span>
                   </a>
 
                   {/* Dropdown Menu */}
@@ -213,7 +213,7 @@ const Navigation = () => {
             {/* Mobile CTA Button */}
             <a
               href="#consultation"
-              className="block mt-4 px-4 py-3 bg-gradient-to-r from-[#060771] to-[#ff4136] text-white font-medium text-center rounded-lg hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300"
+              className="block mt-4 px-4 py-3 bg-linear-to-r from-[#060771] to-[#ff4136] text-white font-medium text-center rounded-lg hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300"
               onClick={() => setIsOpen(false)}
             >
               Konsultasi Gratis
