@@ -1,6 +1,7 @@
 {
   "name": "esabumindo",
   "version": "0.1.0",
+  "description": "Admin panel untuk management artikel, karyawan, dan keuangan Esabumindo Chemical Adhesive",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,6 +10,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@prisma/client": "^7.2.0",
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.16",
@@ -27,6 +29,7 @@
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^0.555.0",
     "next": "^16.0.5",
+    "prisma": "^7.2.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.70.0",
