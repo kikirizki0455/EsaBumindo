@@ -31,13 +31,13 @@ const menuItems = [
   {
     title: "Karyawan",
     icon: Users,
-    href: "/admin/karyawan",
+    href: "/admin/employee",
     description: "Kelola data & absensi karyawan",
   },
   {
     title: "Keuangan",
     icon: DollarSign,
-    href: "/admin/keuangan",
+    href: "/admin/finance",
     description: "Kelola gaji & keuangan karyawan",
   },
 ];
@@ -48,6 +48,7 @@ export default function AdminLayout({ children }) {
 
   const handleLogout = () => {
     // Handle logout logic
+    
     localStorage.removeItem("token");
     router.push("/login");
   };

@@ -1,7 +1,7 @@
 // pages/admin/karyawan/index.jsx
 
 import { useState, useEffect } from "react";
-import AdminLayout from "@/components/layout/AdminLayout";
+import AdminLayout from "@/components/layout/admin-layout";
 import { Button } from "@/components/ui/button";
 import {
   Plus,
@@ -17,6 +17,7 @@ import {
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { useRouter } from "next/router";
 import axios from "axios";
+import api from "@/lib/axios";
 
 export default function Employee() {
   const router = useRouter();
@@ -32,10 +33,10 @@ export default function Employee() {
   const fetchEmployees = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("/api/employees");
+      const response = await api.get("/employees");
       setEmployees(response.data);
     } catch (error) {
-      console.error("Error fetching employees:", error);
+      console.log("error fetching Employee", error);
     } finally {
       setLoading(false);
     }
@@ -46,7 +47,7 @@ export default function Employee() {
       return;
 
     try {
-      await axios.delete(`/api/employees/${id}`);
+      await api.delete(`/api/employees/${id}`);
       fetchEmployees();
     } catch (error) {
       console.error("Error deleting employee:", error);
@@ -82,7 +83,7 @@ export default function Employee() {
             </p>
           </div>
           <Button
-            onClick={() => router.push("/admin/karyawan/tambah")}
+            onClick={() => router.push("/admin/employee/add-employee")}
             className="w-full sm:w-auto"
           >
             <Plus className="h-4 w-4 mr-2" />

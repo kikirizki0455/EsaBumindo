@@ -1,7 +1,7 @@
 // pages/admin/keuangan/index.jsx
 
 import { useState, useEffect } from "react";
-import AdminLayout from "@/components/layout/AdminLayout";
+import AdminLayout from "@/components/layout/admin-layout";
 import { Button } from "@/components/ui/button";
 import {
   DollarSign,
@@ -16,6 +16,7 @@ import {
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { useRouter } from "next/router";
 import axios from "axios";
+import api from "@/lib/axios";
 
 export default function FinancePage() {
   const router = useRouter();
@@ -32,7 +33,8 @@ export default function FinancePage() {
   const fetchSalaries = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("/api/salaries", {
+      const response = await api.get("/salaries", {
+        // ← GANTI
         params: { month: selectedMonth, year: selectedYear },
       });
       setSalaries(response.data);
@@ -55,7 +57,8 @@ export default function FinancePage() {
 
     try {
       setCalculating(true);
-      await axios.post("/api/salaries/calculate", {
+      await api.post("/salaries/calculate", {
+        // ← GANTI
         month: selectedMonth,
         year: selectedYear,
       });
@@ -73,7 +76,7 @@ export default function FinancePage() {
     if (!confirm("Tandai gaji ini sebagai sudah dibayar?")) return;
 
     try {
-      await axios.patch(`/api/salaries/${salaryId}/pay`);
+      await api.patch(`/salaries/${salaryId}/pay`); // ← GANTI
       fetchSalaries();
     } catch (error) {
       console.error("Error marking as paid:", error);

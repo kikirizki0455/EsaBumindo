@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import AdminLayout from "@/components/layout/AdminLayout";
+import AdminLayout from "@/components/layout/admin-layout";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Save, HelpCircle, DollarSign } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import axios from "axios";
+import api from "@/lib/axios";
 
 export default function AddEmployee() {
   const router = useRouter();
@@ -35,7 +36,7 @@ export default function AddEmployee() {
 
   const fetchEmployee = async () => {
     try {
-      const response = await axios.get(`/api/employees/${id}`);
+      const response = await api.get(`/api/employees/${id}`);
       const emp = response.data;
       setFormData({
         ...emp,
@@ -77,10 +78,10 @@ export default function AddEmployee() {
       };
 
       if (isEdit) {
-        await axios.put(`/api/employees/${id}`, dataToSubmit);
+        await api.put(`/api/employees/${id}`, dataToSubmit);
         alert("Data karyawan berhasil diperbarui!");
       } else {
-        await axios.post("/api/employees", dataToSubmit);
+        await api.post("/api/employees", dataToSubmit);
         alert("Karyawan berhasil ditambahkan!");
       }
 

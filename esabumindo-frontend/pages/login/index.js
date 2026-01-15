@@ -16,6 +16,7 @@ export default function Login() {
     if (!email || !password) return alert("Mohon isi semua data");
 
     setLoading(true);
+
     const res = await apiFetch("/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),

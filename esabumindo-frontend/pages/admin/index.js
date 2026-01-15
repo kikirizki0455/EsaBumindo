@@ -1,5 +1,6 @@
 // pages/admin/index.jsx
 
+
 import { useState, useEffect } from "react";
 import AdminLayout from "@/components/layout/admin-layout";
 import {
@@ -14,7 +15,7 @@ import {
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
+import api from "@/lib/axios";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -36,17 +37,20 @@ export default function DashboardPage() {
       setLoading(true);
 
       // Fetch all data in parallel
+      // GANTI DARI axios MENJADI api DAN HAPUS /api/ prefix
       const [articlesRes, employeesRes, attendancesRes, salariesRes] =
         await Promise.all([
-          axios.get("/api/articles"),
-          axios.get("/api/employees"),
-          axios.get("/api/attendances", {
+          api.get("/articles"), // ← GANTI INI (hapus /api/)
+          api.get("/employees"), // ← GANTI INI
+          api.get("/attendances", {
+            // ← GANTI INI
             params: {
               month: new Date().getMonth() + 1,
               year: new Date().getFullYear(),
             },
           }),
-          axios.get("/api/salaries", {
+          api.get("/salaries", {
+            // ← GANTI INI
             params: {
               month: new Date().getMonth() + 1,
               year: new Date().getFullYear(),
