@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role{
+  DIREKTUR
+  ADMIN
+  KARYAWAN
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role @default(KARYAWAN)
+  createdAt DateTime @default(now())
+}
+
+
+model Article {
+  id String @id @default (uuid())
+  title String
+  slug String @unique
+  content String @db.Text
+  excerpt String?
+  coverImage String?
+  author String 
+  status String @default("draft") 
+  publishedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([status])
+}
+
+model Employee{
+  id String @id @default(uuid())
+  employeeCode String @unique
+  name String 
+  email String
+  phone String?
+  position String
+  department String
+  shiftType String
+  hourlyRate Decimal @db.Decimal(10,2) 
+  joinDate DateTime
+  status String @default("active") 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  attendances Attendance[]
+  salaries Salary[]
+
+@@index([employeeCode])
+  @@index([status])
+}
+
+model Attendance{
+  id String @id @default(uuid())
+  employeeId String
+  employee Employee @relation(fields:[employeeId],references:[id], onDelete:Cascade)
+  date DateTime
+  checkIn DateTime?
+  checkOut DateTime?
+  shiftType String?
+  workHours Decimal? @db.Decimal(5, 2)
+  overtimeHours Decimal? @db.Decimal(5, 2)
+  status String @default("present")
+  notes String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([employeeId, date])
+  @@index([employeeId])
+  @@index([date])
+}
+
+model Salary{
+  id String @id @default(uuid())
+  employeeId String
+  employee Employee @relation(fields: [employeeId], references:[id], onDelete:Cascade)
+  month Int
+  year Int
+  basicSalary Decimal @db.Decimal(12,2)
+  overtimePay Decimal @db.Decimal(12,2) @default(0)
+  totalWorkHours Decimal @db.Decimal(8,2)
+  totalOverTimeHours Decimal @db.Decimal(8,2) @default(0)
+  totalDays Int
+  totalSalary Decimal @db.Decimal(12,2)
+  status String @default("pending")
+  paidAt DateTime?
+  notes String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([employeeId, month, year])
+  @@index([employeeId])
+  @@index([year, month])
+}
+
+model CompanySetting{
+  id String @id @default(uuid())
+  regularWorkHours Decimal @db.Decimal(5,2) @default(8)
+  nonShiftStartTime String @default("08:00")
+  nonShiftEndTime String @default("16:00")
+  shift1StartTime String @default("06:00")
+  shift1EndTime String @default("14:00")
+  shift2tStartTime String @default("14:00")
+  shift2EndTime String @default("22:00")
+  overtimeMultiplier Decimal @db.Decimal(3,2) @default(1.0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
