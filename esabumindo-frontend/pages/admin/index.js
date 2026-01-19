@@ -1,6 +1,5 @@
 // pages/admin/index.jsx
 
-
 import { useState, useEffect } from "react";
 import AdminLayout from "@/components/layout/admin-layout";
 import {

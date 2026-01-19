@@ -1,5 +1,7 @@
-import { Controller, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
@@ -13,6 +15,15 @@ import { SalariesModule } from './salaries/salaries.module';
 
 @Module({
   imports: [
+    // ⬇️ INI YANG PENTING
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'public'),
+    }),
+
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
     PrismaModule,
     UserModule,
     AuthModule,
@@ -20,11 +31,7 @@ import { SalariesModule } from './salaries/salaries.module';
     EmployeesModule,
     AttendancesModule,
     SalariesModule,
-    ConfigModule.forRoot({
-      isGlobal: true, // supaya bisa di pakai di mana saja
-    }),
   ],
-
   controllers: [AppController],
   providers: [AppService],
 })

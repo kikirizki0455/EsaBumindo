@@ -1,6 +1,6 @@
 // src/articles/dto/create-article.dto.ts
 
-import { IsString, IsNotEmpty, IsOptional, IsIn } from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsNotEmpty } from 'class-validator';
 
 export class CreateArticleDto {
   @IsString()
@@ -9,26 +9,21 @@ export class CreateArticleDto {
 
   @IsString()
   @IsNotEmpty()
-  slug: string;
-
-  @IsString()
-  @IsNotEmpty()
   content: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   excerpt?: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   coverImage?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  author: string;
-
-  @IsString()
-  @IsIn(['draft', 'published'])
   @IsOptional()
+  @IsString()
+  author?: string; // Akan diisi dari user yang login
+
+  @IsOptional()
+  @IsEnum(['draft', 'published'])
   status?: string;
 }

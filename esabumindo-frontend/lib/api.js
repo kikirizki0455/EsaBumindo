@@ -1,5 +1,5 @@
 export async function apiFetch(url, options = {}) {
-  const res = await fetch(`http://localhost:3001${url}`, {
+  const res = await fetch(`http://localhost:3001/api${url}`, {
     ...options,
     credentials: "include",
     headers: {
@@ -8,11 +8,9 @@ export async function apiFetch(url, options = {}) {
     },
   });
 
-  //global auth error
-  if (res.status === 401) {
-    if (typeof window !== "undefined") {
-      window.location.href = "/login";
-    }
+  if (res.status === 401 && typeof window !== "undefined") {
+    window.location.href = "/login";
   }
+
   return res;
 }

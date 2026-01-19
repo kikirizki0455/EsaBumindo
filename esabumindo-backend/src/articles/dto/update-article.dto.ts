@@ -1,38 +1,32 @@
-// src/articles/dto/update-article.dto.ts
-
-import { IsString, IsOptional, IsIn, IsDate } from 'class-validator';
+import { IsOptional, IsString, IsIn, MaxLength } from 'class-validator';
 
 export class UpdateArticleDto {
-  @IsString()
   @IsOptional()
+  @IsString()
+  @MaxLength(255)
   title?: string;
 
-  @IsString()
   @IsOptional()
-  slug?: string;
+  @IsString()
+  slug?: string; // ✅ IZINKAN
 
-  @IsString()
   @IsOptional()
-  content?: string;
-
   @IsString()
-  @IsOptional()
   excerpt?: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
+  content?: string;
+
+  @IsOptional()
+  @IsString()
   coverImage?: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   author?: string;
 
-  @IsString()
+  @IsOptional()
   @IsIn(['draft', 'published'])
-  @IsOptional()
-  status?: string;
-
-  @IsDate()
-  @IsOptional()
-  publishedAt?: Date;
+  status?: 'draft' | 'published';
 }
