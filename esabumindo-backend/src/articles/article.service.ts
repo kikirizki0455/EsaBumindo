@@ -8,6 +8,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ArticlesService {
@@ -21,6 +22,38 @@ export class ArticlesService {
       .trim()
       .replace(/\s+/g, '-') // ganti spasi dengan -
       .replace(/-+/g, '-'); // ganti multiple - dengan single -
+  }
+  private validateContentBlocks(blocks: any[]): boolean {
+    if (!Array.isArray(blocks) || blocks.length === 0) {
+      return false;
+    }
+
+    for (const block of blocks) {
+      if (!block.id || !block.type) {
+        return false;
+      }
+
+      // Validate based on block type
+      if (block.type === 'paragraph' || block.type === 'heading') {
+        if (!block.content || typeof block.content !== 'string') {
+          return false;
+        }
+      }
+
+      if (block.type === 'image') {
+        if (!block.images || !Array.isArray(block.images)) {
+          return false;
+        }
+
+        for (const img of block.images) {
+          if (!img.url || !img.alt) {
+            return false;
+          }
+        }
+      }
+    }
+
+    return true;
   }
 
   // Generate unique slug (kalau ada yang sama, tambahkan angka)
@@ -91,9 +124,17 @@ export class ArticlesService {
 
   // Create new article
   async create(createArticleDto: CreateArticleDto) {
-    const slug = await this.generateUniqueSlug(createArticleDto.title);
+    // Validate content blocks
+    if (!this.validateContentBlocks(createArticleDto.contentBlocks)) {
+      throw new Error('Invalid content blocks structure');
+    }
 
-    // Set publishedAt jika status published
+    // Generate slug
+    const slug = createArticleDto.slug
+      ? await this.generateUniqueSlug(createArticleDto.slug)
+      : await this.generateUniqueSlug(createArticleDto.title);
+
+    // Set publishedAt if status is published
     const publishedAt =
       createArticleDto.status === 'published' ? new Date() : null;
 
@@ -101,72 +142,58 @@ export class ArticlesService {
       data: {
         title: createArticleDto.title,
         slug,
-        content: createArticleDto.content,
+        contentBlocks: createArticleDto.contentBlocks as any, // Prisma handles JSON
         excerpt: createArticleDto.excerpt || null,
         coverImage: createArticleDto.coverImage || null,
-        author: createArticleDto.author || 'Admin', // Fallback jika tidak ada author
+        author: createArticleDto.author || 'Admin',
         status: createArticleDto.status || 'draft',
         publishedAt,
       },
     });
   }
 
+  // Update article
   async update(id: string, updateArticleDto: UpdateArticleDto) {
     const existingArticle = await this.findOne(id);
+
+    // Validate content blocks if provided
+    if (
+      updateArticleDto.contentBlocks &&
+      !this.validateContentBlocks(updateArticleDto.contentBlocks)
+    ) {
+      throw new Error('Invalid content blocks structure');
+    }
 
     let slug: string | undefined;
     let publishedAt: Date | null | undefined;
 
-    const isDraft = existingArticle.status === 'draft';
-    const isPublishing =
+    // Generate new slug if title changed (only for drafts)
+    if (
+      updateArticleDto.title &&
+      updateArticleDto.title !== existingArticle.title &&
+      existingArticle.status === 'draft'
+    ) {
+      slug = await this.generateUniqueSlug(updateArticleDto.title, id);
+    }
+
+    // Update publishedAt if status changes to published
+    if (
       updateArticleDto.status === 'published' &&
-      existingArticle.status !== 'published';
-
-    /* =========================
-     * SLUG HANDLING
-     * ========================= */
-
-    // ✅ DRAFT → boleh ubah slug (manual / auto)
-    if (isDraft) {
-      if (updateArticleDto.slug) {
-        slug = await this.generateUniqueSlug(updateArticleDto.slug, id);
-      } else if (
-        updateArticleDto.title &&
-        updateArticleDto.title !== existingArticle.title
-      ) {
-        slug = await this.generateUniqueSlug(updateArticleDto.title, id);
-      }
-    }
-
-    // ❌ PUBLISHED → slug tidak boleh diubah
-    if (!isDraft && updateArticleDto.slug) {
-      throw new BadRequestException(
-        'Slug tidak dapat diubah setelah artikel dipublish',
-      );
-    }
-
-    /* =========================
-     * PUBLISHED AT HANDLING
-     * ========================= */
-
-    if (isPublishing) {
-      publishedAt = existingArticle.publishedAt ?? new Date();
-    }
-
-    if (updateArticleDto.status === 'draft') {
+      existingArticle.status !== 'published'
+    ) {
+      publishedAt = existingArticle.publishedAt || new Date();
+    } else if (updateArticleDto.status === 'draft') {
       publishedAt = null;
     }
-
-    /* =========================
-     * UPDATE QUERY
-     * ========================= */
 
     return this.prisma.article.update({
       where: { id },
       data: {
         ...(updateArticleDto.title && { title: updateArticleDto.title }),
         ...(slug && { slug }),
-        ...(updateArticleDto.content && { content: updateArticleDto.content }),
+        ...(updateArticleDto.contentBlocks && {
+          contentBlocks: updateArticleDto.contentBlocks as any,
+        }),
         ...(updateArticleDto.excerpt !== undefined && {
           excerpt: updateArticleDto.excerpt,
         }),
@@ -179,7 +206,6 @@ export class ArticlesService {
       },
     });
   }
-
   // Delete article
   async remove(id: string) {
     // Cek apakah artikel ada

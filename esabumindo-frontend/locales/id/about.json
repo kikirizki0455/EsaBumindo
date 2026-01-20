@@ -1,0 +1,51 @@
+{
+  "header": {
+    "badge": "Tentang Kami",
+    "title": "Mengenal",
+    "titleHighlight": "ESABOND",
+    "subtitle": "Solusi adhesive berkualitas untuk industri modern Indonesia"
+  },
+  "vision": {
+    "title": "Visi Kami",
+    "content": "adalah perusahaan manufaktur chemical adhesive yang hadir untuk menjawab tantangan industri yang membutuhkan suplai lem",
+    "highlight": "berkualitas dengan kecepatan, stabilitas, dan konsistensi tinggi",
+    "description": ". Sejak awal berdiri, ESABOND berfokus pada pengembangan formulasi adhesive yang dapat mendukung berbagai sektor manufaktur mulai dari furniture, packaging, konstruksi, hingga otomotif dengan kualitas yang terukur dan waktu produksi yang efisien."
+  },
+  "experience": {
+    "title": "Pengalaman",
+    "content": "Pengalaman panjang dalam industri adhesive memberikan",
+    "highlight": "pemahaman mendalam mengenai berbagai hambatan yang sering dialami pelaku industri",
+    "description": " seperti lead time yang lama, suplai yang tidak menentu, hingga kualitas produk yang tidak konsisten. Pengalaman tersebut menjadi fondasi kami dalam merancang",
+    "highlight2": "sistem produksi yang lebih responsif dan dapat diandalkan"
+  },
+  "commitment": {
+    "title": "Komitmen",
+    "content": "percaya bahwa kebutuhan adhesive tidak hanya tentang kekuatan material, tetapi juga tentang",
+    "highlight": "efisiensi rantai produksi secara menyeluruh",
+    "description": ". Oleh karena itu, kami menghadirkan pendekatan end-to-end dari hulu ke hilir mulai dari",
+    "highlight2": "formulasi, pengujian, kontrol kualitas",
+    "description2": ", hingga distribusi cepat untuk memastikan setiap pelanggan mendapatkan produk yang",
+    "highlight3": "siap pakai, stabil, dan tepat waktu"
+  },
+  "strengths": {
+    "badge": "Keunggulan Kami",
+    "title": "4 Pilar Kekuatan",
+    "titleHighlight": "ESABOND",
+    "items": [
+      "Produksi Cepat",
+      "Kualitas Konsisten",
+      "Inovasi Berkelanjutan",
+      "Formulasi Andal"
+    ]
+  },
+  "cta": {
+    "title": "Siap Berkolaborasi?",
+    "description": "Mari wujudkan produksi yang lebih cepat, stabil, dan berkualitas bersama ESABOND",
+    "button": "Hubungi Kami Sekarang"
+  },
+  "bottomStatement": {
+    "content": "Dengan menggabungkan keahlian teknis, pemahaman industri, serta inovasi berkelanjutan,",
+    "highlight": "membawa perubahan baru bagi dunia adhesive di Indonesia —",
+    "highlight2": "lebih cepat, lebih stabil, dan lebih siap menghadapi kebutuhan industri modern"
+  }
+}

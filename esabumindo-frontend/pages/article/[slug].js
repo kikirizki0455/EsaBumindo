@@ -1,3 +1,5 @@
+// app/article/[slug]/page.jsx - UPDATED
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -15,6 +17,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MainLayout from "@/pages/layouts/main-layout";
+import BlockRenderer from "@/components/article/block-renderer";
+import api from "@/lib/axios";
 
 export default function ArticleDetailPage() {
   const router = useRouter();
@@ -24,13 +28,11 @@ export default function ArticleDetailPage() {
   const [article, setArticle] = useState(null);
   const [relatedArticles, setRelatedArticles] = useState([]);
   const [loading, setLoading] = useState(true);
-  // Gunakan URL Backend dari env, hapus '/api' jika ada
+
   const getFullImageUrl = (path) => {
     if (!path) return "/images/placeholder-article.jpg";
     if (path.startsWith("http")) return path;
 
-    // 1. Pastikan variabel ini ada di file .env.local Anda
-    // 2. Jika variabel env kosong/undefined, kita beri fallback manual ke localhost:3001
     const apiHost = process.env.NEXT_PUBLIC_API_URL
       ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "")
       : "http://localhost:3001";
@@ -44,22 +46,12 @@ export default function ArticleDetailPage() {
 
   const fetchArticle = async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/articles/slug/${slug}`
-      );
-      if (!response.ok) {
-        router.push("/article");
-        return;
-      }
-      const data = await response.json();
-      setArticle(data);
+      const response = await api.get(`/articles/${slug}`);
+      setArticle(response.data);
 
-      const relatedRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/articles/published`
-      );
-      const allArticles = await relatedRes.json();
+      const relatedRes = await api.get("/articles/published");
       setRelatedArticles(
-        allArticles.filter((a) => a.slug !== slug).slice(0, 3)
+        relatedRes.data.filter((a) => a.slug !== slug).slice(0, 3)
       );
     } catch (error) {
       console.error("Error:", error);
@@ -98,8 +90,24 @@ export default function ArticleDetailPage() {
     );
   }
 
-  const readingTime = Math.ceil(article.content.split(/\s+/).length / 200);
   const publishDate = new Date(article.publishedAt || article.createdAt);
+
+  // ✅ Calculate reading time from blocks
+  const calculateReadingTime = () => {
+    if (!article.contentBlocks || article.contentBlocks.length === 0) return 1;
+
+    let wordCount = 0;
+
+    article.contentBlocks.forEach((block) => {
+      if (block.type === "paragraph" || block.type === "heading") {
+        wordCount += (block.content || "").split(/\s+/).length;
+      }
+    });
+
+    return Math.max(1, Math.ceil(wordCount / 200));
+  };
+
+  const readingTime = calculateReadingTime();
 
   return (
     <MainLayout>
@@ -207,7 +215,7 @@ export default function ArticleDetailPage() {
           </div>
         </header>
 
-        {/* Featured Image */}
+        {/* Cover Image */}
         {article.coverImage && (
           <div className="w-full bg-gray-100">
             <div className="container mx-auto px-4 max-w-5xl py-8">
@@ -217,7 +225,7 @@ export default function ArticleDetailPage() {
                   alt={article.title}
                   fill
                   className="object-cover"
-                  unoptimized // TAMBAHKAN INI
+                  unoptimized
                   priority
                 />
               </div>
@@ -225,24 +233,11 @@ export default function ArticleDetailPage() {
           </div>
         )}
 
-        {/* Content Section */}
+        {/* ✅ CONTENT BLOCKS - RENDERED WITH BlockRenderer */}
         <div className="container mx-auto px-4 max-w-3xl py-12 md:py-16">
-          <div
-            className="prose prose-lg max-w-none
-              prose-headings:text-gray-900 prose-headings:font-bold prose-headings:tracking-tight
-              prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:border-b prose-h2:border-gray-200 prose-h2:pb-3
-              prose-h3:text-xl md:prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4
-              prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6 prose-p:text-[17px] md:prose-p:text-[18px]
-              prose-a:text-[#060771] prose-a:font-semibold prose-a:no-underline hover:prose-a:underline hover:prose-a:text-[#ff4136]
-              prose-strong:text-gray-900 prose-strong:font-bold
-              prose-blockquote:border-l-4 prose-blockquote:border-[#060771] prose-blockquote:bg-gray-50 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-gray-700
-              prose-ul:my-6 prose-ul:list-disc prose-ul:pl-6
-              prose-ol:my-6 prose-ol:list-decimal prose-ol:pl-6
-              prose-li:text-gray-700 prose-li:my-2 prose-li:text-[17px]
-              prose-img:rounded-xl prose-img:shadow-lg prose-img:my-8
-              prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[#060771] prose-code:font-mono prose-code:text-sm
-              prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:rounded-xl prose-pre:p-6"
-            dangerouslySetInnerHTML={{ __html: article.content }}
+          <BlockRenderer
+            blocks={article.contentBlocks}
+            getImageUrl={getFullImageUrl}
           />
         </div>
 
@@ -284,20 +279,17 @@ export default function ArticleDetailPage() {
                   href={`/article/${item.slug}`}
                   className="group flex flex-col bg-white rounded-xl overflow-hidden border border-gray-200 hover:border-[#060771] transition-all shadow-sm hover:shadow-xl h-full"
                 >
-                  {/* Image */}
                   <div className="relative aspect-video overflow-hidden bg-gray-200">
                     <Image
                       src={getFullImageUrl(item.coverImage)}
                       alt={item.title}
                       fill
-                      // 2. Tambahkan unoptimized agar tidak kena error 400 di localhost
                       unoptimized
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
                   </div>
 
-                  {/* Content */}
                   <div className="p-6 flex-grow flex flex-col">
                     <h3 className="font-bold text-lg text-gray-900 group-hover:text-[#060771] transition-colors line-clamp-2 leading-snug mb-3">
                       {item.title}

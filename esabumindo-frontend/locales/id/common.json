@@ -1,0 +1,17 @@
+{
+  "nav": {
+    "home": "Beranda",
+    "about": "Tentang Kami",
+    "products": "Produk",
+    "articles": "Artikel",
+    "contact": "Kontak"
+  },
+  "button": {
+    "contactUs": "Hubungi Kami Sekarang",
+    "readMore": "Baca Selengkapnya",
+    "submit": "Kirim"
+  },
+  "footer": {
+    "copyright": "© 2024 ESABOND. Semua hak dilindungi."
+  }
+}

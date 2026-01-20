@@ -1,16 +1,11 @@
-// pages/admin/artikel/edit/[id].jsx
+// pages/admin/artikel/edit/[id].jsx - UPDATED
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import AdminLayout from "@/components/layout/admin-layout";
+import BlockEditor from "@/components/editor/block-editor";
 import { Button } from "@/components/ui/button";
-import {
-  ArrowLeft,
-  Save,
-  Eye,
-  Link as LinkIcon,
-  Loader2,
-  HelpCircle,
-} from "lucide-react";
+import { ArrowLeft, Save, Eye, Link as LinkIcon, Loader2 } from "lucide-react";
 import { generateSlug } from "@/lib/utils";
 import api from "@/lib/axios";
 
@@ -20,15 +15,16 @@ export default function EditArticle() {
 
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
-  const [autoSlug, setAutoSlug] = useState(true);
+  const [autoSlug, setAutoSlug] = useState(false);
+
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
     excerpt: "",
-    content: "",
     coverImage: "",
     author: "",
     status: "draft",
+    contentBlocks: [], // ✅ NEW
   });
 
   useEffect(() => {
@@ -45,10 +41,10 @@ export default function EditArticle() {
         title: data.title,
         slug: data.slug || generateSlug(data.title),
         excerpt: data.excerpt || "",
-        content: data.content,
         coverImage: data.coverImage || "",
         author: data.author,
         status: data.status,
+        contentBlocks: data.contentBlocks || [], // ✅ Load blocks
       });
     } catch (error) {
       console.error(error);
@@ -66,7 +62,6 @@ export default function EditArticle() {
       [name]: value,
     }));
 
-    // Auto-generate slug jika diaktifkan
     if (name === "title" && autoSlug) {
       setFormData((prev) => ({
         ...prev,
@@ -88,10 +83,10 @@ export default function EditArticle() {
 
     if (
       !formData.title.trim() ||
-      !formData.content.trim() ||
+      formData.contentBlocks.length === 0 ||
       !formData.author.trim()
     ) {
-      alert("Field bertanda bintang (*) wajib diisi");
+      alert("Field bertanda (*) wajib diisi");
       return;
     }
 
@@ -101,13 +96,13 @@ export default function EditArticle() {
       const payload = {
         title: formData.title,
         excerpt: formData.excerpt,
-        content: formData.content,
         coverImage: formData.coverImage,
         author: formData.author,
         status: nextStatus || formData.status,
+        contentBlocks: formData.contentBlocks, // ✅ Send blocks
       };
 
-      // ✅ slug hanya dikirim jika DRAFT
+      // Slug only if draft
       if (formData.status === "draft") {
         payload.slug = formData.slug;
       }
@@ -117,7 +112,7 @@ export default function EditArticle() {
       alert("Artikel berhasil diperbarui!");
       router.push("/admin/artikel");
     } catch (error) {
-      console.error("BACKEND ERROR:", error.response?.data);
+      console.error("Error:", error.response?.data);
       alert(error.response?.data?.message || "Gagal memperbarui artikel");
     } finally {
       setLoading(false);
@@ -137,8 +132,8 @@ export default function EditArticle() {
 
   return (
     <AdminLayout>
-      <div className="max-w-4xl mx-auto space-y-6 pb-20">
-        {/* Header Section */}
+      <div className="max-w-5xl mx-auto space-y-6 pb-20">
+        {/* Header */}
         <div className="flex items-center gap-4">
           <Button variant="outline" size="icon" onClick={() => router.back()}>
             <ArrowLeft className="h-4 w-4" />
@@ -148,31 +143,28 @@ export default function EditArticle() {
               Edit Artikel
             </h1>
             <p className="text-sm text-gray-500 mt-1">
-              ID Artikel: <span className="font-mono">{id}</span>
+              ID: <span className="font-mono">{id}</span>
             </p>
           </div>
         </div>
 
         <form className="space-y-6">
-          {/* Title Card */}
+          {/* Title */}
           <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
-            <div className="flex items-start justify-between mb-2">
-              <label className="block text-sm font-semibold text-gray-700">
-                Judul Artikel <span className="text-red-500">*</span>
-              </label>
-            </div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Judul Artikel <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               name="title"
               value={formData.title}
               onChange={handleInputChange}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#060771] text-lg"
-              placeholder="Masukkan judul artikel yang menarik..."
               required
             />
           </div>
 
-          {/* Slug Card */}
+          {/* Slug */}
           <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
             <div className="flex items-center justify-between mb-2">
               <label className="block text-sm font-semibold text-gray-700">
@@ -181,13 +173,7 @@ export default function EditArticle() {
               <Button
                 type="button"
                 variant="ghost"
-                disabled={
-                  formData.status !== "draft" && (
-                    <p className="text-xs text-orange-600 mt-2">
-                      Slug tidak dapat diubah setelah artikel dipublikasikan.
-                    </p>
-                  )
-                }
+                disabled={formData.status !== "draft"}
                 onClick={() => setAutoSlug(!autoSlug)}
                 className="text-xs text-[#ff4136]"
               >
@@ -201,15 +187,19 @@ export default function EditArticle() {
                 value={formData.slug}
                 onChange={handleSlugChange}
                 disabled={formData.status !== "draft"}
-                className={`w-full pl-10 pr-4 py-3 border rounded-lg font-mono text-sm
-    ${
-      formData.status !== "draft"
-        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-        : "bg-gray-50"
-    }`}
+                className={`w-full pl-10 pr-4 py-3 border rounded-lg font-mono text-sm ${
+                  formData.status !== "draft"
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "border-gray-300"
+                }`}
                 required
               />
             </div>
+            {formData.status !== "draft" && (
+              <p className="text-xs text-orange-600 mt-2">
+                ⚠️ Slug tidak dapat diubah setelah artikel dipublikasikan
+              </p>
+            )}
           </div>
 
           {/* Author */}
@@ -223,101 +213,60 @@ export default function EditArticle() {
               value={formData.author}
               onChange={handleInputChange}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#060771]"
-              placeholder="Nama penulis artikel"
               required
             />
           </div>
 
           {/* Cover Image */}
           <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
-            <div className="flex items-start justify-between mb-2">
-              <label className="block text-sm font-semibold text-gray-700">
-                URL Gambar Cover
-              </label>
-              <div className="group relative">
-                <HelpCircle className="h-4 w-4 text-gray-400 cursor-help" />
-                <div className="hidden group-hover:block absolute right-0 top-6 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg z-10 shadow-lg">
-                  Masukkan URL gambar cover artikel. Bisa dikosongi jika tidak
-                  ada. Gambar akan otomatis menggunakan judul artikel sebagai
-                  alt text.
-                </div>
-              </div>
-            </div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              URL Gambar Cover
+            </label>
             <input
               type="url"
               name="coverImage"
               value={formData.coverImage}
               onChange={handleInputChange}
               placeholder="https://example.com/gambar.jpg"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#060771] focus:border-transparent"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#060771]"
             />
-            {formData.coverImage && (
-              <div className="mt-3 p-2 bg-gray-50 rounded border border-gray-200">
-                <p className="text-xs text-gray-600">
-                  <span className="font-semibold">Preview Alt Text:</span>{" "}
-                  {formData.title || "Judul artikel"}
-                </p>
-              </div>
-            )}
           </div>
 
-          {/* Excerpt Card */}
+          {/* Excerpt */}
           <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
-            <div className="flex items-start justify-between mb-2">
-              <label className="block text-sm font-semibold text-gray-700">
-                Ringkasan Singkat (Excerpt)
-              </label>
-              <div className="group relative">
-                <HelpCircle className="h-4 w-4 text-gray-400 cursor-help" />
-                <div className="hidden group-hover:block absolute right-0 top-6 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg z-10 shadow-lg">
-                  Ringkasan singkat yang akan muncul di halaman daftar artikel
-                  dan preview sosial media.
-                </div>
-              </div>
-            </div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Ringkasan (Excerpt)
+            </label>
             <textarea
               name="excerpt"
               value={formData.excerpt}
               onChange={handleInputChange}
               rows={3}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#060771]"
-              placeholder="Ringkasan artikel yang akan muncul di preview..."
             />
-            <p className="text-xs text-gray-500 mt-2">
-              {formData.excerpt.length} karakter
-            </p>
           </div>
 
-          {/* Content Card */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
-            <div className="flex items-start justify-between mb-2">
-              <label className="block text-sm font-semibold text-gray-700">
-                Konten Artikel <span className="text-red-500">*</span>
-              </label>
-              <div className="group relative">
-                <HelpCircle className="h-4 w-4 text-gray-400 cursor-help" />
-                <div className="hidden group-hover:block absolute right-0 top-6 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg z-10 shadow-lg">
-                  Tulis konten lengkap artikel di sini. Gunakan format yang
-                  jelas dan mudah dibaca. Mendukung HTML untuk formatting.
-                </div>
-              </div>
+          {/* ✅ BLOCK EDITOR */}
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border-2 border-[#060771] p-6 shadow-lg">
+            <div className="mb-4">
+              <h3 className="text-lg font-bold text-gray-900">
+                📝 Konten Artikel <span className="text-red-500">*</span>
+              </h3>
+              <p className="text-sm text-gray-600 mt-1">
+                Edit konten dengan block editor
+              </p>
             </div>
-            <textarea
-              name="content"
-              value={formData.content}
-              onChange={handleInputChange}
-              placeholder="Tuliskan konten artikel lengkap di sini..."
-              rows={15}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#060771] focus:border-transparent resize-none font-sans"
-              required
+
+            <BlockEditor
+              blocks={formData.contentBlocks}
+              onChange={(blocks) =>
+                setFormData({ ...formData, contentBlocks: blocks })
+              }
             />
-            <p className="text-xs text-gray-500 mt-2">
-              {formData.content.length} karakter
-            </p>
           </div>
 
-          {/* Final Action Buttons */}
-          <div className="bg-[#060771] rounded-xl p-6 shadow-xl shadow-blue-900/20 border border-white/10">
+          {/* Action Buttons */}
+          <div className="bg-[#060771] rounded-xl p-6 shadow-xl">
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 type="button"
@@ -338,11 +287,10 @@ export default function EditArticle() {
                 {loading ? "Menyimpan..." : "Update & Publikasikan"}
               </Button>
             </div>
-            <p className="text-white/60 text-[11px] mt-4 text-center italic">
-              Status artikel saat ini:{" "}
-              <span className="uppercase font-bold text-white tracking-wider">
-                {formData.status}
-              </span>
+            <p className="text-white/60 text-xs mt-4 text-center">
+              Status:{" "}
+              <span className="uppercase font-bold">{formData.status}</span> •{" "}
+              {formData.contentBlocks.length} block
             </p>
           </div>
         </form>

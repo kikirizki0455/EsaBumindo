@@ -15,6 +15,7 @@ import {
   Patch,
   UseGuards,
   Request,
+  BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -36,11 +37,6 @@ export class ArticlesController {
     return this.articlesService.findPublished();
   }
 
-  @Get('slug/:slug')
-  async findBySlug(@Param('slug') slug: string) {
-    return this.articlesService.findBySlug(slug);
-  }
-
   // PROTECTED ENDPOINTS - Perlu auth (uncomment guards kalau sudah implement auth)
   @Get()
   // @UseGuards(JwtAuthGuard, RolesGuard)
@@ -55,9 +51,14 @@ export class ArticlesController {
   async getStats() {
     return this.articlesService.getStats();
   }
+  // PUBLIC (slug)
+  @Get('slug/:slug')
+  async findBySlug(@Param('slug') slug: string) {
+    return this.articlesService.findBySlug(slug);
+  }
 
+  // ADMIN (id)
   @Get(':id')
-  // @UseGuards(JwtAuthGuard)
   async findOne(@Param('id') id: string) {
     return this.articlesService.findOne(id);
   }
@@ -104,6 +105,7 @@ export class ArticlesController {
   // Upload image endpoint - Protected
   @Post('upload')
   // @UseGuards(JwtAuthGuard)
+  @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -117,8 +119,12 @@ export class ArticlesController {
         },
       }),
       fileFilter: (req, file, cb) => {
-        if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp)$/)) {
-          return cb(new Error('Only image files are allowed!'), false);
+        // Accept images only
+        if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+          return cb(
+            new BadRequestException('Only image files are allowed!'),
+            false,
+          );
         }
         cb(null, true);
       },
@@ -129,7 +135,7 @@ export class ArticlesController {
   )
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
-      throw new Error('No file uploaded');
+      throw new BadRequestException('No file uploaded');
     }
 
     return {
@@ -138,6 +144,7 @@ export class ArticlesController {
       url: `${process.env.API_URL || 'http://localhost:3001'}/uploads/articles/${file.filename}`,
       size: file.size,
       mimetype: file.mimetype,
+      originalName: file.originalname,
     };
   }
 }

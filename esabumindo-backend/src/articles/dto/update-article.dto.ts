@@ -1,22 +1,67 @@
-import { IsOptional, IsString, IsIn, MaxLength } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsEnum,
+  IsArray,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
-export class UpdateArticleDto {
+// DTO for Image inside Image Block
+class ImageDto {
+  @IsString()
+  url: string;
+
+  @IsString()
+  alt: string;
+
   @IsOptional()
   @IsString()
-  @MaxLength(255)
-  title?: string;
+  caption?: string;
 
   @IsOptional()
   @IsString()
-  slug?: string; // ✅ IZINKAN
+  width?: string; // "full" | "half" | "third"
+}
 
-  @IsOptional()
+// DTO for Content Block
+class ContentBlockDto {
   @IsString()
-  excerpt?: string;
+  id: string;
+
+  @IsEnum(['paragraph', 'heading', 'image'])
+  type: 'paragraph' | 'heading' | 'image';
 
   @IsOptional()
   @IsString()
   content?: string;
+
+  @IsOptional()
+  level?: number;
+
+  @IsOptional()
+  @IsEnum(['single', 'double', 'grid'])
+  layout?: 'single' | 'double' | 'grid';
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ImageDto)
+  images?: ImageDto[];
+}
+
+export class UpdateArticleDto {
+  @IsOptional()
+  @IsString()
+  title?: string;
+
+  @IsOptional()
+  @IsString()
+  slug?: string;
+
+  @IsOptional()
+  @IsString()
+  excerpt?: string;
 
   @IsOptional()
   @IsString()
@@ -27,6 +72,13 @@ export class UpdateArticleDto {
   author?: string;
 
   @IsOptional()
-  @IsIn(['draft', 'published'])
+  @IsEnum(['draft', 'published'])
   status?: 'draft' | 'published';
+
+  // ✅ SAME STRUCTURE, BUT OPTIONAL
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ContentBlockDto)
+  contentBlocks?: ContentBlockDto[];
 }

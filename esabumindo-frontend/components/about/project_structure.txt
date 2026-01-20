@@ -1,0 +1,80 @@
+esabond_web/
+├── esabumindo-backend/
+│   ├── src/
+│   │   ├── articles/
+│   │   │   ├── dto/
+│   │   │   │   ├── create-article.dto.ts
+│   │   │   │   └── update-article.dto.ts
+│   │   │   ├── article.controller.ts
+│   │   │   └── article.service.ts
+│   │   ├── auth/
+│   │   │   ├── decorators/
+│   │   │   │   └── roles.decorator.ts
+│   │   │   └── guards/
+│   │   │       ├── jwt-auth.guard.ts
+│   │   │       └── roles.guard.ts
+│   │   ├── app.module.ts
+│   │   └── main.ts
+│   ├── public/
+│   │   └── uploads/
+│   │       └── articles/
+│   ├── .env.example
+│   ├── .gitignore
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── README.md
+├── esabumindo-frontend/
+│   ├── components/
+│   │   ├── about/
+│   │   │   ├── company-profil.jsx
+│   │   │   ├── founder.jsx
+│   │   │   └── history.jsx
+│   │   ├── editor/
+│   │   │   └── block-editor.jsx
+│   │   ├── layout/
+│   │   │   └── admin-layout.jsx
+│   │   └── ui/
+│   │       ├── button.jsx
+│   │       ├── input.jsx
+│   │       └── label.jsx
+│   ├── lib/
+│   │   ├── axios.js
+│   │   └── utils.js
+│   ├── pages/
+│   │   ├── admin/
+│   │   │   └── artikel/
+│   │   │       └── create-article.jsx
+│   │   ├── _app.js
+│   │   └── index.js
+│   ├── public/
+│   ├── styles/
+│   │   └── globals.css
+│   ├── .env.example
+│   ├── .gitignore
+│   ├── package.json
+│   ├── next.config.js
+│   ├── postcss.config.js
+│   ├── tailwind.config.js
+│   └── README.md
+├── .gitignore
+└── README.md
+
+================================================================================
+TEKNOLOGI YANG DIGUNAKAN
+================================================================================
+
+BACKEND (esabumindo-backend):
+- Framework: NestJS (Node.js Framework)
+- Bahasa: TypeScript
+- Database: PostgreSQL
+- ORM: TypeORM
+- File Upload: Multer (Disk Storage)
+- Authentication: JWT (JSON Web Token) & Role Based Access Control
+
+FRONTEND (esabumindo-frontend):
+- Framework: Next.js (React Framework)
+- Bahasa: JavaScript / React (JSX)
+- Styling: Tailwind CSS
+- HTTP Client: Axios
+- Icons: Lucide React
+- UI Components: Custom Components (Button, Input, Label, BlockEditor)

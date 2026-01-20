@@ -1,70 +1,99 @@
-// app/admin/articles/new/page.jsx
-"use client";
+// pages/admin/artikel/buat.jsx - UPDATED WITH BLOCK EDITOR
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import AdminLayout from "@/components/layout/admin-layout";
+import BlockEditor from "@/components/editor/block-editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
-import TiptapEditor from "@/components/editor/tiptap-editor";
-import ImageUpload from "@/components/ui/image-upload";
-import { ArrowLeft, Save } from "lucide-react";
-import { getCurrentUserName } from "@/lib/auth";
+  ArrowLeft,
+  Save,
+  Eye,
+  HelpCircle,
+  Link as LinkIcon,
+} from "lucide-react";
+import { generateSlug } from "@/lib/utils";
 import api from "@/lib/axios";
 
-export default function NewArticlePage() {
+export default function CreateArticle() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [autoSlug, setAutoSlug] = useState(true);
+
   const [formData, setFormData] = useState({
     title: "",
+    slug: "",
     excerpt: "",
-    content: "",
     coverImage: "",
-    author: "", // Nanti ambil dari session/auth
+    author: "",
     status: "draft",
+    contentBlocks: [], // ✅ NEW: Array of content blocks
   });
 
-  // Auto-generate slug preview
-  const generateSlugPreview = (title) => {
-    return title
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .trim()
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-");
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Auto-generate slug from title
+    if (name === "title" && autoSlug) {
+      setFormData((prev) => ({
+        ...prev,
+        slug: generateSlug(value),
+      }));
+    }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSlugChange = (e) => {
+    setAutoSlug(false);
+    setFormData((prev) => ({
+      ...prev,
+      slug: generateSlug(e.target.value),
+    }));
+  };
+
+  const handleSubmit = async (e, status) => {
     e.preventDefault();
+
+    // Validation
+    if (!formData.title.trim()) {
+      alert("Judul artikel wajib diisi");
+      return;
+    }
+
+    if (formData.contentBlocks.length === 0) {
+      alert("Konten artikel wajib diisi");
+      return;
+    }
+
+    if (!formData.author.trim()) {
+      alert("Nama penulis wajib diisi");
+      return;
+    }
 
     try {
       setLoading(true);
+      const dataToSubmit = {
+        title: formData.title,
+        slug: formData.slug,
+        excerpt: formData.excerpt,
+        coverImage: formData.coverImage,
+        author: formData.author,
+        status: status || formData.status,
+        contentBlocks: formData.contentBlocks, // ✅ Kirim blocks
+        // publishedAt: status === "published" ? new Date().toISOString() : null,
+      };
 
-      const author = getCurrentUserName();
-
-      const response = await api.post("/articles", {
-        ...formData,
-        author,
-      });
-
-      // axios → data langsung di response.data
-      console.log(response.data);
-
+      await api.post("/articles", dataToSubmit);
       alert("Artikel berhasil dibuat!");
       router.push("/admin/artikel");
     } catch (error) {
-      console.error("CREATE ARTICLE ERROR:", error);
-
-      alert(error.response?.data?.message || "Gagal membuat artikel");
+      console.error("Error saving article:", error);
+      alert(error.response?.data?.message || "Gagal menyimpan artikel");
     } finally {
       setLoading(false);
     }
@@ -72,191 +101,183 @@ export default function NewArticlePage() {
 
   return (
     <AdminLayout>
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="max-w-5xl mx-auto space-y-6 pb-20">
         {/* Header */}
         <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push("/admin/articles")}
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Kembali
+          <Button variant="outline" size="icon" onClick={() => router.back()}>
+            <ArrowLeft className="h-4 w-4" />
           </Button>
+          <div className="flex-1">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+              Buat Artikel Baru
+            </h1>
+            <p className="text-sm text-gray-500 mt-1">
+              Gunakan block editor untuk membuat artikel dengan layout custom
+            </p>
+          </div>
         </div>
 
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Tambah Artikel Baru
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Buat artikel baru untuk website Anda
-          </p>
-        </div>
+        <form onSubmit={(e) => handleSubmit(e, "draft")} className="space-y-6">
+          {/* Title */}
+          <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
+            <div className="flex items-start justify-between mb-2">
+              <label className="block text-sm font-semibold text-gray-700">
+                Judul Artikel <span className="text-red-500">*</span>
+              </label>
+            </div>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              placeholder="Contoh: Tips Memilih Lem Terbaik untuk Proyek Anda"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#060771] text-lg"
+              required
+            />
+          </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Basic Info Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Informasi Dasar</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* Title */}
-              <div className="space-y-2">
-                <Label htmlFor="title">
-                  Judul Artikel <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="title"
-                  placeholder="Masukkan judul artikel..."
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  required
-                />
-                {formData.title && (
-                  <p className="text-xs text-gray-500">
-                    🔗 URL Preview: /articles/
-                    <span className="font-mono text-blue-600">
-                      {generateSlugPreview(formData.title)}
-                    </span>
-                  </p>
-                )}
-              </div>
-
-              {/* Excerpt */}
-              <div className="space-y-2">
-                <Label htmlFor="excerpt">Ringkasan (Excerpt)</Label>
-                <Input
-                  id="excerpt"
-                  placeholder="Ringkasan singkat artikel..."
-                  value={formData.excerpt}
-                  onChange={(e) =>
-                    setFormData({ ...formData, excerpt: e.target.value })
-                  }
-                />
-                <p className="text-xs text-gray-500">
-                  📝 Maks. 160 karakter untuk SEO meta description
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Cover Image Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Cover Image</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ImageUpload
-                value={formData.coverImage}
-                onChange={(url) =>
-                  setFormData({ ...formData, coverImage: url })
-                }
-                alt={formData.title || "Article cover"}
+          {/* Slug */}
+          <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
+            <div className="flex items-start justify-between mb-2">
+              <label className="block text-sm font-semibold text-gray-700">
+                URL Slug <span className="text-red-500">*</span>
+              </label>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setAutoSlug(!autoSlug)}
+                className="text-xs text-[#ff4136]"
+              >
+                {autoSlug ? "⚡ Auto ON" : "Edit Manual"}
+              </Button>
+            </div>
+            <div className="relative">
+              <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <input
+                type="text"
+                value={formData.slug}
+                onChange={handleSlugChange}
+                placeholder="tips-memilih-lem-terbaik"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#060771] font-mono text-sm"
+                required
               />
-            </CardContent>
-          </Card>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">
+              Preview URL:{" "}
+              <span className="font-mono text-[#060771]">
+                /artikel/{formData.slug || "url-anda"}
+              </span>
+            </p>
+          </div>
 
-          {/* Content Card */}
-          <Card className="border-slate-300 shadow-md bg-white overflow-hidden">
-            {/* Header dengan Background Kontras */}
-            <CardHeader className="border-b border-slate-200 bg-slate-50/80 px-4 py-4 md:px-6">
-              <div className="space-y-1">
-                <div className="flex items-center gap-1.5">
-                  <CardTitle className="text-base md:text-lg font-bold text-slate-900">
-                    Konten Artikel
-                  </CardTitle>
-                  <span className="text-red-600 font-bold" aria-hidden="true">
-                    *
-                  </span>
+          {/* Author */}
+          <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Nama Penulis <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="author"
+              value={formData.author}
+              onChange={handleInputChange}
+              placeholder="Contoh: Tim Esabumindo"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#060771]"
+              required
+            />
+          </div>
+
+          {/* Excerpt */}
+          <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
+            <div className="flex items-start justify-between mb-2">
+              <label className="block text-sm font-semibold text-gray-700">
+                Ringkasan Artikel
+              </label>
+              <div className="group relative">
+                <HelpCircle className="h-4 w-4 text-gray-400 cursor-help" />
+                <div className="hidden group-hover:block absolute right-0 top-6 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg z-10">
+                  Ringkasan singkat yang akan muncul di preview artikel
                 </div>
-                <p className="text-xs md:text-sm text-slate-500">
-                  Isi konten utama artikel Anda di bawah ini.
+              </div>
+            </div>
+            <textarea
+              name="excerpt"
+              value={formData.excerpt}
+              onChange={handleInputChange}
+              placeholder="Tuliskan ringkasan singkat artikel ini..."
+              rows={3}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#060771] resize-none"
+            />
+          </div>
+
+          {/* Cover Image */}
+          <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              URL Gambar Cover
+            </label>
+            <input
+              type="url"
+              name="coverImage"
+              value={formData.coverImage}
+              onChange={handleInputChange}
+              placeholder="https://example.com/gambar.jpg"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#060771]"
+            />
+          </div>
+
+          {/* ✅ BLOCK EDITOR - MAIN CONTENT */}
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border-2 border-[#060771] p-6 shadow-lg">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900">
+                  📝 Konten Artikel <span className="text-red-500">*</span>
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  Tambahkan paragraf, heading, dan gambar. Atur layout sesuai
+                  kebutuhan Anda.
                 </p>
               </div>
-            </CardHeader>
+            </div>
 
-            {/* Area Editor dengan Kontras Tinggi */}
-            <CardContent className="p-0 bg-slate-100/30">
-              <div className="m-2 md:m-4 rounded-md border border-slate-300 bg-white shadow-sm transition-all focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500">
-                <TiptapEditor
-                  content={formData.content}
-                  onChange={(html) =>
-                    setFormData({ ...formData, content: html })
-                  }
-                  className="min-h-[300px] md:min-h-[500px] p-4 md:p-6 outline-none"
-                />
-              </div>
-            </CardContent>
+            <BlockEditor
+              blocks={formData.contentBlocks}
+              onChange={(blocks) =>
+                setFormData({ ...formData, contentBlocks: blocks })
+              }
+            />
 
-            {/* Footer Mobile Responsive */}
-            <CardFooter className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200 bg-white p-4">
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-[10px] md:text-xs font-medium text-slate-500 uppercase tracking-wider">
-                  Draft Tersimpan Otomatis
-                </span>
+            {formData.contentBlocks.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                <p className="text-sm">
+                  👆 Klik tombol di atas untuk mulai menambahkan konten
+                </p>
               </div>
-
-              <div className="text-[10px] md:text-xs text-slate-400">
-                {formData.content?.replace(/<[^>]*>/g, "").length || 0} Karakter
-              </div>
-            </CardFooter>
-          </Card>
-
-          {/* Publish Settings Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Pengaturan Publikasi</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div className="flex-1">
-                  <Label htmlFor="status" className="text-sm font-medium">
-                    Status Artikel
-                  </Label>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {formData.status === "published"
-                      ? "✅ Artikel akan langsung tampil di website"
-                      : "📝 Artikel disimpan sebagai draft"}
-                  </p>
-                </div>
-                <Switch
-                  id="status"
-                  checked={formData.status === "published"}
-                  onCheckedChange={(checked) =>
-                    setFormData({
-                      ...formData,
-                      status: checked ? "published" : "draft",
-                    })
-                  }
-                />
-              </div>
-            </CardContent>
-          </Card>
+            )}
+          </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3 sticky bottom-0 bg-white p-4 border-t">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.push("/admin/articles")}
-              disabled={loading}
-              className="flex-1"
-            >
-              Batal
-            </Button>
-            <Button
-              type="submit"
-              disabled={loading}
-              className="flex-1 bg-[#060771] hover:bg-[#060771]/90"
-            >
-              <Save className="w-4 h-4 mr-2" />
-              {loading ? "Menyimpan..." : "Simpan Artikel"}
-            </Button>
+          <div className="bg-[#060771] rounded-xl p-6 shadow-xl">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button
+                type="submit"
+                disabled={loading}
+                className="flex-1 bg-white/10 hover:bg-white/20 text-white border border-white/30"
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {loading ? "Menyimpan..." : "Simpan sebagai Draft"}
+              </Button>
+              <Button
+                type="button"
+                onClick={(e) => handleSubmit(e, "published")}
+                disabled={loading}
+                className="flex-1 bg-[#ff4136] hover:bg-[#d9362b] text-white"
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                {loading ? "Menyimpan..." : "Publikasikan Artikel"}
+              </Button>
+            </div>
+            <p className="text-white/60 text-xs mt-4 text-center">
+              {formData.contentBlocks.length} block telah ditambahkan
+            </p>
           </div>
         </form>
       </div>

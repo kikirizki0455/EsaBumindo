@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, ChevronDown, Phone, Mail, MapPin } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link"; // Menggunakan Link dari Next.js untuk routing internal
+import { useTranslation } from "@/hooks/use-translation"; // Sesuaikan path hook Anda
+import LanguageSwitcher from "@/components/layout/language-switcher"; // Sesuaikan path component Anda
 
 const Navigation = () => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
 
+  // Handle Scroll Effect
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -15,21 +20,40 @@ const Navigation = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Define Nav Items with Translation Logic
+  // Kita mendefinisikan ini di dalam komponen agar bisa akses 't'
   const navItems = [
-    { name: "Beranda", href: "/home" },
-
     {
-      name: "Product",
-      href: "#services",
+      name: t("common.nav.home"),
+      href: "/",
+    },
+    {
+      name: t("common.nav.products"),
+      href: "/products", // Sesuaikan route
       dropdown: [
-        { name: "Konsultasi Bisnis", href: "#konsultasi" },
-        { name: "Pelatihan & Workshop", href: "#pelatihan" },
-        { name: "Sertifikasi", href: "#sertifikasi" },
+        {
+          name: t("common.nav.services.consulting"),
+          href: "/products#consulting",
+        },
+        { name: t("common.nav.services.training"), href: "/products#training" },
+        {
+          name: t("common.nav.services.certification"),
+          href: "/products#certification",
+        },
       ],
     },
-    { name: "Tentang Kami", href: "/about" },
-    { name: "artikel", href: "/article" },
-    { name: "Kontak", href: "/contact" },
+    {
+      name: t("common.nav.about"),
+      href: "/about",
+    },
+    {
+      name: t("common.nav.articles"),
+      href: "/articles",
+    },
+    {
+      name: t("common.nav.contact"),
+      href: "/contact",
+    },
   ];
 
   return (
@@ -71,32 +95,32 @@ const Navigation = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 md:h-20">
             {/* Logo */}
-            <div className="shrink">
-              <a href="#home" className="flex items-center gap-2 group">
+            <div className="shrink-0 flex items-center">
+              <Link href="/" className="flex items-center gap-2 group">
                 <Image
-                  src="/asset/image/esabumindo.svg"
-                  alt="Lem Adhesive Terbaik"
+                  src="/asset/image/esabumindo.svg" // Pastikan path logo benar
+                  alt="Esabumindo Logo"
                   width={125}
-                  height={0}
-                  className="mt-4"
+                  height={40} // Beri height agar tidak layout shift
+                  className="w-auto h-10 md:h-12" // Responsive size
                 />
-              </a>
+              </Link>
             </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-1 lg:gap-2">
               {navItems.map((item) => (
                 <div
-                  key={item.name}
+                  key={item.href} // Gunakan href sebagai key jika unik
                   className="relative"
                   onMouseEnter={() =>
                     item.dropdown && setActiveDropdown(item.name)
                   }
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  <a
+                  <Link
                     href={item.href}
-                    className="flex items-center gap-1 px-4 py-2 text-gray-700 font-medium hover:text-[#060771] transition-colors duration-200 relative group"
+                    className="flex items-center gap-1 px-3 py-2 text-gray-700 font-medium hover:text-[#060771] transition-colors duration-200 relative group"
                   >
                     {item.name}
                     {item.dropdown && (
@@ -105,8 +129,8 @@ const Navigation = () => {
                         className="transition-transform duration-200 group-hover:rotate-180"
                       />
                     )}
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-[#060771] to-[#ff4136] group-hover:w-full transition-all duration-300"></span>
-                  </a>
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#060771] to-[#ff4136] group-hover:w-full transition-all duration-300"></span>
+                  </Link>
 
                   {/* Dropdown Menu */}
                   {item.dropdown && (
@@ -118,13 +142,13 @@ const Navigation = () => {
                       }`}
                     >
                       {item.dropdown.map((dropItem) => (
-                        <a
-                          key={dropItem.name}
+                        <Link
+                          key={dropItem.href}
                           href={dropItem.href}
                           className="block px-4 py-3 text-gray-700 hover:bg-[#060771]/5 hover:text-[#060771] transition-colors duration-200 border-l-2 border-transparent hover:border-[#ff4136]"
                         >
                           {dropItem.name}
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   )}
@@ -132,14 +156,18 @@ const Navigation = () => {
               ))}
             </div>
 
-            {/* CTA Button - Desktop */}
-            <div className="hidden md:block">
-              <a
+            {/* Desktop Actions (Lang Switcher & CTA) */}
+            <div className="hidden md:flex items-center gap-4">
+              {/* Language Switcher */}
+              <LanguageSwitcher variant="dropdown" />
+
+              {/* CTA Button */}
+              <Link
                 href="/contact"
                 className="px-6 py-2.5 bg-[#060771] text-white font-medium rounded-lg hover:bg-[#ff4136] transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
               >
-                Hubungi kami
-              </a>
+                {t("common.nav.contact_us_btn") || "Hubungi Kami"}
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -165,59 +193,80 @@ const Navigation = () => {
               : "max-h-0 opacity-0 overflow-hidden"
           }`}
         >
-          <div className="px-4 pt-2 pb-4 space-y-1 bg-white border-t border-gray-100">
+          <div className="px-4 pt-2 pb-4 space-y-1 bg-white border-t border-gray-100 shadow-lg">
             {navItems.map((item) => (
               <div key={item.name}>
-                <a
-                  href={item.href}
-                  className="block px-4 py-3 text-gray-700 font-medium hover:bg-[#060771]/5 hover:text-[#060771] rounded-lg transition-colors duration-200"
-                  onClick={() => !item.dropdown && setIsOpen(false)}
+                <div
+                  className="flex items-center justify-between px-4 py-3 text-gray-700 font-medium hover:bg-[#060771]/5 hover:text-[#060771] rounded-lg transition-colors duration-200 cursor-pointer"
+                  onClick={() => {
+                    if (item.dropdown) {
+                      setActiveDropdown(
+                        activeDropdown === item.name ? null : item.name
+                      );
+                    } else {
+                      setIsOpen(false);
+                      // Navigate manually if needed or wrap in Link if no dropdown
+                    }
+                  }}
                 >
-                  <div className="flex items-center justify-between">
-                    {item.name}
-                    {item.dropdown && (
-                      <ChevronDown
-                        size={16}
-                        className={`transition-transform duration-200 ${
-                          activeDropdown === item.name ? "rotate-180" : ""
-                        }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setActiveDropdown(
-                            activeDropdown === item.name ? null : item.name
-                          );
-                        }}
-                      />
-                    )}
-                  </div>
-                </a>
+                  {/* Jika tidak ada dropdown, gunakan Link langsung */}
+                  {!item.dropdown ? (
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className="w-full"
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <span className="flex-1">{item.name}</span>
+                  )}
+
+                  {item.dropdown && (
+                    <ChevronDown
+                      size={16}
+                      className={`transition-transform duration-200 ${
+                        activeDropdown === item.name ? "rotate-180" : ""
+                      }`}
+                    />
+                  )}
+                </div>
 
                 {/* Mobile Dropdown */}
                 {item.dropdown && activeDropdown === item.name && (
-                  <div className="ml-4 mt-1 space-y-1">
+                  <div className="ml-4 mt-1 space-y-1 bg-gray-50 rounded-lg">
                     {item.dropdown.map((dropItem) => (
-                      <a
+                      <Link
                         key={dropItem.name}
                         href={dropItem.href}
-                        className="block px-4 py-2 text-sm text-gray-600 hover:text-[#060771] hover:bg-[#060771]/5 rounded-lg transition-colors duration-200 border-l-2 border-transparent hover:border-[#ff4136]"
+                        className="block px-4 py-2 text-sm text-gray-600 hover:text-[#060771] hover:bg-[#060771]/10 rounded-lg transition-colors duration-200"
                         onClick={() => setIsOpen(false)}
                       >
                         {dropItem.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 )}
               </div>
             ))}
 
+            <div className="border-t border-gray-100 my-2 pt-2">
+              <div className="px-4 py-2 flex items-center justify-between">
+                <span className="text-gray-600 text-sm">
+                  {t("common.language") || "Language"}
+                </span>
+                <LanguageSwitcher variant="dropdown" />
+              </div>
+            </div>
+
             {/* Mobile CTA Button */}
-            <a
-              href="#consultation"
-              className="block mt-4 px-4 py-3 bg-linear-to-r from-[#060771] to-[#ff4136] text-white font-medium text-center rounded-lg hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300"
+            <Link
+              href="/contact"
+              className="block mt-4 px-4 py-3 bg-gradient-to-r from-[#060771] to-[#ff4136] text-white font-medium text-center rounded-lg hover:shadow-lg transform active:scale-95 transition-all duration-300"
               onClick={() => setIsOpen(false)}
             >
-              Konsultasi Gratis
-            </a>
+              {t("common.nav.contact_us_btn") || "Hubungi Kami"}
+            </Link>
 
             {/* Mobile Contact Info */}
             <div className="mt-4 pt-4 border-t border-gray-200 space-y-2">

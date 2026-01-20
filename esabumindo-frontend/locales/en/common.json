@@ -1,0 +1,17 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "products": "Products",
+    "articles": "Articles",
+    "contact": "Contact"
+  },
+  "button": {
+    "contactUs": "Contact Us Now",
+    "readMore": "Read More",
+    "submit": "Submit"
+  },
+  "footer": {
+    "copyright": "© 2024 ESABOND. All rights reserved."
+  }
+}
