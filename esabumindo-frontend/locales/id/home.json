@@ -1,0 +1,76 @@
+{
+  "hero": {
+    "tagline": "Segalanya menjadi mungkin",
+    "title": "Kami Membawa Kesuksesan Untuk Bisnis Anda",
+    "cta": "Lihat Produk Kami"
+  },
+  "homeSection": {
+    "title": "Tentang Kami",
+    "heroTitle": "<blue>Solusi</blue> <red>Industri</red> <gray>Terpercaya</gray>",
+    "description": "Hubungi kami untuk berkolaborasi dalam menciptakan produk industri yang lebih kuat, efisien, dan berkualitas tinggi.",
+    "ctaPrimary": "Pre-Order Sekarang",
+    "ctaSecondary": "Pelajari Lebih Lanjut",
+    "stats": {
+      "experience": "Tahun Pengalaman",
+      "projects": "Proyek Selesai",
+      "satisfaction": "Kepuasan Klien"
+    }
+  },
+  "productSection": {
+    "badge": "Our Products",
+    "title": "#KualitasDimulaiDiSini",
+    "subtitle": "Solusi adhesive dan chemical terpercaya untuk industri Anda",
+    "description": {
+      "brand": "ESABOND",
+      "text1": "menghadirkan adhesive dan chemical yang andal.",
+      "text2": "Bantu produk Anda jadi lebih",
+      "highlight": "kuat, efisien, dan unggul."
+    },
+    "about": {
+      "title": "Produk & Layanan",
+      "subtitle": "Tentang ESABOND"
+    },
+    "cta": {
+      "primary": "Cek Produk",
+      "secondary": "Hubungi Kami"
+    },
+    "categories": {
+      "title": "Kategori Produk Kami"
+    },
+    "overlay": {
+      "title": "ESABOND Professional",
+      "subtitle": "Quality Solutions for Industry"
+    }
+  },
+  "levelSection": {
+    "badge": "Boost Your Production",
+    "title": {
+      "line1": "Naikin",
+      "line2": "Level",
+      "line3": "Produksi"
+    },
+    "description": {
+      "text1": "Cari adhesive atau chemical yang perform-nya konsisten?",
+      "text2": "Tenang,",
+      "brand": "ESABOND",
+      "text3": "siap support biar bisnis Anda makin ngebut dan gak ribet."
+    },
+    "features": {
+      "performance": {
+        "title": "Performa Konsisten",
+        "subtitle": "Hasil yang dapat diandalkan"
+      },
+      "efficiency": {
+        "title": "Efisiensi Tinggi",
+        "subtitle": "Proses lebih cepat"
+      }
+    },
+    "stats": {
+      "performance": "Performance"
+    },
+    "cta": {
+      "primary": "Cek Produk",
+      "secondary": "Konsultasi Gratis"
+    }
+  }
+}

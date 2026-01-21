@@ -1,0 +1,76 @@
+{
+  "hero": {
+    "tagline": "Everything Becomes Possible",
+    "title": "We Bring Success To Your Business",
+    "cta": "View Our Products"
+  },
+  "homeSection": {
+    "title": "About Us",
+    "heroTitle": "<blue>Trusted</blue> <red>Industrial</red> <gray>Solutions</gray>",
+    "description": "Contact us to collaborate in creating stronger, more efficient, and higher quality industrial products.",
+    "ctaPrimary": "Pre-Order Now",
+    "ctaSecondary": "Learn More",
+    "stats": {
+      "experience": "Years Experience",
+      "projects": "Projects Done",
+      "satisfaction": "Client Satisfied"
+    }
+  },
+  "productSection": {
+    "badge": "Our Products",
+    "title": "#QualityStartsHere",
+    "subtitle": "Trusted adhesive and chemical solutions for your industry",
+    "description": {
+      "brand": "ESABOND",
+      "text1": "provides reliable adhesive and chemical solutions.",
+      "text2": "Help your products become",
+      "highlight": "stronger, more efficient, and superior."
+    },
+    "about": {
+      "title": "Products & Services",
+      "subtitle": "About ESABOND"
+    },
+    "cta": {
+      "primary": "Check Products",
+      "secondary": "Contact Us"
+    },
+    "categories": {
+      "title": "Our Product Categories"
+    },
+    "overlay": {
+      "title": "ESABOND Professional",
+      "subtitle": "Quality Solutions for Industry"
+    }
+  },
+  "levelSection": {
+    "badge": "Boost Your Production",
+    "title": {
+      "line1": "Level",
+      "line2": "Up",
+      "line3": "Production"
+    },
+    "description": {
+      "text1": "Looking for adhesive or chemical with consistent performance?",
+      "text2": "Don't worry,",
+      "brand": "ESABOND",
+      "text3": "is ready to support your business to speed up without hassle."
+    },
+    "features": {
+      "performance": {
+        "title": "Consistent Performance",
+        "subtitle": "Reliable results"
+      },
+      "efficiency": {
+        "title": "High Efficiency",
+        "subtitle": "Faster process"
+      }
+    },
+    "stats": {
+      "performance": "Performance"
+    },
+    "cta": {
+      "primary": "Check Products",
+      "secondary": "Free Consultation"
+    }
+  }
+}

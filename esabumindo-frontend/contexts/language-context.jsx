@@ -15,30 +15,44 @@ export function LanguageProvider({ children }) {
 
   const loadTranslations = async (lang) => {
     try {
-      // Load common translations (dipakai di semua halaman)
       const common = await import(`../locales/${lang}/common.json`);
 
-      // Detect current page and load specific translations
-      let specific = {};
-      if (pathname.includes("/about") || pathname === "/") {
-        const about = await import(`../locales/${lang}/about.json`);
-        specific = { ...about };
-      }
-      // Tambahkan kondisi untuk halaman lain di sini
-      // if (pathname.includes('/products')) {
-      //   const products = await import(`../locales/${lang}/products.json`);
-      //   specific = { ...products };
-      // }
-
-      setTranslations({
+      // Inisialisasi dengan data common
+      let combined = {
         common: common.default,
-        ...specific,
-      });
+      };
+
+      // LOGIKA PENGECEKAN PATH YANG LEBIH AKURAT
+      // Kita gunakan normalisasi path untuk memastikan "/" terdeteksi dengan benar
+      const currentPath = pathname === "" ? "/" : pathname;
+
+      if (currentPath === "/") {
+        // KHUSUS HALAMAN HOME
+        const home = await import(`../locales/${lang}/home.json`);
+
+        combined = {
+          ...combined,
+          home: home.default, // Pakai key 'home' supaya t("home.hero...") jalan
+        };
+
+        console.log("Berhasil load data HOME"); // Cek di console browser
+      } else if (currentPath.includes("/about")) {
+        // KHUSUS HALAMAN ABOUT
+        const about = await import(`../locales/${lang}/about.json`);
+
+        combined = {
+          ...combined,
+          ...about.default, // Sesuai kebutuhan komponen About kamu
+        };
+
+        console.log("Berhasil load data ABOUT");
+      }
+
+      setTranslations(combined);
     } catch (error) {
-      console.error("Error loading translations:", error);
+      console.error("Gagal load translation:", error);
     }
   };
-
   const changeLanguage = (newLocale) => {
     router.push({ pathname, query }, asPath, { locale: newLocale });
   };

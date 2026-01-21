@@ -25,10 +25,32 @@ export default function LanguageSwitcher({ variant = "dropdown" }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // ✅ SOLUSI 1: Save & Restore Scroll Position
   const handleLanguageChange = (langCode) => {
+    // Simpan posisi scroll sebelum ganti bahasa
+    const scrollPosition = window.scrollY || window.pageYOffset;
+    sessionStorage.setItem("scrollPosition", scrollPosition.toString());
+
     changeLanguage(langCode);
     setIsOpen(false);
   };
+
+  // Restore scroll position setelah language change
+  useEffect(() => {
+    const savedScrollPosition = sessionStorage.getItem("scrollPosition");
+    if (savedScrollPosition) {
+      // Tunggu sebentar buat mastiin DOM udah fully rendered
+      const timeoutId = setTimeout(() => {
+        window.scrollTo({
+          top: parseInt(savedScrollPosition, 10),
+          behavior: "instant", // Langsung tanpa animasi
+        });
+        sessionStorage.removeItem("scrollPosition");
+      }, 0);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [locale]);
 
   // VARIANT 1: DROPDOWN (Default)
   if (variant === "dropdown") {

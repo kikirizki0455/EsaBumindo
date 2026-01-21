@@ -1,15 +1,19 @@
 import "@/styles/globals.css";
-import Navigation from "@/components/navigation";
-import Footer from "@/pages/footer";
-import "../styles/globals.css";
 import { LanguageProvider } from "../contexts/language-context";
 
 export default function App({ Component, pageProps }) {
   const getLayout = Component.getLayout || ((page) => page);
+  const isAdminPage = Component.isAdmin === true;
 
+  // 🔒 ADMIN: tanpa LanguageProvider
+  if (isAdminPage) {
+    return getLayout(<Component {...pageProps} />);
+  }
+
+  // 🌍 PUBLIC: pakai LanguageProvider
   return (
     <LanguageProvider>
-      <Component {...pageProps} />
+      {getLayout(<Component {...pageProps} />)}
     </LanguageProvider>
   );
 }

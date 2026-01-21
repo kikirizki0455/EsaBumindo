@@ -1,8 +1,11 @@
 import Image from "next/image";
 import imgImagePt3 from "@/public/asset/image/factory.webp";
 import { ArrowRight, TrendingUp, Zap } from "lucide-react";
+import { useTranslation } from "@/hooks/use-translation";
 
 export function LevelSection() {
+  const { t } = useTranslation();
+
   return (
     <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
       {/* Decorative Background Elements */}
@@ -39,7 +42,9 @@ export function LevelSection() {
                       <div className="text-2xl font-bold text-[#060771]">
                         98%
                       </div>
-                      <div className="text-xs text-gray-600">Performance</div>
+                      <div className="text-xs text-gray-600">
+                        {t("home.levelSection.stats.performance")}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -54,22 +59,22 @@ export function LevelSection() {
               <div className="inline-block mb-4 md:mb-6">
                 <span className="text-[#ff4136] text-xs sm:text-sm font-semibold uppercase tracking-wider px-4 py-2 bg-[#ff4136]/10 rounded-full flex items-center gap-2">
                   <Zap className="w-4 h-4" />
-                  Boost Your Production
+                  {t("home.levelSection.badge")}
                 </span>
               </div>
 
               {/* Main Heading - Mobile First Typography */}
               <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] xl:text-[72px] leading-tight font-bold mb-6 md:mb-8">
                 <span className="text-[#ff4136] inline-block transform hover:scale-105 transition-transform duration-300">
-                  Naikin
+                  {t("home.levelSection.title.line1")}
                 </span>
                 <br />
                 <span className="text-gray-800 inline-block transform hover:scale-105 transition-transform duration-300">
-                  Level
+                  {t("home.levelSection.title.line2")}
                 </span>
                 <br />
                 <span className="text-[#060771] inline-block transform hover:scale-105 transition-transform duration-300">
-                  Produksi
+                  {t("home.levelSection.title.line3")}
                 </span>
               </h2>
 
@@ -82,12 +87,14 @@ export function LevelSection() {
               {/* Description Card */}
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg mb-6 md:mb-8">
                 <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-700">
-                  Cari adhesive atau chemical yang perform-nya konsisten?
+                  {t("home.levelSection.description.text1")}
                 </p>
                 <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-800 font-medium mt-3">
-                  Tenang,{" "}
-                  <span className="text-[#060771] font-bold">ESABOND</span> siap
-                  support biar bisnis Anda makin ngebut dan gak ribet.
+                  {t("home.levelSection.description.text2")}{" "}
+                  <span className="text-[#060771] font-bold">
+                    {t("home.levelSection.description.brand")}
+                  </span>{" "}
+                  {t("home.levelSection.description.text3")}
                 </p>
               </div>
 
@@ -111,10 +118,10 @@ export function LevelSection() {
                   </div>
                   <div>
                     <div className="font-semibold text-gray-800 text-sm md:text-base">
-                      Performa Konsisten
+                      {t("home.levelSection.features.performance.title")}
                     </div>
                     <div className="text-xs md:text-sm text-gray-600 mt-1">
-                      Hasil yang dapat diandalkan
+                      {t("home.levelSection.features.performance.subtitle")}
                     </div>
                   </div>
                 </div>
@@ -137,10 +144,10 @@ export function LevelSection() {
                   </div>
                   <div>
                     <div className="font-semibold text-gray-800 text-sm md:text-base">
-                      Efisiensi Tinggi
+                      {t("home.levelSection.features.efficiency.title")}
                     </div>
                     <div className="text-xs md:text-sm text-gray-600 mt-1">
-                      Proses lebih cepat
+                      {t("home.levelSection.features.efficiency.subtitle")}
                     </div>
                   </div>
                 </div>
@@ -149,12 +156,12 @@ export function LevelSection() {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                 <button className="group bg-[#ff4136] hover:bg-[#ff4136]/90 text-white font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 uppercase tracking-wide text-sm md:text-base flex items-center justify-center gap-2">
-                  Cek Produk
+                  {t("home.levelSection.cta.primary")}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </button>
 
                 <button className="bg-white hover:bg-gray-50 border-2 border-[#ff4136] text-[#ff4136] font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 uppercase tracking-wide text-sm md:text-base">
-                  Konsultasi Gratis
+                  {t("home.levelSection.cta.secondary")}
                 </button>
               </div>
             </div>

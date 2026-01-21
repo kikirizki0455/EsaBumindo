@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { useTranslation } from "@/hooks/use-translation";
 // ============================================================================
 // DATA LAYER
 // ============================================================================
@@ -204,7 +204,10 @@ const TimelineCard = ({ item, index }) => {
 // ============================================================================
 
 export default function History() {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
+  const timelineData = t("history.timeline");
+  const timelineItems = Array.isArray(timelineData) ? timelineData : [];
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1500);
@@ -216,17 +219,16 @@ export default function History() {
       className="relative bg-gradient-to-b from-gray-50 to-white min-h-screen py-12 lg:py-20 px-4 sm:px-6 lg:px-8"
       aria-labelledby="timeline-heading"
     >
-      {/* Header */}
-      <header className="text-center mb-16 lg:mb-24">
+      {/* ================= HEADER ================= */}
+      <header className="text-center mb-20 lg:mb-24">
         <h1
           id="timeline-heading"
           className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-4 tracking-tight"
         >
-          Perjalanan Kami
+          {t("history.header.title")}
         </h1>
         <p className="text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto">
-          Menelusuri setiap langkah penting dalam perjalanan pertumbuhan dan
-          inovasi kami
+          {t("history.header.subtitle")}
         </p>
         <div
           className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mt-6 rounded-full"
@@ -234,26 +236,29 @@ export default function History() {
         />
       </header>
 
-      {/* Timeline Container */}
+      {/* ================= TIMELINE ================= */}
       <div className="relative max-w-7xl mx-auto">
         <TimelineLine />
 
         {isLoading ? (
           <div role="status" aria-label="Loading timeline">
             {Array.from({ length: 3 }).map((_, index) => (
-              <TimelineCardSkeleton key={index} isLeft={index % 2 === 0} />
+              <TimelineCardSkeleton
+                key={`skeleton-${index}`}
+                isLeft={index % 2 === 0}
+              />
             ))}
           </div>
         ) : (
           <div className="space-y-0">
-            {TIMELINE_DATA.map((item, index) => (
+            {timelineItems.map((item, index) => (
               <TimelineCard key={item.id} item={item} index={index} />
             ))}
           </div>
         )}
       </div>
 
-      {/* Background Decoration */}
+      {/* ================= BACKGROUND DECOR ================= */}
       <div
         className="absolute top-0 right-0 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"
         aria-hidden="true"

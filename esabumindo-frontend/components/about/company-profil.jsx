@@ -34,17 +34,33 @@ export default function CompanySection() {
   const { t } = useTranslation();
 
   const strengths = [
-    { number: "01", title: t("about.strengths.items.0"), color: "blue" },
-    { number: "02", title: t("about.strengths.items.1"), color: "red" },
-    { number: "03", title: t("about.strengths.items.2"), color: "red" },
-    { number: "04", title: t("about.strengths.items.3"), color: "blue" },
+    {
+      number: "01",
+      title: t("companyProfile.strengths.items.0"),
+      color: "blue",
+    },
+    {
+      number: "02",
+      title: t("companyProfile.strengths.items.1"),
+      color: "red",
+    },
+    {
+      number: "03",
+      title: t("companyProfile.strengths.items.2"),
+      color: "red",
+    },
+    {
+      number: "04",
+      title: t("companyProfile.strengths.items.3"),
+      color: "blue",
+    },
   ];
 
   return (
-    <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
+    <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-linear-to-b from-white to-gray-50 relative overflow-hidden">
       {/* Decorative Background Elements */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-[#060771]/5 rounded-full blur-3xl -z-0"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#ff4136]/5 rounded-full blur-3xl -z-0"></div>
+      <div className="absolute top-0 left-0 w-96 h-96 bg-[#060771]/5 rounded-full blur-3xl z-0"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#ff4136]/5 rounded-full blur-3xl z-0"></div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Main Content Container with Border */}
@@ -53,17 +69,17 @@ export default function CompanySection() {
           <div className="text-center mb-10 md:mb-14 lg:mb-16">
             <div className="inline-block mb-4">
               <span className="text-[#060771] text-xs sm:text-sm font-semibold uppercase tracking-wider px-4 py-2 bg-[#060771]/10 rounded-full">
-                {t("about.header.badge")}
+                {t("companyProfile.header.badge")}
               </span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
-              {t("about.header.title")}{" "}
+              {t("companyProfile.header.title")}{" "}
               <span className="text-[#ff4136]">
-                {t("about.header.titleHighlight")}
+                {t("companyProfile.header.titleHighlight")}
               </span>
             </h2>
             <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
-              {t("about.header.subtitle")}
+              {t("companyProfile.header.subtitle")}
             </p>
           </div>
 
@@ -71,72 +87,72 @@ export default function CompanySection() {
             {/* Left Content - Company Description */}
             <div className="space-y-6 md:space-y-8">
               {/* Paragraph 1 - Vision */}
-              <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100">
+              <div className="bg-linear-to-br from-gray-50 to-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100">
                 <div className="flex items-start gap-3 mb-4">
-                  <div className="w-10 h-10 bg-[#ff4136]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 bg-[#ff4136]/10 rounded-lg flex items-center justify-center shrink-0">
                     <Target className="w-6 h-6 text-[#ff4136]" />
                   </div>
                   <h3 className="text-xl md:text-2xl font-bold text-gray-800 mt-1">
-                    {t("about.vision.title")}
+                    {t("companyProfile.vision.title")}
                   </h3>
                 </div>
                 <p className="text-sm sm:text-base leading-relaxed text-gray-700">
                   <span className="font-bold text-[#ff4136]">ESABOND</span>{" "}
-                  {t("about.vision.content")}{" "}
+                  {t("companyProfile.vision.content")}{" "}
                   <span className="font-bold text-[#060771]">
-                    {t("about.vision.highlight")}
+                    {t("companyProfile.vision.highlight")}
                   </span>
-                  {t("about.vision.description")}
+                  {t("companyProfile.vision.description")}
                 </p>
               </div>
 
               {/* Paragraph 2 - Experience */}
-              <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100">
+              <div className="bg-linear-to-br from-gray-50 to-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100">
                 <div className="flex items-start gap-3 mb-4">
-                  <div className="w-10 h-10 bg-[#060771]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 bg-[#060771]/10 rounded-lg flex items-center justify-center shrink-0">
                     <Award className="w-6 h-6 text-[#060771]" />
                   </div>
                   <h3 className="text-xl md:text-2xl font-bold text-gray-800 mt-1">
-                    {t("about.experience.title")}
+                    {t("companyProfile.experience.title")}
                   </h3>
                 </div>
                 <p className="text-sm sm:text-base leading-relaxed text-gray-700">
-                  {t("about.experience.content")}{" "}
+                  {t("companyProfile.experience.content")}{" "}
                   <span className="font-bold text-[#ff4136]">ESABOND</span>{" "}
                   <span className="font-bold text-[#060771]">
-                    {t("about.experience.highlight")}
+                    {t("companyProfile.experience.highlight")}
                   </span>
-                  {t("about.experience.description")}{" "}
+                  {t("companyProfile.experience.description")}{" "}
                   <span className="font-bold text-[#060771]">
-                    {t("about.experience.highlight2")}
+                    {t("companyProfile.experience.highlight2")}
                   </span>
                   .
                 </p>
               </div>
 
               {/* Paragraph 3 - Commitment */}
-              <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100">
+              <div className="bg-linear-to-br from-gray-50 to-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100">
                 <div className="flex items-start gap-3 mb-4">
-                  <div className="w-10 h-10 bg-[#ff4136]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 bg-[#ff4136]/10 rounded-lg flex items-center justify-center shrink-0">
                     <TrendingUp className="w-6 h-6 text-[#ff4136]" />
                   </div>
                   <h3 className="text-xl md:text-2xl font-bold text-gray-800 mt-1">
-                    {t("about.commitment.title")}
+                    {t("companyProfile.commitment.title")}
                   </h3>
                 </div>
                 <p className="text-sm sm:text-base leading-relaxed text-gray-700">
                   <span className="font-bold text-[#ff4136]">ESABOND</span>{" "}
-                  {t("about.commitment.content")}{" "}
+                  {t("companyProfile.commitment.content")}{" "}
                   <span className="font-bold text-[#060771]">
-                    {t("about.commitment.highlight")}
+                    {t("companyProfile.commitment.highlight")}
                   </span>
-                  {t("about.commitment.description")}{" "}
+                  {t("companyProfile.commitment.description")}{" "}
                   <span className="font-bold text-[#060771]">
-                    {t("about.commitment.highlight2")}
+                    {t("companyProfile.commitment.highlight2")}
                   </span>
-                  {t("about.commitment.description2")}{" "}
+                  {t("companyProfile.commitment.description2")}{" "}
                   <span className="font-bold text-[#060771]">
-                    {t("about.commitment.highlight3")}
+                    {t("companyProfile.commitment.highlight3")}
                   </span>
                   .
                 </p>
@@ -150,13 +166,13 @@ export default function CompanySection() {
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#060771]/10 rounded-full mb-4">
                   <Zap className="w-4 h-4 text-[#060771]" />
                   <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#060771]">
-                    {t("about.strengths.badge")}
+                    {t("companyProfile.strengths.badge")}
                   </span>
                 </div>
                 <h3 className="text-2xl md:text-3xl font-bold text-gray-800">
-                  {t("about.strengths.title")}{" "}
+                  {t("companyProfile.strengths.title")}{" "}
                   <span className="text-[#ff4136]">
-                    {t("about.strengths.titleHighlight")}
+                    {t("companyProfile.strengths.titleHighlight")}
                   </span>
                 </h3>
               </div>
@@ -174,15 +190,15 @@ export default function CompanySection() {
               </div>
 
               {/* CTA Card */}
-              <div className="bg-gradient-to-br from-[#060771] to-[#060771]/90 rounded-2xl p-6 md:p-8 shadow-2xl text-white transform hover:scale-105 transition-all duration-300">
+              <div className="bg-linear-to-br from-[#060771] to-[#060771]/90 rounded-2xl p-6 md:p-8 shadow-2xl text-white transform hover:scale-105 transition-all duration-300">
                 <h4 className="text-xl md:text-2xl font-bold mb-3">
-                  {t("about.cta.title")}
+                  {t("companyProfile.cta.title")}
                 </h4>
                 <p className="text-sm md:text-base text-white/90 mb-6">
-                  {t("about.cta.description")}
+                  {t("companyProfile.cta.description")}
                 </p>
                 <button className="w-full bg-[#ff4136] hover:bg-[#ff4136]/90 text-white font-semibold px-6 py-3 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl uppercase tracking-wide text-sm">
-                  {t("about.cta.button")}
+                  {t("companyProfile.cta.button")}
                 </button>
               </div>
             </div>
@@ -190,15 +206,15 @@ export default function CompanySection() {
 
           {/* Bottom Statement */}
           <div className="mt-10 md:mt-14 lg:mt-16 text-center">
-            <div className="max-w-4xl mx-auto bg-gradient-to-r from-[#060771]/5 via-[#ff4136]/5 to-[#060771]/5 rounded-2xl p-6 md:p-8 border border-gray-200">
+            <div className="max-w-4xl mx-auto bg-linear-to-r from-[#060771]/5 via-[#ff4136]/5 to-[#060771]/5 rounded-2xl p-6 md:p-8 border border-gray-200">
               <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-700">
-                {t("about.bottomStatement.content")}{" "}
+                {t("companyProfile.bottomStatement.content")}{" "}
                 <span className="font-bold text-[#ff4136]">ESABOND</span>{" "}
                 <span className="font-bold text-[#060771]">
-                  {t("about.bottomStatement.highlight")}
+                  {t("companyProfile.bottomStatement.highlight")}
                 </span>{" "}
                 <span className="font-bold text-[#060771]">
-                  {t("about.bottomStatement.highlight2")}
+                  {t("companyProfile.bottomStatement.highlight2")}
                 </span>
                 .
               </p>

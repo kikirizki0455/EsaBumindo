@@ -1,10 +1,11 @@
 import Image from "next/image";
 import imgImagePt4 from "@/public/asset/image/esabumindo-founder.webp";
 import AdhesiveIcon from "@/public/asset/icon/polymere.svg";
-// import { PolymerIcon } from "./icons/PolymerIcon";
-// import { ChemicalIcon } from "./icons/ChemicalIcon";
+import { useTranslation } from "@/hooks/use-translation";
 
 export function ProductSection() {
+  const { t } = useTranslation();
+
   return (
     <section
       className="py-16 sm:py-20 md:py-24 lg:py-32 bg-gradient-to-br from-[#edebeb] via-[#f5f3f3] to-[#edebeb] rounded-tl-[30px] sm:rounded-tl-[50px] md:rounded-tl-[80px] rounded-tr-[30px] sm:rounded-tr-[50px] md:rounded-tr-[80px] relative overflow-hidden"
@@ -19,14 +20,14 @@ export function ProductSection() {
         <div className="text-center mb-10 md:mb-14 lg:mb-16">
           <div className="inline-block mb-3 md:mb-4">
             <span className="text-[#060771] text-xs sm:text-sm font-semibold uppercase tracking-wider px-4 py-2 bg-white/80 rounded-full shadow-sm">
-              Our Products
+              {t("home.productSection.badge")}
             </span>
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] xl:text-[56px] text-[#060771] font-bold mb-3 md:mb-4">
-            #KualitasDimulaiDiSini
+            {t("home.productSection.title")}
           </h2>
           <p className="text-gray-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
-            Solusi adhesive dan chemical terpercaya untuk industri Anda
+            {t("home.productSection.subtitle")}
           </p>
         </div>
 
@@ -36,38 +37,42 @@ export function ProductSection() {
             {/* Main Description */}
             <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg">
               <p className="text-base sm:text-lg md:text-xl leading-relaxed mb-6 md:mb-8">
-                <span className="text-[#ff4136] font-bold">ESABOND</span>
+                <span className="text-[#ff4136] font-bold">
+                  {t("home.productSection.description.brand")}
+                </span>
                 <span className="text-gray-800">
                   {" "}
-                  menghadirkan adhesive dan chemical yang andal.
+                  {t("home.productSection.description.text1")}
                 </span>
                 <br />
                 <span className="text-gray-800">
-                  Bantu produk Anda jadi lebih{" "}
+                  {t("home.productSection.description.text2")}{" "}
                 </span>
                 <span className="text-[#060771] font-semibold">
-                  kuat, efisien, dan unggul.
+                  {t("home.productSection.description.highlight")}
                 </span>
               </p>
 
               <div className="space-y-3 mb-6 md:mb-8 pb-6 md:pb-8 border-b border-gray-200">
                 <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
-                  Produk & Layanan{" "}
-                  <span className="text-[#ff4136]">ESABOND</span>
+                  {t("home.productSection.about.title")}{" "}
+                  <span className="text-[#ff4136]">
+                    {t("home.productSection.description.brand")}
+                  </span>
                 </h3>
                 <p className="text-[#060771] text-sm md:text-base font-medium">
-                  Tentang ESABOND
+                  {t("home.productSection.about.subtitle")}
                 </p>
               </div>
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                 <button className="bg-[#060771] hover:bg-[#060771]/90 text-white font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 uppercase tracking-wide text-sm md:text-base">
-                  Cek Produk
+                  {t("home.productSection.cta.primary")}
                 </button>
 
                 <button className="bg-white hover:bg-gray-50 border-2 border-[#060771] text-[#060771] font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 uppercase tracking-wide text-sm md:text-base">
-                  Hubungi Kami
+                  {t("home.productSection.cta.secondary")}
                 </button>
               </div>
             </div>
@@ -75,7 +80,7 @@ export function ProductSection() {
             {/* Product Icons Section */}
             <div>
               <h4 className="text-lg md:text-xl font-semibold text-gray-800 mb-4 md:mb-6">
-                Kategori Produk Kami
+                {t("home.productSection.categories.title")}
               </h4>
 
               {/* Mobile & Tablet: Horizontal Scroll with indicators */}
@@ -136,10 +141,10 @@ export function ProductSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#060771]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                   <div className="absolute bottom-6 left-6 right-6">
                     <p className="text-white font-bold text-lg md:text-xl mb-2">
-                      ESABOND Professional
+                      {t("home.productSection.overlay.title")}
                     </p>
                     <p className="text-white/90 text-sm">
-                      Quality Solutions for Industry
+                      {t("home.productSection.overlay.subtitle")}
                     </p>
                   </div>
                 </div>
@@ -149,7 +154,7 @@ export function ProductSection() {
         </div>
       </div>
 
-      {/* Custom scrollbar hide utility - Add to your global CSS */}
+      {/* Custom scrollbar hide utility */}
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;

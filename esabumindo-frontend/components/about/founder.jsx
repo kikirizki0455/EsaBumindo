@@ -1,5 +1,6 @@
 import { Quote, Users } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "../../hooks/use-translation";
 
 // Profile Avatar Component
 function Founder({ name, imageSrc }) {
@@ -33,16 +34,16 @@ function Founder({ name, imageSrc }) {
 }
 
 // Timeline Item Component with Scroll Animation
-function TimelineItem({ name, quote, imageSrc, index, isVisible }) {
+function TimelineItem({ name, role, quote, imageSrc, index, isVisible }) {
   const isLeft = index % 2 === 0;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 mb-20 md:mb-32 relative">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-16 md:mb-24 relative">
       {/* Left Side - Founder or Quote */}
       <div
-        className={`flex ${
-          isLeft ? "md:justify-end" : "md:justify-start"
-        } md:pr-8 lg:pr-16`}
+        className={`flex ${isLeft ? "md:justify-end" : "md:justify-start"} ${
+          isLeft ? "md:pr-8 lg:pr-12" : "md:pl-8 lg:pl-12"
+        }`}
       >
         <div
           className={`transition-all duration-1000 ease-out ${
@@ -55,25 +56,25 @@ function TimelineItem({ name, quote, imageSrc, index, isVisible }) {
             /* Founder on Left */
             <div className="flex flex-col items-center md:items-end text-center md:text-right">
               <Founder name={name} imageSrc={imageSrc} />
-              <h3 className="text-xl md:text-2xl font-bold text-gray-800 mt-4">
+              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mt-6">
                 {name}
               </h3>
-              <p className="text-sm text-[#060771] font-medium mt-1">
-                Co-Founder
+              <p className="text-sm md:text-base text-[#060771] font-semibold mt-2">
+                {role}
               </p>
             </div>
           ) : (
             /* Quote on Left */
-            <div className="relative max-w-xl">
-              <div className="absolute -top-4 left-4 w-12 h-12 bg-gradient-to-br from-[#060771] to-[#ff4136] rounded-full flex items-center justify-center shadow-lg z-10">
+            <div className="relative max-w-xl mx-auto md:mx-0">
+              <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-[#060771] to-[#ff4136] rounded-full flex items-center justify-center shadow-lg z-10">
                 <Quote className="w-6 h-6 text-white" />
               </div>
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-xl border-2 border-gray-100 hover:shadow-2xl hover:border-[#060771]/20 transition-all duration-300">
                 <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-700 italic">
                   "{quote}"
                 </p>
               </div>
-              <div className="absolute -bottom-3 right-3 w-24 h-24 bg-[#ff4136]/10 rounded-full blur-2xl -z-10"></div>
+              <div className="absolute -bottom-3 -right-3 w-24 h-24 bg-[#ff4136]/10 rounded-full blur-2xl -z-10"></div>
             </div>
           )}
         </div>
@@ -81,9 +82,9 @@ function TimelineItem({ name, quote, imageSrc, index, isVisible }) {
 
       {/* Right Side - Quote or Founder */}
       <div
-        className={`flex ${
-          isLeft ? "md:justify-start" : "md:justify-end"
-        } md:pl-8 lg:pl-16`}
+        className={`flex ${isLeft ? "md:justify-start" : "md:justify-end"} ${
+          isLeft ? "md:pl-8 lg:pl-12" : "md:pr-8 lg:pr-12"
+        }`}
       >
         <div
           className={`transition-all duration-1000 ease-out delay-300 ${
@@ -94,26 +95,26 @@ function TimelineItem({ name, quote, imageSrc, index, isVisible }) {
         >
           {isLeft ? (
             /* Quote on Right */
-            <div className="relative max-w-xl">
-              <div className="absolute -top-4 left-4 md:right-4 md:left-auto w-12 h-12 bg-gradient-to-br from-[#060771] to-[#ff4136] rounded-full flex items-center justify-center shadow-lg z-10">
+            <div className="relative max-w-xl mx-auto md:mx-0">
+              <div className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br from-[#060771] to-[#ff4136] rounded-full flex items-center justify-center shadow-lg z-10">
                 <Quote className="w-6 h-6 text-white" />
               </div>
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-xl border-2 border-gray-100 hover:shadow-2xl hover:border-[#060771]/20 transition-all duration-300">
                 <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-700 italic">
                   "{quote}"
                 </p>
               </div>
-              <div className="absolute -bottom-3 left-3 md:right-3 md:left-auto w-24 h-24 bg-[#ff4136]/10 rounded-full blur-2xl -z-10"></div>
+              <div className="absolute -bottom-3 -left-3 w-24 h-24 bg-[#ff4136]/10 rounded-full blur-2xl -z-10"></div>
             </div>
           ) : (
             /* Founder on Right */
             <div className="flex flex-col items-center md:items-start text-center md:text-left">
               <Founder name={name} imageSrc={imageSrc} />
-              <h3 className="text-xl md:text-2xl font-bold text-gray-800 mt-4">
+              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mt-6">
                 {name}
               </h3>
-              <p className="text-sm text-[#060771] font-medium mt-1">
-                Co-Founder
+              <p className="text-sm md:text-base text-[#060771] font-semibold mt-2">
+                {role}
               </p>
             </div>
           )}
@@ -139,23 +140,49 @@ function TimelineItem({ name, quote, imageSrc, index, isVisible }) {
 
 // Main Co-Founder Section
 export default function CoFounderSection() {
+  const { t } = useTranslation();
   const [visibleItems, setVisibleItems] = useState(new Set());
   const observerRefs = useRef([]);
 
-  const coFounders = [
-    {
-      name: "Eman Suratman",
-      quote:
-        "ESABOND lahir dari pengalaman panjang kami di industri adhesive. Kami melihat bagaimana banyak bisnis terhambat oleh suplai yang lambat dan kualitas yang tidak konsisten. Dari situ, kami bertekad menciptakan solusi yang benar-benar responsif dan dapat diandalkan untuk mendukung pertumbuhan industri Indonesia.",
-      imageSrc: null,
-    },
-    {
-      name: "Sarjana",
-      quote:
-        "Visi kami sederhana: memberikan produk adhesive berkualitas tinggi dengan waktu produksi yang cepat. Kami percaya bahwa setiap bisnis berhak mendapatkan partner yang tidak hanya menyediakan produk, tetapi juga memahami kebutuhan mereka secara menyeluruh. Itulah komitmen ESABOND untuk setiap klien kami.",
-      imageSrc: null,
-    },
-  ];
+  // ✅ FIX: Pastikan coFoundersData SELALU array + Multiple fallback
+  const coFoundersData = (() => {
+    // Coba berbagai kemungkinan path
+    let data = t("founder.list", { returnObjects: true });
+
+    // 🔍 DEBUG: Cek apa yang di-return
+    console.log("🔍 Try 1 - founder.list:", data);
+
+    // Kalo ga ada, coba tanpa returnObjects
+    if (!Array.isArray(data)) {
+      const founderObj = t("founder", { returnObjects: true });
+      console.log("🔍 Try 2 - founder object:", founderObj);
+      data = founderObj?.list;
+    }
+
+    // Kalo masih ga ada, coba hardcode (temporary)
+    if (!Array.isArray(data)) {
+      console.log("⚠️ Using fallback data");
+      data = [
+        {
+          name: "Eman Suratman",
+          role: "Co-Founder",
+          quote:
+            "ESABOND was born from our extensive experience in the adhesive industry. We saw how many businesses were hindered by slow supply and inconsistent quality. From there, we were determined to create a truly responsive and reliable solution to support Indonesia's industrial growth.",
+          imageSrc: null,
+        },
+        {
+          name: "Sarjana",
+          role: "Co-Founder",
+          quote:
+            "Our vision is simple: deliver high-quality adhesive products with fast production time. We believe every business deserves a partner that not only provides products, but also comprehensively understands their needs. That is ESABOND's commitment to every client.",
+          imageSrc: null,
+        },
+      ];
+    }
+
+    console.log("✅ Final data:", data);
+    return Array.isArray(data) ? data : [];
+  })();
 
   useEffect(() => {
     const observers = observerRefs.current.map((ref, index) => {
@@ -196,35 +223,47 @@ export default function CoFounderSection() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#060771]/10 rounded-full mb-4">
             <Users className="w-4 h-4 text-[#060771]" />
             <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#060771]">
-              Pendiri Kami
+              {t("founder.badge")}
             </span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
-            Co-Founder <span className="text-[#ff4136]">ESABOND</span>
+            {t("founder.title.prefix")}{" "}
+            <span className="text-[#ff4136]">
+              {t("founder.title.highlight")}
+            </span>
           </h2>
 
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-            Dipimpin oleh para profesional berpengalaman yang berkomitmen
-            membawa inovasi ke industri adhesive Indonesia
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            {t("founder.description")}
           </p>
         </div>
 
         {/* Timeline Container */}
-        <div className="relative max-w-7xl ">
+        <div className="relative max-w-7xl mx-auto">
           {/* Timeline Items */}
-          <div className="relative ">
-            {coFounders.map((coFounder, index) => (
-              <div key={index} ref={(el) => (observerRefs.current[index] = el)}>
-                <TimelineItem
-                  name={coFounder.name}
-                  quote={coFounder.quote}
-                  imageSrc={coFounder.imageSrc}
-                  index={index}
-                  isVisible={visibleItems.has(index)}
-                />
+          <div className="relative">
+            {coFoundersData.length > 0 ? (
+              coFoundersData.map((coFounder, index) => (
+                <div
+                  key={index}
+                  ref={(el) => (observerRefs.current[index] = el)}
+                >
+                  <TimelineItem
+                    name={coFounder.name}
+                    role={coFounder.role}
+                    quote={coFounder.quote}
+                    imageSrc={coFounder.imageSrc || null}
+                    index={index}
+                    isVisible={visibleItems.has(index)}
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-12 text-gray-500">
+                No founder data available
               </div>
-            ))}
+            )}
           </div>
         </div>
 
@@ -237,19 +276,19 @@ export default function CoFounderSection() {
 
             <div className="relative z-10">
               <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-                Bergabunglah dengan Visi Kami
+                {t("founder.cta.title")}
               </h3>
-              <p className="text-base md:text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-                Mari bersama-sama membangun masa depan industri adhesive
-                Indonesia yang lebih baik
+              <p className="text-base md:text-lg text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+                {t("founder.cta.description")}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-[#ff4136] hover:bg-[#ff4136]/90 text-white font-semibold px-8 py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 uppercase tracking-wide">
-                  Hubungi Kami
+                <button className="bg-[#ff4136] hover:bg-[#ff4136]/90 text-white font-semibold px-8 py-3 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl uppercase tracking-wide text-sm">
+                  {t("founder.cta.contact")}
                 </button>
-                <button className="bg-white hover:bg-gray-100 text-[#060771] font-semibold px-8 py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 uppercase tracking-wide">
-                  Pelajari Lebih Lanjut
+
+                <button className="bg-white hover:bg-gray-100 text-[#060771] font-semibold px-8 py-3 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl uppercase tracking-wide text-sm">
+                  {t("founder.cta.learnMore")}
                 </button>
               </div>
             </div>

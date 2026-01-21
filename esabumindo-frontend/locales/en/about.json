@@ -1,51 +1,152 @@
 {
-  "header": {
-    "badge": "About Us",
-    "title": "Get to Know",
-    "titleHighlight": "ESABOND",
-    "subtitle": "Quality adhesive solutions for modern Indonesian industries"
-  },
-  "vision": {
-    "title": "Our Vision",
-    "content": "is a chemical adhesive manufacturing company established to address industrial challenges requiring adhesive supplies with",
-    "highlight": "quality, speed, stability, and high consistency",
-    "description": ". Since its inception, ESABOND has focused on developing adhesive formulations that support various manufacturing sectors from furniture, packaging, construction, to automotive with measurable quality and efficient production time."
-  },
-  "experience": {
-    "title": "Experience",
-    "content": "Extensive experience in the adhesive industry gives",
-    "highlight": "deep understanding of various obstacles commonly faced by industry players",
-    "description": " such as long lead times, uncertain supply, and inconsistent product quality. This experience serves as our foundation in designing",
-    "highlight2": "more responsive and reliable production systems"
-  },
-  "commitment": {
-    "title": "Commitment",
-    "content": "believes that adhesive needs are not only about material strength, but also about",
-    "highlight": "overall production chain efficiency",
-    "description": ". Therefore, we present an end-to-end approach from upstream to downstream starting from",
-    "highlight2": "formulation, testing, quality control",
-    "description2": ", to fast distribution to ensure every customer gets products that are",
-    "highlight3": "ready to use, stable, and timely"
-  },
-  "strengths": {
-    "badge": "Our Advantages",
-    "title": "4 Pillars of",
-    "titleHighlight": "ESABOND Strength",
-    "items": [
-      "Fast Production",
-      "Consistent Quality",
-      "Sustainable Innovation",
-      "Reliable Formulation"
+  "heroSection": {
+    "headline": {
+      "prefix": "#ORDER TODAY",
+      "highlight": "READY TOMORROW."
+    },
+    "description": "Industries are often constrained by slow production and uncertain supply. Speed and consistency are key. ESABOND addresses this challenge with ultra-fast production processes  order today, produced tomorrow helping your business move more efficiently and stay competitive.",
+    "cta": {
+      "primary": "Contact Us Now",
+      "secondary": "View Products"
+    },
+    "carousel": [
+      {
+        "title": "Fast Solutions",
+        "detail": "We provide 24/7 after-sales support."
+      },
+      {
+        "title": "Premium Products",
+        "detail": "Top-quality materials for your satisfaction."
+      },
+      {
+        "title": "Latest Innovation",
+        "detail": "Adopting cutting-edge industrial technology."
+      },
+      {
+        "title": "Best Value",
+        "detail": "Maximum investment value for your business."
+      }
     ]
   },
-  "cta": {
-    "title": "Ready to Collaborate?",
-    "description": "Let's achieve faster, more stable, and quality production together with ESABOND",
-    "button": "Contact Us Now"
+  "history": {
+    "header": {
+      "title": "Our Journey",
+      "subtitle": "Tracing the key milestones in our growth and innovation",
+      "divider": true
+    },
+    "timeline": [
+      {
+        "id": "2025-expansion",
+        "title": "Regional Expansion",
+        "year": "2025",
+        "description": "Expansion into Southeast Asia and implementation of sustainable eco-friendly production technology.",
+        "badgeColor": "bg-gradient-to-r from-indigo-600 to-purple-600",
+        "image": "/api/placeholder/400/300"
+      },
+      {
+        "id": "2024-launch",
+        "title": "Product Launch X-Plus",
+        "year": "2024",
+        "description": "Launching X-Plus product and achieving full market penetration in Jakarta.",
+        "badgeColor": "bg-gradient-to-r from-blue-800 to-blue-900",
+        "image": "/api/placeholder/400/300"
+      },
+      {
+        "id": "2023-certification",
+        "title": "ISO Certification",
+        "year": "2023",
+        "description": "Achieved ISO 9001:2015 certification and expanded distribution across West Java.",
+        "badgeColor": "bg-gradient-to-r from-red-500 to-red-600",
+        "image": "/api/placeholder/400/300"
+      },
+      {
+        "id": "2008-foundation",
+        "title": "Company Foundation",
+        "year": "2008",
+        "description": "Company founded and began first batch production for local B2B market.",
+        "badgeColor": "bg-gradient-to-r from-green-600 to-emerald-600",
+        "image": "/api/placeholder/400/300"
+      }
+    ]
   },
-  "bottomStatement": {
-    "content": "By combining technical expertise, industry understanding, and continuous innovation,",
-    "highlight": "brings new changes to the adhesive world in Indonesia —",
-    "highlight2": "faster, more stable, and more ready to meet modern industry needs"
+  "companyProfile": {
+    "header": {
+      "badge": "About Us",
+      "title": "Get to Know",
+      "titleHighlight": "ESABOND",
+      "subtitle": "Quality adhesive solutions for modern Indonesian industries"
+    },
+    "vision": {
+      "title": "Our Vision",
+      "content": "is a chemical adhesive manufacturing company established to address industrial challenges requiring adhesive supplies with",
+      "highlight": "quality, speed, stability, and high consistency",
+      "description": ". Since its inception, ESABOND has focused on developing adhesive formulations that support various manufacturing sectors from furniture, packaging, construction, to automotive with measurable quality and efficient production time."
+    },
+    "experience": {
+      "title": "Experience",
+      "content": "Extensive experience in the adhesive industry gives",
+      "highlight": "deep understanding of various obstacles commonly faced by industry players",
+      "description": " such as long lead times, uncertain supply, and inconsistent product quality. This experience serves as our foundation in designing",
+      "highlight2": "more responsive and reliable production systems"
+    },
+    "commitment": {
+      "title": "Commitment",
+      "content": "believes that adhesive needs are not only about material strength, but also about",
+      "highlight": "overall production chain efficiency",
+      "description": ". Therefore, we present an end-to-end approach from upstream to downstream starting from",
+      "highlight2": "formulation, testing, quality control",
+      "description2": ", to fast distribution to ensure every customer gets products that are",
+      "highlight3": "ready to use, stable, and timely"
+    },
+    "strengths": {
+      "badge": "Our Advantages",
+      "title": "4 Pillars of",
+      "titleHighlight": "ESABOND Strength",
+      "items": [
+        "Fast Production",
+        "Consistent Quality",
+        "Sustainable Innovation",
+        "Reliable Formulation"
+      ]
+    },
+    "cta": {
+      "title": "Ready to Collaborate?",
+      "description": "Let's achieve faster, more stable, and quality production together with ESABOND",
+      "button": "Contact Us Now"
+    },
+    "bottomStatement": {
+      "content": "By combining technical expertise, industry understanding, and continuous innovation,",
+      "highlight": "brings new changes to the adhesive world in Indonesia —",
+      "highlight2": "faster, more stable, and more ready to meet modern industry needs"
+    }
+  },
+
+  "founder": {
+    "badge": "Our Founders",
+    "title": {
+      "prefix": "The People Behind",
+      "highlight": "ESABOND"
+    },
+    "description": "Two experienced entrepreneurs with a vision to transform Indonesia's adhesive industry to be faster, more stable, and higher quality",
+    "list": [
+      {
+        "name": "Eman Suratman",
+        "role": "Co-Founder",
+        "quote": "ESABOND was born from our extensive experience in the adhesive industry. We saw how many businesses were hindered by slow supply and inconsistent quality. From there, we were determined to create a truly responsive and reliable solution to support Indonesia's industrial growth.",
+        "imageSrc": null
+      },
+      {
+        "name": "Sarjana",
+        "role": "Co-Founder",
+        "quote": "Our vision is simple: deliver high-quality adhesive products with fast production time. We believe every business deserves a partner that not only provides products, but also comprehensively understands their needs. That is ESABOND's commitment to every client.",
+        "imageSrc": null
+      }
+    ],
+    "cta": {
+      "title": "Ready to Collaborate with ESABOND?",
+      "description": "Let's achieve faster, more stable, and quality production together with our experienced team",
+      "contact": "Contact Us Now",
+      "learnMore": "Learn More"
+    }
   }
 }

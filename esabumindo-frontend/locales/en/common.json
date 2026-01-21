@@ -4,7 +4,8 @@
     "about": "About Us",
     "products": "Products",
     "articles": "Articles",
-    "contact": "Contact"
+    "contact": "Contact",
+    "contact_us_btn": "Contact Us"
   },
   "button": {
     "contactUs": "Contact Us Now",

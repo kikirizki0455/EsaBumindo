@@ -1,51 +1,159 @@
 {
-  "header": {
-    "badge": "Tentang Kami",
-    "title": "Mengenal",
-    "titleHighlight": "ESABOND",
-    "subtitle": "Solusi adhesive berkualitas untuk industri modern Indonesia"
-  },
-  "vision": {
-    "title": "Visi Kami",
-    "content": "adalah perusahaan manufaktur chemical adhesive yang hadir untuk menjawab tantangan industri yang membutuhkan suplai lem",
-    "highlight": "berkualitas dengan kecepatan, stabilitas, dan konsistensi tinggi",
-    "description": ". Sejak awal berdiri, ESABOND berfokus pada pengembangan formulasi adhesive yang dapat mendukung berbagai sektor manufaktur mulai dari furniture, packaging, konstruksi, hingga otomotif dengan kualitas yang terukur dan waktu produksi yang efisien."
-  },
-  "experience": {
-    "title": "Pengalaman",
-    "content": "Pengalaman panjang dalam industri adhesive memberikan",
-    "highlight": "pemahaman mendalam mengenai berbagai hambatan yang sering dialami pelaku industri",
-    "description": " seperti lead time yang lama, suplai yang tidak menentu, hingga kualitas produk yang tidak konsisten. Pengalaman tersebut menjadi fondasi kami dalam merancang",
-    "highlight2": "sistem produksi yang lebih responsif dan dapat diandalkan"
-  },
-  "commitment": {
-    "title": "Komitmen",
-    "content": "percaya bahwa kebutuhan adhesive tidak hanya tentang kekuatan material, tetapi juga tentang",
-    "highlight": "efisiensi rantai produksi secara menyeluruh",
-    "description": ". Oleh karena itu, kami menghadirkan pendekatan end-to-end dari hulu ke hilir mulai dari",
-    "highlight2": "formulasi, pengujian, kontrol kualitas",
-    "description2": ", hingga distribusi cepat untuk memastikan setiap pelanggan mendapatkan produk yang",
-    "highlight3": "siap pakai, stabil, dan tepat waktu"
-  },
-  "strengths": {
-    "badge": "Keunggulan Kami",
-    "title": "4 Pilar Kekuatan",
-    "titleHighlight": "ESABOND",
-    "items": [
-      "Produksi Cepat",
-      "Kualitas Konsisten",
-      "Inovasi Berkelanjutan",
-      "Formulasi Andal"
+  "heroSection": {
+    "headline": {
+      "prefix": "#HARI INI PO",
+      "highlight": "LANGSUNG JADI."
+    },
+    "description": "Industri sering terhambat oleh produksi yang lambat dan suplai yang tidak pasti. Karena itu, kecepatan dan konsistensi menjadi kunci. ESABOND menjawab kebutuhan tersebut dengan proses produksi super cepat pemesanan hari ini, besok langsung kami buat membantu bisnis Anda bergerak lebih efisien dan siap bersaing.",
+    "cta": {
+      "primary": "Hubungi Kami Sekarang",
+      "secondary": "Lihat Produk"
+    },
+    "carousel": [
+      {
+        "title": "Solusi Cepat",
+        "detail": "Kami menawarkan layanan purna jual 24/7."
+      },
+      {
+        "title": "Produk Premium",
+        "detail": "Kualitas bahan terbaik untuk kepuasan Anda."
+      },
+      {
+        "title": "Inovasi Terbaru",
+        "detail": "Mengadopsi teknologi terdepan di industri."
+      },
+      {
+        "title": "Harga Terbaik",
+        "detail": "Nilai investasi maksimal untuk bisnis Anda."
+      }
     ]
   },
-  "cta": {
-    "title": "Siap Berkolaborasi?",
-    "description": "Mari wujudkan produksi yang lebih cepat, stabil, dan berkualitas bersama ESABOND",
-    "button": "Hubungi Kami Sekarang"
+  "history": {
+    "header": {
+      "title": "Perjalanan Kami",
+      "subtitle": "Merekam setiap pencapaian penting yang mendorong pertumbuhan dan inovasi kami.",
+      "divider": true
+    },
+    "timeline": [
+      {
+        "id": "2025-expansion",
+        "name": "Ekspansi Regional",
+        "year": "2025",
+        "description": "Target ekspansi ke Asia Tenggara dan implementasi teknologi produksi ramah lingkungan yang berkelanjutan.",
+        "badgeColor": "bg-gradient-to-r from-indigo-600 to-purple-600",
+        "image": "/api/placeholder/400/300"
+      },
+      {
+        "id": "2024-launch",
+        "name": "Eman Suratman",
+        "year": "2024",
+        "description": "Meluncurkan produk utama X-Plus dan mencapai 100% target pasar di wilayah Jakarta dengan pertumbuhan signifikan.",
+        "badgeColor": "bg-gradient-to-r from-blue-800 to-blue-900",
+        "image": "/api/placeholder/400/300"
+      },
+      {
+        "id": "2023-certification",
+        "name": "Sarjana",
+        "year": "2023",
+        "description": "Memperoleh sertifikasi ISO 9001:2015 dan memperluas jaringan distribusi ke seluruh Jawa Barat.",
+        "badgeColor": "bg-gradient-to-r from-red-500 to-red-600",
+        "image": "/api/placeholder/400/300"
+      },
+      {
+        "id": "2017-innovation",
+        "name": "ESABOND Innovation",
+        "year": "2017",
+        "description": "Berpartisipasi dalam pameran internasional pertama dan meraih penghargaan inovasi produk terbaik.",
+        "badgeColor": "bg-gradient-to-r from-purple-600 to-pink-600",
+        "image": "/api/placeholder/400/300"
+      },
+      {
+        "id": "2008-foundation",
+        "name": "ESABOND Foundation",
+        "year": "2008",
+        "description": "Pendirian perusahaan dan awal produksi batch pertama dengan fokus pada pasar lokal B2B yang solid.",
+        "badgeColor": "bg-gradient-to-r from-green-600 to-emerald-600",
+        "image": "/api/placeholder/400/300"
+      }
+    ]
   },
-  "bottomStatement": {
-    "content": "Dengan menggabungkan keahlian teknis, pemahaman industri, serta inovasi berkelanjutan,",
-    "highlight": "membawa perubahan baru bagi dunia adhesive di Indonesia —",
-    "highlight2": "lebih cepat, lebih stabil, dan lebih siap menghadapi kebutuhan industri modern"
+  "companyProfile": {
+    "header": {
+      "badge": "Tentang Kami",
+      "title": "Mengenal",
+      "titleHighlight": "ESABOND",
+      "subtitle": "Solusi adhesive berkualitas untuk industri modern Indonesia"
+    },
+    "vision": {
+      "title": "Visi Kami",
+      "content": "adalah perusahaan manufaktur chemical adhesive yang hadir untuk menjawab tantangan industri yang membutuhkan suplai lem",
+      "highlight": "berkualitas dengan kecepatan, stabilitas, dan konsistensi tinggi",
+      "description": ". Sejak awal berdiri, ESABOND berfokus pada pengembangan formulasi adhesive yang dapat mendukung berbagai sektor manufaktur mulai dari furniture, packaging, konstruksi, hingga otomotif dengan kualitas yang terukur dan waktu produksi yang efisien."
+    },
+    "experience": {
+      "title": "Pengalaman",
+      "content": "Pengalaman panjang dalam industri adhesive memberikan",
+      "highlight": "pemahaman mendalam mengenai berbagai hambatan yang sering dialami pelaku industri",
+      "description": " seperti lead time yang lama, suplai yang tidak menentu, hingga kualitas produk yang tidak konsisten. Pengalaman tersebut menjadi fondasi kami dalam merancang",
+      "highlight2": "sistem produksi yang lebih responsif dan dapat diandalkan"
+    },
+    "commitment": {
+      "title": "Komitmen",
+      "content": "percaya bahwa kebutuhan adhesive tidak hanya tentang kekuatan material, tetapi juga tentang",
+      "highlight": "efisiensi rantai produksi secara menyeluruh",
+      "description": ". Oleh karena itu, kami menghadirkan pendekatan end-to-end dari hulu ke hilir mulai dari",
+      "highlight2": "formulasi, pengujian, kontrol kualitas",
+      "description2": ", hingga distribusi cepat untuk memastikan setiap pelanggan mendapatkan produk yang",
+      "highlight3": "siap pakai, stabil, dan tepat waktu"
+    },
+    "strengths": {
+      "badge": "Keunggulan Kami",
+      "title": "4 Pilar Kekuatan",
+      "titleHighlight": "ESABOND",
+      "items": [
+        "Produksi Cepat",
+        "Kualitas Konsisten",
+        "Inovasi Berkelanjutan",
+        "Formulasi Andal"
+      ]
+    },
+    "cta": {
+      "title": "Siap Berkolaborasi?",
+      "description": "Mari wujudkan produksi yang lebih cepat, stabil, dan berkualitas bersama ESABOND",
+      "button": "Hubungi Kami Sekarang"
+    },
+    "bottomStatement": {
+      "content": "Dengan menggabungkan keahlian teknis, pemahaman industri, serta inovasi berkelanjutan,",
+      "highlight": "membawa perubahan baru bagi dunia adhesive di Indonesia —",
+      "highlight2": "lebih cepat, lebih stabil, dan lebih siap menghadapi kebutuhan industri modern"
+    }
+  },
+  "founder": {
+    "badge": "Para Pendiri",
+    "title": {
+      "prefix": "Orang Di Balik",
+      "highlight": "ESABOND"
+    },
+    "description": "Dua pengusaha berpengalaman yang memiliki visi untuk mengubah industri adhesive Indonesia menjadi lebih cepat, lebih stabil, dan lebih berkualitas",
+    "list": [
+      {
+        "name": "Eman Suratman",
+        "role": "Co-Founder",
+        "quote": "ESABOND lahir dari pengalaman panjang kami di industri adhesive. Kami melihat bagaimana banyak bisnis terhambat oleh suplai yang lambat dan kualitas yang tidak konsisten. Dari situ, kami bertekad menciptakan solusi yang benar-benar responsif dan dapat diandalkan untuk mendukung pertumbuhan industri Indonesia.",
+        "imageSrc": null
+      },
+      {
+        "name": "Sarjana",
+        "role": "Co-Founder",
+        "quote": "Visi kami sederhana: memberikan produk adhesive berkualitas tinggi dengan waktu produksi yang cepat. Kami percaya bahwa setiap bisnis berhak mendapatkan partner yang tidak hanya menyediakan produk, tetapi juga memahami kebutuhan mereka secara menyeluruh. Itulah komitmen ESABOND untuk setiap klien kami.",
+        "imageSrc": null
+      }
+    ],
+    "cta": {
+      "title": "Siap Berkolaborasi dengan ESABOND?",
+      "description": "Mari wujudkan produksi yang lebih cepat, stabil, dan berkualitas bersama tim yang berpengalaman",
+      "contact": "Hubungi Kami Sekarang",
+      "learnMore": "Pelajari Lebih Lanjut"
+    }
   }
 }

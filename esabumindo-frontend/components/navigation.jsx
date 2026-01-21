@@ -24,34 +24,28 @@ const Navigation = () => {
   // Kita mendefinisikan ini di dalam komponen agar bisa akses 't'
   const navItems = [
     {
-      name: t("common.nav.home"),
+      key: "home",
       href: "/",
     },
     {
-      name: t("common.nav.products"),
-      href: "/products", // Sesuaikan route
-      dropdown: [
-        {
-          name: t("common.nav.services.consulting"),
-          href: "/products#consulting",
-        },
-        { name: t("common.nav.services.training"), href: "/products#training" },
-        {
-          name: t("common.nav.services.certification"),
-          href: "/products#certification",
-        },
-      ],
+      key: "products",
+      href: "/product",
+      // dropdown: [
+      //   { key: "consulting", href: "/products#consulting" },
+      //   { key: "training", href: "/products#training" },
+      //   { key: "certification", href: "/products#certification" },
+      // ],
     },
     {
-      name: t("common.nav.about"),
+      key: "about",
       href: "/about",
     },
     {
-      name: t("common.nav.articles"),
-      href: "/articles",
+      key: "articles",
+      href: "/article",
     },
     {
-      name: t("common.nav.contact"),
+      key: "contact",
       href: "/contact",
     },
   ];
@@ -109,51 +103,59 @@ const Navigation = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-1 lg:gap-2">
-              {navItems.map((item) => (
-                <div
-                  key={item.href} // Gunakan href sebagai key jika unik
-                  className="relative"
-                  onMouseEnter={() =>
-                    item.dropdown && setActiveDropdown(item.name)
-                  }
-                  onMouseLeave={() => setActiveDropdown(null)}
-                >
-                  <Link
-                    href={item.href}
-                    className="flex items-center gap-1 px-3 py-2 text-gray-700 font-medium hover:text-[#060771] transition-colors duration-200 relative group"
-                  >
-                    {item.name}
-                    {item.dropdown && (
-                      <ChevronDown
-                        size={16}
-                        className="transition-transform duration-200 group-hover:rotate-180"
-                      />
-                    )}
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#060771] to-[#ff4136] group-hover:w-full transition-all duration-300"></span>
-                  </Link>
+              {navItems.map((item) => {
+                const label = t(`common.nav.${item.key}`);
 
-                  {/* Dropdown Menu */}
-                  {item.dropdown && (
-                    <div
-                      className={`absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden transition-all duration-200 ${
-                        activeDropdown === item.name
-                          ? "opacity-100 visible translate-y-0"
-                          : "opacity-0 invisible -translate-y-2"
-                      }`}
+                return (
+                  <div
+                    key={item.key}
+                    className="relative"
+                    onMouseEnter={() =>
+                      item.dropdown && setActiveDropdown(item.key)
+                    }
+                    onMouseLeave={() => setActiveDropdown(null)}
+                  >
+                    <Link
+                      href={item.href}
+                      className="flex items-center gap-1 px-3 py-2 text-gray-700 font-medium hover:text-[#060771] transition-colors duration-200 relative group"
                     >
-                      {item.dropdown.map((dropItem) => (
-                        <Link
-                          key={dropItem.href}
-                          href={dropItem.href}
-                          className="block px-4 py-3 text-gray-700 hover:bg-[#060771]/5 hover:text-[#060771] transition-colors duration-200 border-l-2 border-transparent hover:border-[#ff4136]"
-                        >
-                          {dropItem.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
+                      {label}
+
+                      {item.dropdown && (
+                        <ChevronDown
+                          size={16}
+                          className={`transition-transform duration-200 ${
+                            activeDropdown === item.key ? "rotate-180" : ""
+                          }`}
+                        />
+                      )}
+
+                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#060771] to-[#ff4136] group-hover:w-full transition-all duration-300"></span>
+                    </Link>
+
+                    {/* Dropdown Menu */}
+                    {item.dropdown && (
+                      <div
+                        className={`absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden transition-all duration-200 ${
+                          activeDropdown === item.key
+                            ? "opacity-100 visible translate-y-0"
+                            : "opacity-0 invisible -translate-y-2"
+                        }`}
+                      >
+                        {item.dropdown.map((dropItem) => (
+                          <Link
+                            key={dropItem.key}
+                            href={dropItem.href}
+                            className="block px-4 py-3 text-gray-700 hover:bg-[#060771]/5 hover:text-[#060771] transition-colors duration-200 border-l-2 border-transparent hover:border-[#ff4136]"
+                          >
+                            {t(`common.nav.services.${dropItem.key}`)}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Desktop Actions (Lang Switcher & CTA) */}
@@ -194,61 +196,63 @@ const Navigation = () => {
           }`}
         >
           <div className="px-4 pt-2 pb-4 space-y-1 bg-white border-t border-gray-100 shadow-lg">
-            {navItems.map((item) => (
-              <div key={item.name}>
-                <div
-                  className="flex items-center justify-between px-4 py-3 text-gray-700 font-medium hover:bg-[#060771]/5 hover:text-[#060771] rounded-lg transition-colors duration-200 cursor-pointer"
-                  onClick={() => {
-                    if (item.dropdown) {
-                      setActiveDropdown(
-                        activeDropdown === item.name ? null : item.name
-                      );
-                    } else {
-                      setIsOpen(false);
-                      // Navigate manually if needed or wrap in Link if no dropdown
-                    }
-                  }}
-                >
-                  {/* Jika tidak ada dropdown, gunakan Link langsung */}
-                  {!item.dropdown ? (
-                    <Link
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className="w-full"
-                    >
-                      {item.name}
-                    </Link>
-                  ) : (
-                    <span className="flex-1">{item.name}</span>
-                  )}
+            {navItems.map((item) => {
+              const label = t(`common.nav.${item.key}`);
 
-                  {item.dropdown && (
-                    <ChevronDown
-                      size={16}
-                      className={`transition-transform duration-200 ${
-                        activeDropdown === item.name ? "rotate-180" : ""
-                      }`}
-                    />
+              return (
+                <div key={item.key}>
+                  <div
+                    className="flex items-center justify-between px-4 py-3 text-gray-700 font-medium hover:bg-[#060771]/5 hover:text-[#060771] rounded-lg transition-colors duration-200 cursor-pointer"
+                    onClick={() => {
+                      if (item.dropdown) {
+                        setActiveDropdown(
+                          activeDropdown === item.key ? null : item.key
+                        );
+                      } else {
+                        setIsOpen(false);
+                      }
+                    }}
+                  >
+                    {!item.dropdown ? (
+                      <Link
+                        href={item.href}
+                        onClick={() => setIsOpen(false)}
+                        className="w-full"
+                      >
+                        {label}
+                      </Link>
+                    ) : (
+                      <span className="flex-1">{label}</span>
+                    )}
+
+                    {item.dropdown && (
+                      <ChevronDown
+                        size={16}
+                        className={`transition-transform duration-200 ${
+                          activeDropdown === item.key ? "rotate-180" : ""
+                        }`}
+                      />
+                    )}
+                  </div>
+
+                  {/* Mobile Dropdown */}
+                  {item.dropdown && activeDropdown === item.key && (
+                    <div className="ml-4 mt-1 space-y-1 bg-gray-50 rounded-lg">
+                      {item.dropdown.map((dropItem) => (
+                        <Link
+                          key={dropItem.key}
+                          href={dropItem.href}
+                          className="block px-4 py-2 text-sm text-gray-600 hover:text-[#060771] hover:bg-[#060771]/10 rounded-lg transition-colors duration-200"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {t(`common.nav.services.${dropItem.key}`)}
+                        </Link>
+                      ))}
+                    </div>
                   )}
                 </div>
-
-                {/* Mobile Dropdown */}
-                {item.dropdown && activeDropdown === item.name && (
-                  <div className="ml-4 mt-1 space-y-1 bg-gray-50 rounded-lg">
-                    {item.dropdown.map((dropItem) => (
-                      <Link
-                        key={dropItem.name}
-                        href={dropItem.href}
-                        className="block px-4 py-2 text-sm text-gray-600 hover:text-[#060771] hover:bg-[#060771]/10 rounded-lg transition-colors duration-200"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        {dropItem.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+              );
+            })}
 
             <div className="border-t border-gray-100 my-2 pt-2">
               <div className="px-4 py-2 flex items-center justify-between">
