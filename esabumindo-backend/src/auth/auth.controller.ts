@@ -64,12 +64,17 @@ export class AuthController {
   }
 
   @Post('logout')
-  logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('access_token');
-    return {
-      message: 'berhasil keluar',
-    };
-  }
+logout(@Res({ passthrough: true }) res: Response) {
+  res.clearCookie('access_token', {
+    httpOnly: true,
+    secure: false,
+    sameSite: 'lax',
+  });
+
+  return {
+    message: 'berhasil logout',
+  };
+}
 
   @Get('me')
   @UseGuards(JwtAuthGuard)

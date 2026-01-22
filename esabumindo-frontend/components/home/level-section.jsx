@@ -18,15 +18,17 @@ export function LevelSection() {
           <div className="order-2 lg:order-1">
             <div className="relative group">
               {/* Decorative Elements */}
-              <div className="absolute -top-6 -left-6 w-24 h-24 md:w-32 md:h-32 bg-[#ff4136]/20 rounded-tl-[60px] -z-10 group-hover:scale-110 transition-transform duration-500"></div>
-              <div className="absolute -bottom-6 -right-6 w-24 h-24 md:w-32 md:h-32 bg-[#060771]/20 rounded-br-[60px] -z-10 group-hover:scale-110 transition-transform duration-500"></div>
+              <div className="absolute -top-6 -left-6 w-24 h-24 md:w-32 md:h-32 bg-[#ff4136]/20 rounded-tl-[60px] -z-10"></div>
+              <div className="absolute -bottom-6 -right-6 w-24 h-24 md:w-32 md:h-32 bg-[#060771]/20 rounded-br-[60px] -z-10"></div>
 
               {/* Main Image Container */}
               <div className="relative rounded-tl-[60px] sm:rounded-tl-[100px] md:rounded-tl-[155px] overflow-hidden shadow-2xl ring-4 ring-white">
                 <Image
                   src={imgImagePt3}
                   alt="Industrial Tanks - ESABOND Chemical Solutions"
-                  className="w-full h-[320px] sm:h-[380px] md:h-[420px] lg:h-[480px] xl:h-[520px] object-cover transform group-hover:scale-110 transition-transform duration-700"
+                  className="w-full h-[320px] sm:h-[380px] md:h-[420px] lg:h-[480px] xl:h-[520px] object-cover"
+                  loading="lazy"
+                  quality={75}
                 />
 
                 {/* Overlay Gradient */}
@@ -65,15 +67,15 @@ export function LevelSection() {
 
               {/* Main Heading - Mobile First Typography */}
               <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] xl:text-[72px] leading-tight font-bold mb-6 md:mb-8">
-                <span className="text-[#ff4136] inline-block transform hover:scale-105 transition-transform duration-300">
+                <span className="text-[#ff4136]">
                   {t("home.levelSection.title.line1")}
                 </span>
                 <br />
-                <span className="text-gray-800 inline-block transform hover:scale-105 transition-transform duration-300">
+                <span className="text-gray-800">
                   {t("home.levelSection.title.line2")}
                 </span>
                 <br />
-                <span className="text-[#060771] inline-block transform hover:scale-105 transition-transform duration-300">
+                <span className="text-[#060771]">
                   {t("home.levelSection.title.line3")}
                 </span>
               </h2>
@@ -81,7 +83,6 @@ export function LevelSection() {
               {/* Decorative Divider */}
               <div className="relative mb-6 md:mb-8">
                 <div className="h-1 w-full bg-gradient-to-r from-[#ff4136] via-[#ff4136]/50 to-transparent rounded-full"></div>
-                <div className="absolute top-0 left-0 h-1 w-20 bg-[#ff4136] rounded-full animate-pulse"></div>
               </div>
 
               {/* Description Card */}

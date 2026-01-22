@@ -1,0 +1,93 @@
+{
+  "heroSection": {
+    "headline": {
+      "prefix": "Get in Touch",
+      "highlight": "We're Here to Help"
+    },
+    "description": "Have questions about our products or services? We'd love to hear from you. Contact our team and let's discuss how ESABOND can support your business needs.",
+    "cta": {
+      "primary": "Send Message",
+      "secondary": "Call Us"
+    }
+  },
+  "contactForm": {
+    "title": "Contact Us",
+    "description": "Fill in your details below and we'll get back to you as soon as possible",
+    "fields": {
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "company": "Company Name",
+      "subject": "Subject",
+      "message": "Message",
+      "placeholder": {
+        "fullName": "Enter your full name",
+        "email": "Enter your email address",
+        "phone": "Enter your phone number",
+        "company": "Enter your company name",
+        "subject": "What is this about?",
+        "message": "Tell us more about your inquiry..."
+      }
+    },
+    "button": "Send Message",
+    "success": "Thank you for your message! We'll contact you soon.",
+    "error": "Something went wrong. Please try again."
+  },
+  "contactInfo": {
+    "title": "Contact Information",
+    "subtitle": "Reach out to us through any of these channels",
+    "items": [
+      {
+        "type": "address",
+        "title": "Our Address",
+        "value": "Jakarta, Indonesia",
+        "icon": "location"
+      },
+      {
+        "type": "phone",
+        "title": "Phone",
+        "value": "+62 (123) 456-7890",
+        "icon": "phone"
+      },
+      {
+        "type": "email",
+        "title": "Email",
+        "value": "contact@esabond.com",
+        "icon": "mail"
+      },
+      {
+        "type": "hours",
+        "title": "Business Hours",
+        "value": "Monday - Friday: 9:00 AM - 5:00 PM",
+        "icon": "clock"
+      }
+    ]
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "description": "Find answers to common questions about our products and services",
+    "items": [
+      {
+        "question": "What is the minimum order quantity?",
+        "answer": "Our minimum order quantity depends on the product type. Please contact us for specific details."
+      },
+      {
+        "question": "How long does delivery take?",
+        "answer": "Delivery typically takes 3-7 business days depending on your location. Rush delivery options are available."
+      },
+      {
+        "question": "Do you offer bulk discounts?",
+        "answer": "Yes, we offer competitive pricing for bulk orders. Contact our sales team for a custom quote."
+      },
+      {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept bank transfers, credit cards, and other payment methods. Please inquire for details."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Ready to Work Together?",
+    "description": "Let's discuss how ESABOND can help accelerate your production",
+    "button": "Contact Us Now"
+  }
+}

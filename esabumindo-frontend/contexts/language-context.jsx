@@ -3,56 +3,56 @@ import { useRouter } from "next/router";
 
 const LanguageContext = createContext();
 
-export function LanguageProvider({ children }) {
+export { LanguageContext };
+
+export function LanguageProvider({ children, initialTranslations = {} }) {
   const router = useRouter();
   const { locale, locales, defaultLocale, pathname, query, asPath } = router;
-  const [translations, setTranslations] = useState({});
+  const [translations, setTranslations] = useState(initialTranslations);
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // Load translations when locale changes
+  // Set hydrated flag setelah component mount di client
   useEffect(() => {
-    loadTranslations(locale);
-  }, [locale]);
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (locale && isHydrated) {
+      loadTranslations(locale);
+    }
+  }, [locale, pathname, isHydrated]);
 
   const loadTranslations = async (lang) => {
     try {
       const common = await import(`../locales/${lang}/common.json`);
 
-      // Inisialisasi dengan data common
       let combined = {
         common: common.default,
       };
 
-      // LOGIKA PENGECEKAN PATH YANG LEBIH AKURAT
-      // Kita gunakan normalisasi path untuk memastikan "/" terdeteksi dengan benar
       const currentPath = pathname === "" ? "/" : pathname;
 
       if (currentPath === "/") {
-        // KHUSUS HALAMAN HOME
         const home = await import(`../locales/${lang}/home.json`);
-
         combined = {
           ...combined,
-          home: home.default, // Pakai key 'home' supaya t("home.hero...") jalan
+          home: home.default,
         };
-
-        console.log("Berhasil load data HOME"); // Cek di console browser
       } else if (currentPath.includes("/about")) {
-        // KHUSUS HALAMAN ABOUT
         const about = await import(`../locales/${lang}/about.json`);
-
         combined = {
           ...combined,
-          ...about.default, // Sesuai kebutuhan komponen About kamu
+          ...about.default,
         };
-
-        console.log("Berhasil load data ABOUT");
       }
 
       setTranslations(combined);
     } catch (error) {
-      console.error("Gagal load translation:", error);
+      console.warn(`Failed to load translations for ${lang}:`, error);
+      setTranslations(initialTranslations);
     }
   };
+
   const changeLanguage = (newLocale) => {
     router.push({ pathname, query }, asPath, { locale: newLocale });
   };
@@ -65,7 +65,7 @@ export function LanguageProvider({ children }) {
       if (value && typeof value === "object") {
         value = value[k];
       } else {
-        return key; // Return key if translation not found
+        return key;
       }
     }
 
@@ -81,6 +81,7 @@ export function LanguageProvider({ children }) {
         changeLanguage,
         t,
         translations,
+        isHydrated,
       }}
     >
       {children}

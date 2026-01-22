@@ -1,0 +1,158 @@
+{
+  "company": {
+    "title": "ESABOND",
+    "description": "Quality adhesive and chemical solutions for modern Indonesian industries",
+    "logo": "ESABOND"
+  },
+  "quickLinks": {
+    "title": "Quick Links",
+    "links": [
+      {
+        "label": "Home",
+        "href": "/"
+      },
+      {
+        "label": "About Us",
+        "href": "/about"
+      },
+      {
+        "label": "Products",
+        "href": "/product"
+      },
+      {
+        "label": "Articles",
+        "href": "/article"
+      },
+      {
+        "label": "Contact",
+        "href": "/contact"
+      }
+    ]
+  },
+  "products": {
+    "title": "Products",
+    "links": [
+      {
+        "label": "Adhesive Solutions",
+        "href": "/product"
+      },
+      {
+        "label": "Chemical Products",
+        "href": "/product"
+      },
+      {
+        "label": "Industrial Supplies",
+        "href": "/product"
+      },
+      {
+        "label": "Custom Solutions",
+        "href": "/contact"
+      }
+    ]
+  },
+  "company_info": {
+    "title": "Company",
+    "links": [
+      {
+        "label": "About Us",
+        "href": "/about"
+      },
+      {
+        "label": "Our Mission",
+        "href": "/about"
+      },
+      {
+        "label": "Careers",
+        "href": "#"
+      },
+      {
+        "label": "Blog",
+        "href": "/article"
+      }
+    ]
+  },
+  "support": {
+    "title": "Support",
+    "links": [
+      {
+        "label": "Contact Us",
+        "href": "/contact"
+      },
+      {
+        "label": "FAQ",
+        "href": "/contact"
+      },
+      {
+        "label": "Documentation",
+        "href": "#"
+      },
+      {
+        "label": "Support Center",
+        "href": "#"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Contact Information",
+    "address": "Jakarta, Indonesia",
+    "phone": "+62 (123) 456-7890",
+    "email": "contact@esabond.com",
+    "hours": "Monday - Friday: 9:00 AM - 5:00 PM"
+  },
+  "social": {
+    "title": "Follow Us",
+    "links": [
+      {
+        "label": "Facebook",
+        "url": "https://facebook.com/esabond",
+        "icon": "facebook"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://instagram.com/esabond",
+        "icon": "instagram"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://linkedin.com/company/esabond",
+        "icon": "linkedin"
+      },
+      {
+        "label": "Twitter",
+        "url": "https://twitter.com/esabond",
+        "icon": "twitter"
+      }
+    ]
+  },
+  "newsletter": {
+    "title": "Subscribe to Our Newsletter",
+    "description": "Get the latest updates and industry insights delivered to your inbox",
+    "placeholder": "Enter your email",
+    "button": "Subscribe",
+    "success": "Thank you for subscribing!",
+    "error": "Please enter a valid email address"
+  },
+  "legal": {
+    "title": "Legal",
+    "links": [
+      {
+        "label": "Privacy Policy",
+        "href": "#"
+      },
+      {
+        "label": "Terms of Service",
+        "href": "#"
+      },
+      {
+        "label": "Cookie Policy",
+        "href": "#"
+      },
+      {
+        "label": "Disclaimer",
+        "href": "#"
+      }
+    ]
+  },
+  "copyright": "© 2024 ESABOND. All rights reserved.",
+  "credits": "Designed and developed with care"
+}

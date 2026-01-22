@@ -1,0 +1,43 @@
+{
+  "page": {
+    "title": "Artikel Terbaru",
+    "subtitle": "Tetap terupdate dengan wawasan industri dan tips ahli kami",
+    "metaDescription": "Jelajahi artikel dan wawasan terbaru kami tentang solusi adhesive, tren industri, dan praktik terbaik"
+  },
+  "search": {
+    "placeholder": "Cari artikel...",
+    "label": "Cari artikel",
+    "resultsFor": "Hasil pencarian untuk"
+  },
+  "badge": {
+    "new": "BARU",
+    "featured": "UNGGULAN"
+  },
+  "card": {
+    "readMore": "Baca Selengkapnya",
+    "minRead": "menit baca"
+  },
+  "empty": {
+    "noResults": "Tidak ada artikel ditemukan",
+    "tryAgain": "Coba sesuaikan filter pencarian Anda"
+  },
+  "error": {
+    "loadFailed": "Gagal memuat artikel. Silakan coba lagi."
+  },
+
+  "articleDetail": {
+    "category": "Artikel",
+    "loading": "Memuat",
+    "subtitle": "Artikel",
+    "author": "Penulis",
+    "date": "Dipublikasikan",
+    "reading_time": "Waktu Baca",
+    "reading_time_unit": "menit",
+    "share_article": "Bagikan Artikel Ini",
+    "share_description": "Bantu orang lain menemukan konten berharga ini dengan membagikannya ke jaringan Anda",
+    "share_button": "Bagikan Sekarang",
+    "back_to_articles": "Kembali ke Artikel",
+    "read_more": "Baca Selengkapnya",
+    "relatedArticles": "Artikel Terkait"
+  }
+}

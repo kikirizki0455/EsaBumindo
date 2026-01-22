@@ -4,7 +4,7 @@ import AdhesiveIcon from "@/public/asset/icon/polymere.svg";
 import { useTranslation } from "@/hooks/use-translation";
 
 export function ProductSection() {
-  const { t } = useTranslation();
+  const { t, isHydrated } = useTranslation();
 
   return (
     <section
@@ -20,14 +20,14 @@ export function ProductSection() {
         <div className="text-center mb-10 md:mb-14 lg:mb-16">
           <div className="inline-block mb-3 md:mb-4">
             <span className="text-[#060771] text-xs sm:text-sm font-semibold uppercase tracking-wider px-4 py-2 bg-white/80 rounded-full shadow-sm">
-              {t("home.productSection.badge")}
+              {isHydrated ? t("home.productSection.badge") : ""}
             </span>
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] xl:text-[56px] text-[#060771] font-bold mb-3 md:mb-4">
-            {t("home.productSection.title")}
+            {isHydrated ? t("home.productSection.title") : ""}
           </h2>
           <p className="text-gray-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
-            {t("home.productSection.subtitle")}
+            {isHydrated ? t("home.productSection.subtitle") : ""}
           </p>
         </div>
 
@@ -38,41 +38,45 @@ export function ProductSection() {
             <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg">
               <p className="text-base sm:text-lg md:text-xl leading-relaxed mb-6 md:mb-8">
                 <span className="text-[#ff4136] font-bold">
-                  {t("home.productSection.description.brand")}
+                  {isHydrated ? t("home.productSection.description.brand") : ""}
                 </span>
                 <span className="text-gray-800">
                   {" "}
-                  {t("home.productSection.description.text1")}
+                  {isHydrated ? t("home.productSection.description.text1") : ""}
                 </span>
                 <br />
                 <span className="text-gray-800">
-                  {t("home.productSection.description.text2")}{" "}
+                  {isHydrated ? t("home.productSection.description.text2") : ""}{" "}
                 </span>
                 <span className="text-[#060771] font-semibold">
-                  {t("home.productSection.description.highlight")}
+                  {isHydrated
+                    ? t("home.productSection.description.highlight")
+                    : ""}
                 </span>
               </p>
 
               <div className="space-y-3 mb-6 md:mb-8 pb-6 md:pb-8 border-b border-gray-200">
                 <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
-                  {t("home.productSection.about.title")}{" "}
+                  {isHydrated ? t("home.productSection.about.title") : ""}{" "}
                   <span className="text-[#ff4136]">
-                    {t("home.productSection.description.brand")}
+                    {isHydrated
+                      ? t("home.productSection.description.brand")
+                      : ""}
                   </span>
                 </h3>
                 <p className="text-[#060771] text-sm md:text-base font-medium">
-                  {t("home.productSection.about.subtitle")}
+                  {isHydrated ? t("home.productSection.about.subtitle") : ""}
                 </p>
               </div>
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                 <button className="bg-[#060771] hover:bg-[#060771]/90 text-white font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 uppercase tracking-wide text-sm md:text-base">
-                  {t("home.productSection.cta.primary")}
+                  {isHydrated ? t("home.productSection.cta.primary") : ""}
                 </button>
 
                 <button className="bg-white hover:bg-gray-50 border-2 border-[#060771] text-[#060771] font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 uppercase tracking-wide text-sm md:text-base">
-                  {t("home.productSection.cta.secondary")}
+                  {isHydrated ? t("home.productSection.cta.secondary") : ""}
                 </button>
               </div>
             </div>
@@ -80,26 +84,27 @@ export function ProductSection() {
             {/* Product Icons Section */}
             <div>
               <h4 className="text-lg md:text-xl font-semibold text-gray-800 mb-4 md:mb-6">
-                {t("home.productSection.categories.title")}
+                {isHydrated ? t("home.productSection.categories.title") : ""}
               </h4>
 
               {/* Mobile & Tablet: Horizontal Scroll with indicators */}
               <div className="lg:hidden relative">
                 <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
                   <div className="flex-shrink-0 w-48 sm:w-56 snap-center">
-                    <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full"></div>
+                    <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 h-full"></div>
                   </div>
                   <div className="flex-shrink-0 w-48 sm:w-56 snap-center">
-                    <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full">
+                    <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 h-full">
                       <Image
                         src={AdhesiveIcon}
                         width={100}
                         alt="lem tanggerang"
+                        loading="lazy"
                       />
                     </div>
                   </div>
                   <div className="flex-shrink-0 w-48 sm:w-56 snap-center">
-                    <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full"></div>
+                    <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 h-full"></div>
                   </div>
                 </div>
 
@@ -113,11 +118,16 @@ export function ProductSection() {
 
               {/* Desktop: Grid Layout */}
               <div className="hidden lg:grid lg:grid-cols-3 gap-4 xl:gap-6">
-                <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-                  <Image src={AdhesiveIcon} width={100} alt="lem tanggerang" />
+                <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <Image
+                    src={AdhesiveIcon}
+                    width={100}
+                    alt="lem tanggerang"
+                    loading="lazy"
+                  />
                 </div>
-                <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"></div>
-                <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"></div>
+                <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"></div>
+                <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"></div>
               </div>
             </div>
           </div>
@@ -126,25 +136,29 @@ export function ProductSection() {
           <div className="order-1 lg:order-2">
             <div className="relative group">
               {/* Decorative Elements */}
-              <div className="absolute -top-4 -right-4 w-20 h-20 md:w-28 md:h-28 bg-[#ff4136]/20 rounded-tr-[50px] -z-10 group-hover:scale-110 transition-transform duration-500"></div>
-              <div className="absolute -bottom-4 -left-4 w-20 h-20 md:w-28 md:h-28 bg-[#060771]/20 rounded-bl-[50px] -z-10 group-hover:scale-110 transition-transform duration-500"></div>
+              <div className="absolute -top-4 -right-4 w-20 h-20 md:w-28 md:h-28 bg-[#ff4136]/20 rounded-tr-[50px] -z-10"></div>
+              <div className="absolute -bottom-4 -left-4 w-20 h-20 md:w-28 md:h-28 bg-[#060771]/20 rounded-bl-[50px] -z-10"></div>
 
               {/* Main Image Container */}
               <div className="relative rounded-tr-[60px] sm:rounded-tr-[100px] md:rounded-tr-[155px] overflow-hidden shadow-2xl ring-4 ring-white">
                 <Image
                   src={imgImagePt4}
                   alt="ESABOND Conference Room - Professional Industrial Solutions"
-                  className="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] xl:h-[500px] object-cover transform group-hover:scale-110 transition-transform duration-700"
+                  className="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] xl:h-[500px] object-cover"
+                  loading="lazy"
+                  quality={75}
                 />
 
                 {/* Overlay with Branding */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#060771]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                   <div className="absolute bottom-6 left-6 right-6">
                     <p className="text-white font-bold text-lg md:text-xl mb-2">
-                      {t("home.productSection.overlay.title")}
+                      {isHydrated ? t("home.productSection.overlay.title") : ""}
                     </p>
                     <p className="text-white/90 text-sm">
-                      {t("home.productSection.overlay.subtitle")}
+                      {isHydrated
+                        ? t("home.productSection.overlay.subtitle")
+                        : ""}
                     </p>
                   </div>
                 </div>

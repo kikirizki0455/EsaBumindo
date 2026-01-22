@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import api from "@/lib/axios";
 
 const menuItems = [
   {
@@ -46,11 +47,22 @@ export default function AdminLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
 
-  const handleLogout = () => {
-    // Handle logout logic
-    
-    localStorage.removeItem("token");
-    router.push("/login");
+  const handleLogout = async () => {
+    try {
+      await api.post(
+        "/auth/logout",
+        {},
+        {
+          withCredentials: true, // ⬅️ penting untuk cookie httpOnly
+        }
+      );
+
+      localStorage.removeItem("token");
+
+      router.push("/login");
+    } catch (error) {
+      console.error("Logout gagal:", error);
+    }
   };
 
   return (

@@ -1,0 +1,141 @@
+{
+  "heroSection": {
+    "headline": {
+      "prefix": "Produk Premium",
+      "highlight": "Solusi Terbaik Kami"
+    },
+    "description": "Temukan rangkaian lengkap produk adhesive dan chemical berkualitas tinggi yang dirancang untuk memenuhi kebutuhan industri modern.",
+    "cta": {
+      "primary": "Jelajahi Produk",
+      "secondary": "Minta Penawaran"
+    }
+  },
+  "productGrid": {
+    "title": "Produk Kami",
+    "subtitle": "Jelajahi katalog produk lengkap kami",
+    "filterBy": "Filter berdasarkan Kategori",
+    "sortBy": "Urutkan berdasarkan",
+    "noResults": "Tidak ada produk ditemukan"
+  },
+  "productCard": {
+    "viewDetails": "Lihat Detail",
+    "addToCart": "Tambah ke Keranjang",
+    "price": "Harga",
+    "inStock": "Stok Tersedia",
+    "outOfStock": "Stok Habis",
+    "specifications": "Spesifikasi",
+    "features": "Fitur"
+  },
+  "productDetail": {
+    "backButton": "Kembali ke Produk",
+    "shareButton": "Bagikan Produk",
+    "addToCart": "Tambah ke Keranjang",
+    "requestQuote": "Minta Penawaran",
+    "preOrder": "Pre-Order Sekarang",
+    "downloadSpec": "Spesifikasi",
+    "share": "Bagikan",
+    "copied": "Tersalin",
+    "specifications": "Spesifikasi",
+    "features": "Keunggulan Utama",
+    "applications": "Aplikasi",
+    "technicalData": "Data Teknis",
+    "relatedProducts": "Produk Terkait",
+    "description": "Deskripsi Produk",
+    "availability": "Ketersediaan",
+    "leadTime": "Waktu Pengiriman",
+    "minimumOrder": "Jumlah Pesanan Minimum",
+    "overview": "Gambaran Umum",
+    "tabs": {
+      "overview": "Gambaran Umum",
+      "specifications": "Spesifikasi",
+      "technical": "Info Teknis"
+    },
+    "productNotFound": "Produk Tidak Ditemukan",
+    "backToProducts": "Kembali ke Produk",
+    "category": "Kategori",
+    "mainAdvantages": "Keunggulan Utama",
+    "applicationInfo": "Info Aplikasi",
+    "industry": "Industri",
+    "adhesiveType": "Tipe Adhesive"
+  },
+  "preOrder": {
+    "title": "Form Pre-Order",
+    "subtitle": "Pesan produk pilihan Anda dan dapatkan penawaran khusus",
+    "backButton": "Kembali",
+    "submitButton": "Kirim Pre-Order",
+    "submitting": "Mengirim...",
+    "productSummary": "Ringkasan Produk",
+    "product": "PRODUK",
+    "category": "Kategori",
+    "type": "Tipe",
+    "application": "Aplikasi",
+    "advantages": "Keunggulan",
+    "needHelp": "Butuh Bantuan?",
+    "successMessage": "Pre-order berhasil dikirim! Tim kami akan menghubungi Anda segera.",
+    "errorMessage": "Gagal mengirim pre-order. Silakan coba lagi.",
+    "requiredFields": "Mohon isi semua field yang diperlukan",
+    "productNotFound": "Produk Tidak Ditemukan",
+    "sections": {
+      "personalInfo": "Informasi Pribadi",
+      "companyInfo": "Informasi Perusahaan",
+      "orderDetails": "Detail Pre-Order"
+    },
+    "fields": {
+      "fullName": "Nama Lengkap",
+      "email": "Email",
+      "phone": "Nomor WhatsApp",
+      "company": "Nama Perusahaan",
+      "industry": "Industri / Sektor",
+      "quantity": "Jumlah (Unit/Karton)",
+      "productName": "Nama Produk",
+      "packaging": "Kemasan",
+      "notes": "Catatan / Permintaan Khusus",
+      "contactMethod": "Metode Kontak"
+    },
+    "placeholders": {
+      "fullName": "Masukkan nama lengkap Anda",
+      "email": "email@example.com",
+      "phone": "+62 xxx xxxx xxxx",
+      "company": "PT. Nama Perusahaan",
+      "industry": "Contoh: Otomotif, Elektronik, Konstruksi",
+      "quantity": "1",
+      "notes": "Tambahkan catatan khusus atau pertanyaan..."
+    },
+    "packaging": {
+      "title": "Pilihan Kemasan",
+      "tong50kg": "Tong Dus 50 kg",
+      "tong40kg": "Tong Dus 40 kg",
+      "drumPolos200kg": "Drum Polos 200 kg",
+      "drumTulang200kg": "Drum Tulang 200 kg",
+      "drumPlastik200kg": "Drum Plastik 200 kg",
+      "bulltank1ton": "Bulltank 1 Ton"
+    },
+    "contactMethods": {
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "emailDesc": "Kami akan menghubungi via Email",
+      "whatsappDesc": "Kami akan menghubungi via WhatsApp"
+    },
+    "helpSection": {
+      "email": "kikirizki0455@gmail.com",
+      "phone": "082146024328"
+    }
+  },
+  "categories": {
+    "title": "Kategori Produk",
+    "all": "Semua Produk",
+    "adhesive": "Solusi Adhesive",
+    "chemical": "Produk Chemical",
+    "industrial": "Perlengkapan Industri",
+    "specialty": "Produk Khusus"
+  },
+  "cta": {
+    "title": "Butuh Solusi Custom?",
+    "description": "Hubungi tim kami untuk mendiskusikan produk yang disesuaikan dengan kebutuhan spesifik Anda",
+    "button": "Hubungi Tim Kami"
+  },
+  "testimonials": {
+    "title": "Apa Kata Pelanggan Kami",
+    "description": "Dipercaya oleh produsen dan bisnis terkemuka"
+  }
+}

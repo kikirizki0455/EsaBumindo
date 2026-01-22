@@ -1,0 +1,42 @@
+{
+  "page": {
+    "title": "Latest Articles",
+    "subtitle": "Stay updated with our industry insights and expert tips",
+    "metaDescription": "Explore our latest articles and insights on adhesive solutions, industrial trends, and best practices"
+  },
+  "search": {
+    "placeholder": "Search articles...",
+    "label": "Search articles",
+    "resultsFor": "Search results for"
+  },
+  "badge": {
+    "new": "NEW",
+    "featured": "FEATURED"
+  },
+  "card": {
+    "readMore": "Read More",
+    "minRead": "min read"
+  },
+  "empty": {
+    "noResults": "No articles found",
+    "tryAgain": "Try adjusting your search filters"
+  },
+  "error": {
+    "loadFailed": "Failed to load articles. Please try again."
+  },
+  "articleDetail": {
+    "category": "Article",
+    "loading": "Loading",
+    "subtitle": "Article",
+    "author": "Author",
+    "date": "Published",
+    "reading_time": "Read Time",
+    "reading_time_unit": "min",
+    "share_article": "Share This Article",
+    "share_description": "Help others discover this valuable content by sharing it with your network",
+    "share_button": "Share Now",
+    "back_to_articles": "Back to Articles",
+    "read_more": "Read More",
+    "relatedArticles": "Related Articles"
+  }
+}

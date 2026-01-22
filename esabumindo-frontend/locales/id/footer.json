@@ -1,0 +1,158 @@
+{
+  "company": {
+    "title": "ESABOND",
+    "description": "Solusi adhesive dan chemical berkualitas untuk industri modern Indonesia",
+    "logo": "ESABOND"
+  },
+  "quickLinks": {
+    "title": "Tautan Cepat",
+    "links": [
+      {
+        "label": "Beranda",
+        "href": "/"
+      },
+      {
+        "label": "Tentang Kami",
+        "href": "/about"
+      },
+      {
+        "label": "Produk",
+        "href": "/product"
+      },
+      {
+        "label": "Artikel",
+        "href": "/article"
+      },
+      {
+        "label": "Kontak",
+        "href": "/contact"
+      }
+    ]
+  },
+  "products": {
+    "title": "Produk",
+    "links": [
+      {
+        "label": "Solusi Adhesive",
+        "href": "/product"
+      },
+      {
+        "label": "Produk Chemical",
+        "href": "/product"
+      },
+      {
+        "label": "Perlengkapan Industri",
+        "href": "/product"
+      },
+      {
+        "label": "Solusi Custom",
+        "href": "/contact"
+      }
+    ]
+  },
+  "company_info": {
+    "title": "Perusahaan",
+    "links": [
+      {
+        "label": "Tentang Kami",
+        "href": "/about"
+      },
+      {
+        "label": "Misi Kami",
+        "href": "/about"
+      },
+      {
+        "label": "Karir",
+        "href": "#"
+      },
+      {
+        "label": "Blog",
+        "href": "/article"
+      }
+    ]
+  },
+  "support": {
+    "title": "Dukungan",
+    "links": [
+      {
+        "label": "Hubungi Kami",
+        "href": "/contact"
+      },
+      {
+        "label": "FAQ",
+        "href": "/contact"
+      },
+      {
+        "label": "Dokumentasi",
+        "href": "#"
+      },
+      {
+        "label": "Pusat Dukungan",
+        "href": "#"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Informasi Kontak",
+    "address": "Jakarta, Indonesia",
+    "phone": "+62 (123) 456-7890",
+    "email": "contact@esabond.com",
+    "hours": "Senin - Jumat: 9:00 AM - 5:00 PM"
+  },
+  "social": {
+    "title": "Ikuti Kami",
+    "links": [
+      {
+        "label": "Facebook",
+        "url": "https://facebook.com/esabond",
+        "icon": "facebook"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://instagram.com/esabond",
+        "icon": "instagram"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://linkedin.com/company/esabond",
+        "icon": "linkedin"
+      },
+      {
+        "label": "Twitter",
+        "url": "https://twitter.com/esabond",
+        "icon": "twitter"
+      }
+    ]
+  },
+  "newsletter": {
+    "title": "Berlangganan Newsletter Kami",
+    "description": "Dapatkan update dan wawasan industri terbaru langsung ke inbox Anda",
+    "placeholder": "Masukkan email Anda",
+    "button": "Berlangganan",
+    "success": "Terima kasih telah berlangganan!",
+    "error": "Silakan masukkan alamat email yang valid"
+  },
+  "legal": {
+    "title": "Legal",
+    "links": [
+      {
+        "label": "Kebijakan Privasi",
+        "href": "#"
+      },
+      {
+        "label": "Syarat Layanan",
+        "href": "#"
+      },
+      {
+        "label": "Kebijakan Cookie",
+        "href": "#"
+      },
+      {
+        "label": "Penafian",
+        "href": "#"
+      }
+    ]
+  },
+  "copyright": "© 2024 ESABOND. Semua hak dilindungi.",
+  "credits": "Dirancang dan dikembangkan dengan sepenuh hati"
+}

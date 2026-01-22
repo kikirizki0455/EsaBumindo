@@ -1,0 +1,25 @@
+{
+  "articles": [
+    {
+      "id": "19981e00-d9a5-42d6-8ffd-abfdb8f7f9e2",
+      "slug": "lem-kertas-tanggerang-murah",
+      "title": "lem kertas tanggerang murah",
+      "excerpt": "kegunaan lem kertas di industri besar",
+      "author": "R&D Team",
+      "coverImage": "https://down-id.img.susercontent.com/file/sg-11134201-824iv-mf84lplg7ytr3d@resize_w450_nl.webp",
+      "publishedAt": "2026-01-22T03:51:09.676Z",
+      "status": "published"
+    },
+    {
+      "id": "e675ec40-95d2-4aa3-a897-897dddfa8b7d",
+      "slug": "lem-kayu-terbaik",
+      "title": "lem kayu terbaik",
+      "excerpt": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+      "author": "bung iki asdasd",
+      "coverImage": "https://i.pinimg.com/736x/fa/f9/d7/faf9d714d09a181218593e95e5387248.jpg",
+      "publishedAt": "2026-01-20T04:23:12.306Z",
+      "status": "published"
+    }
+  ],
+  "lastUpdated": "2026-01-22T04:18:03.568Z"
+}

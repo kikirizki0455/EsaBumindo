@@ -1,7 +1,7 @@
 // components/article/BlockRenderer.jsx
 "use client";
 
-import Image from "next/image";
+import { LazyImage } from "./lazy-image";
 
 export default function BlockRenderer({ blocks, getImageUrl }) {
   if (!blocks || blocks.length === 0) {
@@ -14,12 +14,12 @@ export default function BlockRenderer({ blocks, getImageUrl }) {
 
   return (
     <div className="space-y-8">
-      {blocks.map((block) => {
+      {blocks.map((block, index) => {
         // Paragraph Block
         if (block.type === "paragraph") {
           return (
             <p
-              key={block.id}
+              key={block.id || index}
               className="text-gray-700 leading-relaxed text-[17px] md:text-[18px]"
             >
               {block.content}
@@ -38,7 +38,7 @@ export default function BlockRenderer({ blocks, getImageUrl }) {
 
           return (
             <HeadingTag
-              key={block.id}
+              key={block.id || index}
               className={headingClasses[block.level] || headingClasses[2]}
             >
               {block.content}
@@ -51,17 +51,19 @@ export default function BlockRenderer({ blocks, getImageUrl }) {
           // Single Image Layout (Full Width)
           if (block.layout === "single") {
             return (
-              <div key={block.id} className="my-8">
+              <div key={block.id || index} className="my-8">
                 {block.images.map((image, idx) => (
                   <div key={idx} className="space-y-3">
-                    <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-lg bg-gray-100">
-                      <Image
+                    <div
+                      className="relative w-full overflow-hidden rounded-xl shadow-lg bg-gray-100"
+                      style={{ aspectRatio: "16/9" }}
+                    >
+                      <LazyImage
                         src={getImageUrl(image.url)}
                         alt={image.alt || "Article image"}
                         fill
-                        className="object-cover"
-                        unoptimized
                         sizes="(max-width: 768px) 100vw, 896px"
+                        priority={idx === 0}
                       />
                     </div>
                     {image.caption && (
@@ -79,19 +81,21 @@ export default function BlockRenderer({ blocks, getImageUrl }) {
           if (block.layout === "double") {
             return (
               <div
-                key={block.id}
+                key={block.id || index}
                 className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8"
               >
                 {block.images.map((image, idx) => (
                   <div key={idx} className="space-y-3">
-                    <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-md bg-gray-100">
-                      <Image
+                    <div
+                      className="relative w-full overflow-hidden rounded-xl shadow-md bg-gray-100"
+                      style={{ aspectRatio: "16/9" }}
+                    >
+                      <LazyImage
                         src={getImageUrl(image.url)}
                         alt={image.alt || "Article image"}
                         fill
-                        className="object-cover"
-                        unoptimized
                         sizes="(max-width: 768px) 100vw, 50vw"
+                        priority={false}
                       />
                     </div>
                     {image.caption && (
@@ -109,19 +113,21 @@ export default function BlockRenderer({ blocks, getImageUrl }) {
           if (block.layout === "grid") {
             return (
               <div
-                key={block.id}
+                key={block.id || index}
                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-8"
               >
                 {block.images.map((image, idx) => (
                   <div key={idx} className="space-y-2">
-                    <div className="relative w-full aspect-square rounded-lg overflow-hidden shadow-md bg-gray-100">
-                      <Image
+                    <div
+                      className="relative w-full overflow-hidden rounded-lg shadow-md bg-gray-100"
+                      style={{ aspectRatio: "1/1" }}
+                    >
+                      <LazyImage
                         src={getImageUrl(image.url)}
                         alt={image.alt || "Article image"}
                         fill
-                        className="object-cover"
-                        unoptimized
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        priority={false}
                       />
                     </div>
                     {image.caption && (

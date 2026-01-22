@@ -93,3 +93,43 @@ export function calculateSalary(
     totalSalary: Number((basicSalary + overtimePay).toFixed(2)),
   };
 }
+
+// Load translations untuk SSR dan hydration
+export async function loadTranslationsForPath(locale, pathname) {
+  try {
+    const translations = {};
+
+    // Always load common translations
+    try {
+      const common = await import(`../locales/${locale}/common.json`);
+      translations.common = common.default;
+    } catch (error) {
+      console.warn(`Failed to load common translations for ${locale}`);
+      translations.common = {};
+    }
+
+    // Load page-specific translations
+    const currentPath = pathname === "" ? "/" : pathname;
+
+    if (currentPath === "/") {
+      try {
+        const home = await import(`../locales/${locale}/home.json`);
+        translations.home = home.default;
+      } catch (error) {
+        console.warn(`Failed to load home translations for ${locale}`);
+      }
+    } else if (currentPath.includes("/about")) {
+      try {
+        const about = await import(`../locales/${locale}/about.json`);
+        Object.assign(translations, about.default);
+      } catch (error) {
+        console.warn(`Failed to load about translations for ${locale}`);
+      }
+    }
+
+    return translations;
+  } catch (error) {
+    console.error(`Error loading translations for ${locale}:`, error);
+    return {};
+  }
+}

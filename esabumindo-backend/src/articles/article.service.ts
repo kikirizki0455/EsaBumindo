@@ -8,7 +8,8 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
-import { Prisma } from '@prisma/client';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class ArticlesService {
@@ -138,7 +139,7 @@ export class ArticlesService {
     const publishedAt =
       createArticleDto.status === 'published' ? new Date() : null;
 
-    return this.prisma.article.create({
+    const article = await this.prisma.article.create({
       data: {
         title: createArticleDto.title,
         slug,
@@ -150,6 +151,11 @@ export class ArticlesService {
         publishedAt,
       },
     });
+
+    // Auto sync cache setelah create
+    await this.syncCache();
+
+    return article;
   }
 
   // Update article
@@ -186,7 +192,7 @@ export class ArticlesService {
       publishedAt = null;
     }
 
-    return this.prisma.article.update({
+    const article = await this.prisma.article.update({
       where: { id },
       data: {
         ...(updateArticleDto.title && { title: updateArticleDto.title }),
@@ -205,7 +211,13 @@ export class ArticlesService {
         ...(publishedAt !== undefined && { publishedAt }),
       },
     });
+
+    // Auto sync cache setelah update
+    await this.syncCache();
+
+    return article;
   }
+
   // Delete article
   async remove(id: string) {
     // Cek apakah artikel ada
@@ -214,6 +226,9 @@ export class ArticlesService {
     await this.prisma.article.delete({
       where: { id },
     });
+
+    // Auto sync cache setelah delete
+    await this.syncCache();
 
     return { message: 'Article deleted successfully' };
   }
@@ -247,5 +262,72 @@ export class ArticlesService {
       published,
       draft,
     };
+  }
+
+  // Sync cache ke frontend
+  private async syncCache(): Promise<void> {
+    try {
+      const articles = await this.findPublished();
+      const frontendDataDir = path.join(
+        process.cwd(),
+        '..',
+        'esabumindo-frontend',
+        'data',
+      );
+
+      // Ensure directory exists
+      if (!fs.existsSync(frontendDataDir)) {
+        fs.mkdirSync(frontendDataDir, { recursive: true });
+      }
+
+      // Write articles.json
+      const articlesList = {
+        articles: articles.map((a) => ({
+          id: a.id,
+          slug: a.slug,
+          title: a.title,
+          excerpt: a.excerpt,
+          author: a.author,
+          coverImage: a.coverImage,
+          publishedAt: a.publishedAt,
+          status: a.status,
+        })),
+        lastUpdated: new Date().toISOString(),
+      };
+
+      fs.writeFileSync(
+        path.join(frontendDataDir, 'articles.json'),
+        JSON.stringify(articlesList, null, 2),
+      );
+
+      // Write articles-detail.json
+      const articlesDetail = {
+        articles: {},
+        lastUpdated: new Date().toISOString(),
+      };
+      articles.forEach((a) => {
+        articlesDetail.articles[a.slug] = {
+          id: a.id,
+          slug: a.slug,
+          title: a.title,
+          excerpt: a.excerpt,
+          author: a.author,
+          coverImage: a.coverImage,
+          publishedAt: a.publishedAt,
+          status: a.status,
+          contentBlocks: a.contentBlocks,
+        };
+      });
+
+      fs.writeFileSync(
+        path.join(frontendDataDir, 'articles-detail.json'),
+        JSON.stringify(articlesDetail, null, 2),
+      );
+
+      console.log('✅ Cache synced successfully');
+    } catch (error) {
+      console.error('❌ Cache sync error:', error);
+      // Don't throw - cache sync failure shouldn't break the main operation
+    }
   }
 }

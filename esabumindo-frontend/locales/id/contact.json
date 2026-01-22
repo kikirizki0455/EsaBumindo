@@ -1,0 +1,93 @@
+{
+  "heroSection": {
+    "headline": {
+      "prefix": "Hubungi Kami",
+      "highlight": "Kami Siap Membantu"
+    },
+    "description": "Ada pertanyaan tentang produk atau layanan kami? Kami ingin mendengar dari Anda. Hubungi tim kami dan mari kita diskusikan bagaimana ESABOND dapat mendukung kebutuhan bisnis Anda.",
+    "cta": {
+      "primary": "Kirim Pesan",
+      "secondary": "Hubungi Kami"
+    }
+  },
+  "contactForm": {
+    "title": "Hubungi Kami",
+    "description": "Isi detail di bawah dan kami akan merespons Anda secepatnya",
+    "fields": {
+      "fullName": "Nama Lengkap",
+      "email": "Alamat Email",
+      "phone": "Nomor Telepon",
+      "company": "Nama Perusahaan",
+      "subject": "Subjek",
+      "message": "Pesan",
+      "placeholder": {
+        "fullName": "Masukkan nama lengkap Anda",
+        "email": "Masukkan alamat email Anda",
+        "phone": "Masukkan nomor telepon Anda",
+        "company": "Masukkan nama perusahaan Anda",
+        "subject": "Tentang apa ini?",
+        "message": "Ceritakan lebih lanjut tentang pertanyaan Anda..."
+      }
+    },
+    "button": "Kirim Pesan",
+    "success": "Terima kasih atas pesan Anda! Kami akan menghubungi Anda segera.",
+    "error": "Terjadi kesalahan. Silakan coba lagi."
+  },
+  "contactInfo": {
+    "title": "Informasi Kontak",
+    "subtitle": "Hubungi kami melalui salah satu saluran berikut",
+    "items": [
+      {
+        "type": "address",
+        "title": "Alamat Kami",
+        "value": "Jakarta, Indonesia",
+        "icon": "location"
+      },
+      {
+        "type": "phone",
+        "title": "Telepon",
+        "value": "+62 (123) 456-7890",
+        "icon": "phone"
+      },
+      {
+        "type": "email",
+        "title": "Email",
+        "value": "contact@esabond.com",
+        "icon": "mail"
+      },
+      {
+        "type": "hours",
+        "title": "Jam Kerja",
+        "value": "Senin - Jumat: 9:00 AM - 5:00 PM",
+        "icon": "clock"
+      }
+    ]
+  },
+  "faq": {
+    "title": "Pertanyaan yang Sering Diajukan",
+    "description": "Temukan jawaban untuk pertanyaan umum tentang produk dan layanan kami",
+    "items": [
+      {
+        "question": "Berapa jumlah pesanan minimum?",
+        "answer": "Jumlah pesanan minimum kami tergantung pada jenis produk. Silakan hubungi kami untuk detail spesifik."
+      },
+      {
+        "question": "Berapa lama waktu pengiriman?",
+        "answer": "Pengiriman biasanya memakan waktu 3-7 hari kerja tergantung lokasi Anda. Opsi pengiriman cepat tersedia."
+      },
+      {
+        "question": "Apakah Anda menawarkan diskon untuk pesanan besar?",
+        "answer": "Ya, kami menawarkan harga yang kompetitif untuk pesanan besar. Hubungi tim penjualan kami untuk penawaran khusus."
+      },
+      {
+        "question": "Metode pembayaran apa yang Anda terima?",
+        "answer": "Kami menerima transfer bank, kartu kredit, dan metode pembayaran lainnya. Silakan tanya untuk detail lebih lanjut."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Siap Bekerja Sama?",
+    "description": "Mari kita diskusikan bagaimana ESABOND dapat membantu mempercepat produksi Anda",
+    "button": "Hubungi Kami Sekarang"
+  }
+}

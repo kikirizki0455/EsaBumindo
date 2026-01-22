@@ -1,0 +1,141 @@
+{
+  "heroSection": {
+    "headline": {
+      "prefix": "Our Premium",
+      "highlight": "Product Solutions"
+    },
+    "description": "Discover our comprehensive range of high-quality adhesive and chemical products designed to meet the diverse needs of modern industries.",
+    "cta": {
+      "primary": "Explore Products",
+      "secondary": "Request Quote"
+    }
+  },
+  "productGrid": {
+    "title": "Our Products",
+    "subtitle": "Browse our complete product catalog",
+    "filterBy": "Filter by Category",
+    "sortBy": "Sort by",
+    "noResults": "No products found"
+  },
+  "productCard": {
+    "viewDetails": "View Details",
+    "addToCart": "Add to Cart",
+    "price": "Price",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "specifications": "Specifications",
+    "features": "Features"
+  },
+  "productDetail": {
+    "backButton": "Back to Products",
+    "shareButton": "Share Product",
+    "addToCart": "Add to Cart",
+    "requestQuote": "Request Quote",
+    "preOrder": "Pre-Order Now",
+    "downloadSpec": "Specifications",
+    "share": "Share",
+    "copied": "Copied",
+    "specifications": "Specifications",
+    "features": "Key Features",
+    "applications": "Applications",
+    "technicalData": "Technical Data",
+    "relatedProducts": "Related Products",
+    "description": "Product Description",
+    "availability": "Availability",
+    "leadTime": "Lead Time",
+    "minimumOrder": "Minimum Order Quantity",
+    "overview": "Overview",
+    "tabs": {
+      "overview": "Overview",
+      "specifications": "Specifications",
+      "technical": "Technical Info"
+    },
+    "productNotFound": "Product Not Found",
+    "backToProducts": "Back to Products",
+    "category": "Category",
+    "mainAdvantages": "Main Advantages",
+    "applicationInfo": "Application Info",
+    "industry": "Industry",
+    "adhesiveType": "Adhesive Type"
+  },
+  "preOrder": {
+    "title": "Pre-Order Form",
+    "subtitle": "Order your chosen product and get special offers",
+    "backButton": "Back",
+    "submitButton": "Submit Pre-Order",
+    "submitting": "Submitting...",
+    "productSummary": "Product Summary",
+    "product": "PRODUCT",
+    "category": "Category",
+    "type": "Type",
+    "application": "Application",
+    "advantages": "Advantages",
+    "needHelp": "Need Help?",
+    "successMessage": "Pre-order successfully submitted! Our team will contact you soon.",
+    "errorMessage": "Failed to submit pre-order. Please try again.",
+    "requiredFields": "Please fill in all required fields",
+    "productNotFound": "Product Not Found",
+    "sections": {
+      "personalInfo": "Personal Information",
+      "companyInfo": "Company Information",
+      "orderDetails": "Pre-Order Details"
+    },
+    "fields": {
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "WhatsApp Number",
+      "company": "Company Name",
+      "industry": "Industry / Sector",
+      "quantity": "Quantity (Unit/Carton)",
+      "productName": "Product Name",
+      "packaging": "Packaging",
+      "notes": "Notes / Special Requests",
+      "contactMethod": "Contact Method"
+    },
+    "placeholders": {
+      "fullName": "Enter your full name",
+      "email": "email@example.com",
+      "phone": "+62 xxx xxxx xxxx",
+      "company": "PT. Company Name",
+      "industry": "Example: Automotive, Electronics, Construction",
+      "quantity": "1",
+      "notes": "Add any special notes or questions..."
+    },
+    "packaging": {
+      "title": "Packaging Options",
+      "tong50kg": "Carton Drum 50 kg",
+      "tong40kg": "Carton Drum 40 kg",
+      "drumPolos200kg": "Plain Drum 200 kg",
+      "drumTulang200kg": "Bone Drum 200 kg",
+      "drumPlastik200kg": "Plastic Drum 200 kg",
+      "bulltank1ton": "Bulltank 1 Ton"
+    },
+    "contactMethods": {
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "emailDesc": "We will contact you via Email",
+      "whatsappDesc": "We will contact you via WhatsApp"
+    },
+    "helpSection": {
+      "email": "kikirizki0455@gmail.com",
+      "phone": "082146024328"
+    }
+  },
+  "categories": {
+    "title": "Product Categories",
+    "all": "All Products",
+    "adhesive": "Adhesive Solutions",
+    "chemical": "Chemical Products",
+    "industrial": "Industrial Supplies",
+    "specialty": "Specialty Products"
+  },
+  "cta": {
+    "title": "Need Custom Solutions?",
+    "description": "Contact our team to discuss tailored products for your specific requirements",
+    "button": "Contact Our Team"
+  },
+  "testimonials": {
+    "title": "What Our Customers Say",
+    "description": "Trusted by leading manufacturers and businesses"
+  }
+}

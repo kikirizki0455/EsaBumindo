@@ -4,16 +4,14 @@ import { useTranslation } from "@/hooks/use-translation";
 import parse, { domToReact } from "html-react-parser";
 
 export function HomeSection() {
-  const { t } = useTranslation();
+  const { t, isHydrated } = useTranslation();
 
-  // ✅ FIX: Ubah jadi objek biasa tanpa function
   const components = {
     blue: "text-[#060771]",
     red: "text-[#ff4136]",
     gray: "text-gray-800",
   };
 
-  // ✅ FIX: Parse dengan benar
   const renderTitle = (text) =>
     parse(text, {
       replace: (domNode) => {
@@ -32,7 +30,6 @@ export function HomeSection() {
       className="py-16 sm:py-20 md:py-24 lg:py-32 bg-gradient-to-b from-white to-gray-50"
       id="about"
     >
-      {/* ... rest of your code ... */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 xl:gap-20 items-center">
           {/* Left Content */}
@@ -41,28 +38,28 @@ export function HomeSection() {
               {/* Section Label */}
               <div className="inline-block mb-4 md:mb-6">
                 <span className="text-[#060771] text-xs sm:text-sm font-semibold uppercase tracking-wider px-4 py-2 bg-[#060771]/10 rounded-full">
-                  {t("home.homeSection.title")}
+                  {isHydrated ? t("home.homeSection.title") : ""}
                 </span>
               </div>
 
               {/* Main Heading */}
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-[56px] leading-tight font-bold mb-4 md:mb-6">
-                {renderTitle(t("home.homeSection.heroTitle"))}
+                {isHydrated ? renderTitle(t("home.homeSection.heroTitle")) : ""}
               </h2>
 
               {/* Description */}
               <p className="text-gray-600 text-base sm:text-lg md:text-xl leading-relaxed mb-6 md:mb-8">
-                {t("home.homeSection.description")}
+                {isHydrated ? t("home.homeSection.description") : ""}
               </p>
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <button className="bg-[#060771] hover:bg-[#060771]/90 text-white font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[10px] rounded-br-[10px] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 uppercase tracking-wide text-sm md:text-base">
-                  {t("home.homeSection.ctaPrimary")}
+                  {isHydrated ? t("home.homeSection.ctaPrimary") : ""}
                 </button>
 
                 <button className="border-2 border-[#060771] text-[#060771] hover:bg-[#060771] hover:text-white font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[10px] rounded-br-[10px] transition-all duration-300 uppercase tracking-wide text-sm md:text-base">
-                  {t("home.homeSection.ctaSecondary")}
+                  {isHydrated ? t("home.homeSection.ctaSecondary") : ""}
                 </button>
               </div>
             </div>
@@ -74,7 +71,7 @@ export function HomeSection() {
                   15+
                 </div>
                 <div className="text-xs md:text-sm text-gray-600">
-                  {t("home.homeSection.stats.experience")}
+                  {isHydrated ? t("home.homeSection.stats.experience") : ""}
                 </div>
               </div>
               <div className="text-center lg:text-left">
@@ -82,7 +79,7 @@ export function HomeSection() {
                   500+
                 </div>
                 <div className="text-xs md:text-sm text-gray-600">
-                  {t("home.homeSection.stats.projects")}
+                  {isHydrated ? t("home.homeSection.stats.projects") : ""}
                 </div>
               </div>
               <div className="text-center lg:text-left">
@@ -90,7 +87,7 @@ export function HomeSection() {
                   100%
                 </div>
                 <div className="text-xs md:text-sm text-gray-600">
-                  {t("home.homeSection.stats.satisfaction")}
+                  {isHydrated ? t("home.homeSection.stats.satisfaction") : ""}
                 </div>
               </div>
             </div>
@@ -106,7 +103,9 @@ export function HomeSection() {
                 <Image
                   src={imgImagePt2}
                   alt="Industrial Worker - Professional Manufacturing"
-                  className="w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] xl:h-[550px] object-cover transform hover:scale-105 transition-transform duration-700"
+                  className="w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] xl:h-[550px] object-cover"
+                  loading="lazy"
+                  quality={75}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>

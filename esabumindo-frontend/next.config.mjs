@@ -11,10 +11,26 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "localhost",
-        port: "3001",
-        pathname: "/uploads/**",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.esabumindo.com",
       },
     ],
+    // Tambahkan timeout untuk mencegah infinite optimization loop
+    minimumCacheTTL: 60,
+    // Disable image optimization jika mengalami error
+    formats: ["image/avif", "image/webp"],
   },
 };
 

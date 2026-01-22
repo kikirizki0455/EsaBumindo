@@ -1,24 +1,50 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 export function ProductCard({ product, onDetail, onPreOrder }) {
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = useCallback(() => {
+    setImageError(true);
+  }, []);
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       {/* Product Image */}
-      <div className="relative aspect-[4/3] bg-[#f5f0f0]">
-        <Image
-          src={product.image}
-          alt={`${product.title} - ${product.application}`}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-          priority={false}
-          loading="lazy"
-          quality={85}
-        />
+      <div className="relative aspect-[4/3] bg-[#f5f0f0] flex items-center justify-center">
+        {!imageError ? (
+          <Image
+            src={product.image}
+            alt={`${product.title} - ${product.application}`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            priority={false}
+            loading="lazy"
+            quality={85}
+            onError={handleImageError}
+            unoptimized={false}
+          />
+        ) : (
+          <svg
+            className="w-16 h-16 text-gray-300"
+            fill="currentColor"
+            viewBox="0 0 200 200"
+          >
+            <rect width="200" height="200" fill="#f5f0f0" />
+            <path
+              d="M60 80 L140 80 L140 160 L60 160 Z"
+              fill="none"
+              stroke="#d1d5db"
+              strokeWidth="2"
+            />
+            <circle cx="100" cy="110" r="8" fill="#d1d5db" />
+          </svg>
+        )}
       </div>
 
       {/* Product Info */}

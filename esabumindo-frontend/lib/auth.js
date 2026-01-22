@@ -13,7 +13,6 @@ export const getCurrentUser = () => {
     const userData = JSON.parse(userDataString);
     return userData;
   } catch (error) {
-    console.error("Error parsing user data:", error);
     return null;
   }
 };
@@ -56,6 +55,20 @@ export const getAuthToken = () => {
 };
 
 /**
+ * Set auth token and user data
+ */
+export const setAuthData = (token, userData) => {
+  if (typeof window === "undefined") return;
+
+  if (token) {
+    localStorage.setItem("authToken", token);
+  }
+  if (userData) {
+    localStorage.setItem("userData", JSON.stringify(userData));
+  }
+};
+
+/**
  * Logout user
  */
 export const logout = () => {
@@ -64,4 +77,14 @@ export const logout = () => {
   localStorage.removeItem("userData");
   localStorage.removeItem("authToken");
   window.location.href = "/login";
+};
+
+/**
+ * Clear all auth data
+ */
+export const clearAuthData = () => {
+  if (typeof window === "undefined") return;
+
+  localStorage.removeItem("userData");
+  localStorage.removeItem("authToken");
 };
