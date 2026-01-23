@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import { LanguageProvider } from "../contexts/language-context";
+import { ToastProvider } from "@/components/ui/toast-context";
 import { loadTranslationsForPath } from "../lib/utils";
 
 export default function App({
@@ -12,13 +13,15 @@ export default function App({
 
   // 🔒 ADMIN: tanpa LanguageProvider
   if (isAdminPage) {
-    return getLayout(<Component {...pageProps} />);
+    return (
+      <ToastProvider>{getLayout(<Component {...pageProps} />)}</ToastProvider>
+    );
   }
 
-  // 🌍 PUBLIC: pakai LanguageProvider dengan initial translations
+  // 🌍 PUBLIC: pakai LanguageProvider dan ToastProvider dengan initial translations
   return (
     <LanguageProvider initialTranslations={initialTranslations}>
-      {getLayout(<Component {...pageProps} />)}
+      <ToastProvider>{getLayout(<Component {...pageProps} />)}</ToastProvider>
     </LanguageProvider>
   );
 }

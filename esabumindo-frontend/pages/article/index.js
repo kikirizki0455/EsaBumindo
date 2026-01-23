@@ -60,7 +60,9 @@ export default function ArticlesPage() {
       }
     } catch (error) {
       console.error("Error fetching articles:", error);
-      setError(t("error.loadFailed")); // ✅ Pakai translation
+
+      // Set error message
+      setError("Gagal memuat artikel. Pastikan backend berjalan di port 3001");
 
       // Fallback ke cache
       if (typeof window !== "undefined") {
@@ -69,7 +71,7 @@ export default function ArticlesPage() {
           try {
             const { data } = JSON.parse(cached);
             setArticles(data);
-            setError(null);
+            setError(null); // Clear error jika cache berhasil dimuat
           } catch (e) {
             setArticles([]);
           }
@@ -78,7 +80,7 @@ export default function ArticlesPage() {
     } finally {
       setLoading(false);
     }
-  }, [t]); // ✅ Add t to dependency
+  }, [t]);
 
   useEffect(() => {
     if (!hasFetched.current) {

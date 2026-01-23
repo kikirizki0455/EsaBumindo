@@ -1,6 +1,12 @@
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
+import Head from "next/head";
 import MainLayout from "./layouts/main-layout";
+import {
+  generatePageMeta,
+  generateOrganizationStructuredData,
+  generateBreadcrumbSchema,
+} from "@/lib/seo-utils";
 
 // Dynamic imports dengan strategi optimal
 // Hero component dengan SSR diaktifkan (above the fold)
@@ -115,53 +121,91 @@ function LevelSectionSkeleton() {
   );
 }
 
-export default function Home() {
-  return (
-    <MainLayout>
-      <Suspense fallback={null}>
-        <HeroCarousel />
-      </Suspense>
-
-      <Suspense fallback={<HomeSectionSkeleton />}>
-        <HomeSection />
-      </Suspense>
-
-      <Suspense fallback={<ProductSectionSkeleton />}>
-        <ProductSection />
-      </Suspense>
-
-      <Suspense fallback={<LevelSectionSkeleton />}>
-        <LevelSection />
-      </Suspense>
-    </MainLayout>
-  );
-}
-
-// Metadata untuk SEO
-export const metadata = {
+// ✅ SEO Meta Data
+const seoMeta = generatePageMeta({
   title: "Esabumindo - Solusi Adhesive Terbaik Indonesia",
   description:
-    "Temukan solusi adhesive berkualitas tinggi dari Esabumindo untuk berbagai kebutuhan industri Anda.",
-  keywords: "adhesive, lem, industrial glue, esabumindo",
-  openGraph: {
-    title: "Esabumindo - Solusi Adhesive Terbaik Indonesia",
-    description:
-      "Temukan solusi adhesive berkualitas tinggi dari Esabumindo untuk berbagai kebutuhan industri Anda.",
-    type: "website",
-    url: "https://esabumindo.com",
-    images: [
-      {
-        url: "https://esabumindo.com/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Esabumindo",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Esabumindo - Solusi Adhesive Terbaik Indonesia",
-    description:
-      "Temukan solusi adhesive berkualitas tinggi dari Esabumindo untuk berbagai kebutuhan industri Anda.",
-  },
-};
+    "Temukan solusi adhesive berkualitas tinggi dari Esabumindo untuk berbagai kebutuhan industri Anda. Produk kami telah dipercaya oleh ribuan industri di Indonesia.",
+  keywords:
+    "adhesive, lem, industrial glue, chemical adhesive, solusi adhesive, lem berkualitas",
+  image: "https://esabumindo.com/og-home.png",
+  url: "https://esabumindo.com",
+  type: "website",
+});
+
+// ✅ Breadcrumb Schema
+const breadcrumbSchema = generateBreadcrumbSchema([]);
+
+// ✅ Organization Schema
+const organizationSchema = generateOrganizationStructuredData();
+
+export default function Home() {
+  return (
+    <>
+      <Head>
+        <title>{seoMeta.title}</title>
+        <meta name="description" content={seoMeta.description} />
+        <meta name="keywords" content={seoMeta.keywords} />
+        <meta name="author" content={seoMeta.author} />
+        <meta name="viewport" content={seoMeta.viewport} />
+        <meta name="theme-color" content={seoMeta.themeColor} />
+        <meta name="robots" content={seoMeta.robots} />
+
+        {/* Open Graph */}
+        <meta property="og:title" content={seoMeta.openGraph.title} />
+        <meta
+          property="og:description"
+          content={seoMeta.openGraph.description}
+        />
+        <meta property="og:type" content={seoMeta.openGraph.type} />
+        <meta property="og:url" content={seoMeta.openGraph.url} />
+        <meta property="og:image" content={seoMeta.openGraph.images[0].url} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content={seoMeta.openGraph.siteName} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content={seoMeta.twitter.card} />
+        <meta name="twitter:title" content={seoMeta.twitter.title} />
+        <meta
+          name="twitter:description"
+          content={seoMeta.twitter.description}
+        />
+        <meta name="twitter:image" content={seoMeta.twitter.image} />
+
+        {/* Canonical */}
+        <link rel="canonical" href={seoMeta.canonical} />
+
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        />
+      </Head>
+
+      <MainLayout>
+        <Suspense fallback={null}>
+          <HeroCarousel />
+        </Suspense>
+
+        <Suspense fallback={<HomeSectionSkeleton />}>
+          <HomeSection />
+        </Suspense>
+
+        <Suspense fallback={<ProductSectionSkeleton />}>
+          <ProductSection />
+        </Suspense>
+
+        <Suspense fallback={<LevelSectionSkeleton />}>
+          <LevelSection />
+        </Suspense>
+      </MainLayout>
+    </>
+  );
+}

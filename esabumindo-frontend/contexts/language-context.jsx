@@ -24,10 +24,13 @@ export function LanguageProvider({ children, initialTranslations = {} }) {
 
   const loadTranslations = async (lang) => {
     try {
+      // Always load common and footer for all pages
       const common = await import(`../locales/${lang}/common.json`);
+      const footer = await import(`../locales/${lang}/footer.json`);
 
       let combined = {
         common: common.default,
+        footer: footer.default,
       };
 
       const currentPath = pathname === "" ? "/" : pathname;
@@ -44,6 +47,24 @@ export function LanguageProvider({ children, initialTranslations = {} }) {
           ...combined,
           ...about.default,
         };
+      } else if (currentPath.includes("/contact")) {
+        const contact = await import(`../locales/${lang}/contact.json`);
+        combined = {
+          ...combined,
+          contact: contact.default,
+        };
+      } else if (currentPath.includes("/product")) {
+        const products = await import(`../locales/${lang}/products.json`);
+        combined = {
+          ...combined,
+          products: products.default,
+        };
+      } else if (currentPath.includes("/pre-order")) {
+        const products = await import(`../locales/${lang}/products.json`);
+        combined = {
+          ...combined,
+          products: products.default,
+        };
       }
 
       setTranslations(combined);
@@ -57,7 +78,7 @@ export function LanguageProvider({ children, initialTranslations = {} }) {
     router.push({ pathname, query }, asPath, { locale: newLocale });
   };
 
-  const t = (key) => {
+  const t = (key, params = {}) => {
     const keys = key.split(".");
     let value = translations;
 
@@ -69,7 +90,16 @@ export function LanguageProvider({ children, initialTranslations = {} }) {
       }
     }
 
-    return value || key;
+    if (!value) return key;
+
+    // Support template interpolation with {{variable}} syntax
+    if (typeof value === "string" && Object.keys(params).length > 0) {
+      return value.replace(/\{\{(\w+)\}\}/g, (match, paramName) => {
+        return params[paramName] !== undefined ? params[paramName] : match;
+      });
+    }
+
+    return value;
   };
 
   return (

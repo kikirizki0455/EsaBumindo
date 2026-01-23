@@ -19,6 +19,7 @@ import api from "@/lib/axios";
 export default function DashboardPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [stats, setStats] = useState({
     articles: { total: 0, published: 0, draft: 0 },
     employees: { total: 0, active: 0, inactive: 0 },
@@ -34,22 +35,20 @@ export default function DashboardPage() {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
+      setError(null);
 
       // Fetch all data in parallel
-      // GANTI DARI axios MENJADI api DAN HAPUS /api/ prefix
       const [articlesRes, employeesRes, attendancesRes, salariesRes] =
         await Promise.all([
-          api.get("/articles"), // ← GANTI INI (hapus /api/)
-          api.get("/employees"), // ← GANTI INI
+          api.get("/articles"),
+          api.get("/employees"),
           api.get("/attendances", {
-            // ← GANTI INI
             params: {
               month: new Date().getMonth() + 1,
               year: new Date().getFullYear(),
             },
           }),
           api.get("/salaries", {
-            // ← GANTI INI
             params: {
               month: new Date().getMonth() + 1,
               year: new Date().getFullYear(),
@@ -57,10 +56,10 @@ export default function DashboardPage() {
           }),
         ]);
 
-      const articles = articlesRes.data;
-      const employees = employeesRes.data;
-      const attendances = attendancesRes.data;
-      const salaries = salariesRes.data;
+      const articles = articlesRes.data || [];
+      const employees = employeesRes.data || [];
+      const attendances = attendancesRes.data || [];
+      const salaries = salariesRes.data || [];
 
       // Calculate stats
       const today = new Date().toISOString().split("T")[0];
@@ -118,6 +117,9 @@ export default function DashboardPage() {
       setRecentActivities(activities);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
+      setError(
+        "Gagal memuat dashboard. Pastikan backend berjalan di port 3001"
+      );
     } finally {
       setLoading(false);
     }
@@ -140,6 +142,13 @@ export default function DashboardPage() {
             Selamat datang di sistem admin panel Esabumindo Chemical Adhesive
           </p>
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            ⚠️ {error}
+          </div>
+        )}
 
         {/* Main Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

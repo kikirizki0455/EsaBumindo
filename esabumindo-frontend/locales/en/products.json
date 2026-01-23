@@ -15,11 +15,26 @@
     "subtitle": "Browse our complete product catalog",
     "filterBy": "Filter by Category",
     "sortBy": "Sort by",
-    "noResults": "No products found"
+    "noResults": "No products found",
+    "searchPlaceholder": "Search products by name or type...",
+    "filters": {
+      "title": "Filters",
+      "type": "Product Type",
+      "application": "Application/Features",
+      "clearAll": "Clear All Filters",
+      "all": "All"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "showing": "Showing {{start}} to {{end}} of {{total}} products",
+      "goToPage": "Go to page",
+      "itemsPerPage": "Items per page"
+    }
   },
   "productCard": {
     "viewDetails": "View Details",
-    "addToCart": "Add to Cart",
+    "addToCart": "Pre Order",
     "price": "Price",
     "inStock": "In Stock",
     "outOfStock": "Out of Stock",
@@ -29,7 +44,7 @@
   "productDetail": {
     "backButton": "Back to Products",
     "shareButton": "Share Product",
-    "addToCart": "Add to Cart",
+    "addToCart": "Pre Order",
     "requestQuote": "Request Quote",
     "preOrder": "Pre-Order Now",
     "downloadSpec": "Specifications",

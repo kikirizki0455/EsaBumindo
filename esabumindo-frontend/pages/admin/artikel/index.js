@@ -30,6 +30,7 @@ export default function ArticlesPage() {
   const [articles, setArticles] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchArticles();
@@ -37,10 +38,13 @@ export default function ArticlesPage() {
 
   const fetchArticles = async () => {
     try {
+      setLoading(true);
+      setError(null);
       const { data } = await api.get("/articles");
       setArticles(data);
     } catch (error) {
       console.error("Error fetching articles:", error);
+      setError("Gagal memuat artikel. Pastikan backend berjalan di port 3001");
     } finally {
       setLoading(false);
     }
@@ -50,15 +54,9 @@ export default function ArticlesPage() {
     if (!confirm("Yakin ingin menghapus artikel ini?")) return;
 
     try {
-      const response = await api(
-        `${process.env.NEXT_PUBLIC_API_URL}/articles/${id}`,
-        { method: "DELETE" }
-      );
-
-      if (response.ok) {
-        alert("Artikel berhasil dihapus!");
-        fetchArticles();
-      }
+      await api.delete(`/articles/${id}`);
+      alert("Artikel berhasil dihapus!");
+      fetchArticles();
     } catch (error) {
       console.error("Error deleting article:", error);
       alert("Gagal menghapus artikel!");
@@ -67,15 +65,9 @@ export default function ArticlesPage() {
 
   const togglePublish = async (id) => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/articles/${id}/toggle-publish`,
-        { method: "PATCH" }
-      );
-
-      if (response.ok) {
-        alert("Status artikel berhasil diubah!");
-        fetchArticles();
-      }
+      await api.patch(`/articles/${id}/toggle-publish`);
+      alert("Status artikel berhasil diubah!");
+      fetchArticles();
     } catch (error) {
       console.error("Error toggling publish:", error);
       alert("Gagal mengubah status artikel!");
@@ -109,6 +101,13 @@ export default function ArticlesPage() {
           </Button>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            ⚠️ {error}
+          </div>
+        )}
+
         {/* Search */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -139,7 +138,7 @@ export default function ArticlesPage() {
                   </p>
                   {!search && (
                     <Button
-                      onClick={() => router.push("/admin/articles/new")}
+                      onClick={() => router.push("/admin/artikel/new")}
                       className="bg-[#060771] hover:bg-[#060771]/90"
                     >
                       <Plus className="w-4 h-4 mr-2" />

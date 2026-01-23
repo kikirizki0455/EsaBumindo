@@ -5,7 +5,18 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, Send, Phone, Mail, AlertCircle } from "lucide-react";
+import {
+  ChevronLeft,
+  Send,
+  Phone,
+  Mail,
+  AlertCircle,
+  Package,
+  Beaker,
+} from "lucide-react";
+import { useTranslation } from "@/hooks/use-translation";
+import { useToast } from "@/components/ui/toast-context";
+import { checkRateLimit, recordSubmission } from "@/lib/rate-limiter";
 import MainLayout from "../layouts/main-layout";
 import { BEST_SELLER_PRODUCTS, NEW_PRODUCTS } from "@/data/products";
 
@@ -23,6 +34,8 @@ const ContactMethodSelector = dynamic(
 export default function PreOrderPage() {
   const router = useRouter();
   const { id } = router.query;
+  const { t, isHydrated } = useTranslation();
+  const toast = useToast();
 
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,15 +43,17 @@ export default function PreOrderPage() {
   const [submitStatus, setSubmitStatus] = useState(null);
   const [contactMethod, setContactMethod] = useState("email");
   const [imageError, setImageError] = useState(false);
+  const [rateLimitWarning, setRateLimitWarning] = useState(null);
 
   // Form state
   const [formData, setFormData] = useState({
+    orderType: "direct", // 'direct' or 'sample'
     fullName: "",
     email: "",
     phone: "",
     company: "",
     industri: "",
-    quantity: "1",
+    quantityKg: "1", // Quantity in kg
     packaging: "tong50kg",
     message: "",
   });
@@ -59,12 +74,59 @@ export default function PreOrderPage() {
   }, [id]);
 
   // Handle form input change
-  const handleInputChange = useCallback((e) => {
-    const { name, value } = e.target;
+  const handleInputChange = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+
+      // Always update form first
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+
+      // Validation for sample order quantity
+      if (name === "quantityKg" && formData.orderType === "sample") {
+        const numValue = parseFloat(value);
+        if (numValue > 100) {
+          setSubmitStatus({
+            type: "warning",
+            message:
+              "Jumlah sample maksimal 100 kg. Untuk pesanan lebih besar, silakan pilih Direct Order.",
+          });
+          return;
+        } else {
+          // Clear warning if quantity is valid
+          setSubmitStatus(null);
+        }
+      } else if (name === "quantityKg") {
+        // Clear warning for direct orders
+        setSubmitStatus(null);
+      }
+
+      // Check rate limit warning when email changes
+      if (name === "email" && value) {
+        const rateLimitStatus = checkRateLimit(value);
+        if (!rateLimitStatus.allowed) {
+          setRateLimitWarning(rateLimitStatus);
+        } else if (rateLimitStatus.remaining < 2) {
+          setRateLimitWarning(rateLimitStatus);
+        } else {
+          setRateLimitWarning(null);
+        }
+      }
+    },
+    [formData.orderType]
+  );
+
+  // Handle order type change
+  const handleOrderTypeChange = useCallback((type) => {
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      orderType: type,
+      // Reset quantity when changing order type
+      quantityKg: type === "sample" ? "1" : "1",
     }));
+    setSubmitStatus(null);
   }, []);
 
   // Handle form submission
@@ -82,13 +144,40 @@ export default function PreOrderPage() {
           !formData.phone ||
           !formData.company
         ) {
-          setSubmitStatus({
-            type: "error",
-            message: "Mohon isi semua field yang diperlukan",
-          });
+          toast.error(t("products.preOrder.requiredFields"));
           setIsSubmitting(false);
           return;
         }
+
+        // Check rate limit
+        const rateLimitStatus = checkRateLimit(formData.email);
+        if (!rateLimitStatus.allowed) {
+          toast.error(rateLimitStatus.message);
+          setIsSubmitting(false);
+          return;
+        }
+
+        // Validate quantity for sample
+        if (formData.orderType === "sample") {
+          const qty = parseFloat(formData.quantityKg);
+          if (isNaN(qty) || qty < 1 || qty > 100) {
+            toast.error("Jumlah sample harus antara 1-100 kg");
+            setIsSubmitting(false);
+            return;
+          }
+        } else {
+          const qty = parseFloat(formData.quantityKg);
+          if (isNaN(qty) || qty < 1) {
+            toast.error("Jumlah pesanan harus lebih dari 0 kg");
+            setIsSubmitting(false);
+            return;
+          }
+        }
+
+        // Show loading toast
+        const loadingToastId = toast.loading(
+          "📤 Mengirim pesanan Anda, mohon tunggu..."
+        );
 
         // Send to API
         const response = await fetch("/api/pre-order", {
@@ -97,6 +186,7 @@ export default function PreOrderPage() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            orderType: formData.orderType,
             product: product?.name,
             productId: product?.id,
             customerName: formData.fullName,
@@ -104,49 +194,97 @@ export default function PreOrderPage() {
             customerPhone: formData.phone,
             company: formData.company,
             industri: formData.industri,
-            quantity: formData.quantity,
+            quantityKg: parseFloat(formData.quantityKg),
             packaging: formData.packaging,
             message: formData.message,
             contactMethod,
             timestamp: new Date().toISOString(),
+            rateLimitStatus,
           }),
         });
 
-        if (!response.ok) throw new Error("Failed to submit");
+        let responseData = {};
+        try {
+          responseData = await response.json();
+        } catch (parseError) {
+          console.error("JSON parse error:", parseError);
+          responseData = { message: "Invalid server response" };
+        }
+
+        if (!response.ok) {
+          // Remove loading toast
+          toast.removeToast(loadingToastId);
+
+          // Handle rate limit error
+          if (response.status === 429) {
+            const retryAfter = responseData?.retryAfter || 5;
+            toast.error(
+              `⏱️ ${
+                responseData?.message || "Terlalu banyak permintaan"
+              } (Coba lagi dalam ${retryAfter} menit)`
+            );
+            setIsSubmitting(false);
+            return;
+          }
+
+          const errorMessage =
+            responseData?.message || `Server error: ${response.status}`;
+          toast.error(`❌ Error: ${errorMessage}`);
+          setSubmitStatus({
+            type: "error",
+            message: errorMessage,
+          });
+          setIsSubmitting(false);
+          return;
+        }
+
+        // Record submission in localStorage
+        recordSubmission(formData.email);
+
+        // Remove loading toast and show success
+        toast.removeToast(loadingToastId);
+        toast.success(
+          `✅ ${
+            formData.orderType === "sample"
+              ? "Permintaan sample"
+              : "Pesanan langsung"
+          } berhasil dikirim! Tim kami akan menghubungi Anda segera.`
+        );
 
         setSubmitStatus({
           type: "success",
-          message:
-            "Pre-order berhasil dikirim! Tim kami akan menghubungi Anda segera.",
+          message: t("products.preOrder.successMessage"),
         });
 
         // Reset form
         setFormData({
+          orderType: "direct",
           fullName: "",
           email: "",
           phone: "",
           company: "",
           industri: "",
-          quantity: "1",
+          quantityKg: "1",
           packaging: "tong50kg",
           message: "",
         });
 
-        // Redirect after 2 seconds
+        // Redirect after 3 seconds
         setTimeout(() => {
           router.push("/product");
-        }, 2000);
+        }, 3000);
       } catch (error) {
         console.error("Submit error:", error);
+        toast.error(`❌ Error: ${error.message}`);
         setSubmitStatus({
           type: "error",
-          message: "Gagal mengirim pre-order. Silakan coba lagi.",
+          message: error.message || t("products.preOrder.errorMessage"),
         });
       } finally {
         setIsSubmitting(false);
       }
     },
-    [formData, product, contactMethod, router]
+    [formData, product, contactMethod, router, t, toast]
   );
 
   // Handle image error
@@ -154,7 +292,7 @@ export default function PreOrderPage() {
     setImageError(true);
   }, []);
 
-  if (isLoading) return <PreOrderFormSkeleton />;
+  if (isLoading || !isHydrated) return <PreOrderFormSkeleton />;
 
   if (!product) {
     return (
@@ -162,13 +300,13 @@ export default function PreOrderPage() {
         <div className="min-h-screen bg-white flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              Produk Tidak Ditemukan
+              {t("products.preOrder.productNotFound")}
             </h1>
             <Link
               href="/product"
               className="inline-block px-6 py-3 bg-[#0c439a] text-white rounded-lg hover:bg-[#0a3478] transition-colors"
             >
-              Kembali ke Produk
+              {t("products.productDetail.backToProducts")}
             </Link>
           </div>
         </div>
@@ -187,7 +325,7 @@ export default function PreOrderPage() {
               className="flex items-center gap-2 text-[#0c439a] hover:text-[#0a3478] font-semibold transition-colors"
             >
               <ChevronLeft size={20} />
-              Kembali
+              {t("products.preOrder.backButton")}
             </button>
           </div>
         </div>
@@ -196,11 +334,9 @@ export default function PreOrderPage() {
           {/* Page Header */}
           <div className="mb-12">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              Form Pre-Order
+              {t("products.preOrder.title")}
             </h1>
-            <p className="text-gray-600">
-              Pesan produk pilihan Anda dan dapatkan penawaran khusus
-            </p>
+            <p className="text-gray-600">{t("products.preOrder.subtitle")}</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -216,6 +352,8 @@ export default function PreOrderPage() {
                     className={`mb-6 p-4 rounded-lg flex items-start gap-3 ${
                       submitStatus.type === "success"
                         ? "bg-green-50 border border-green-200"
+                        : submitStatus.type === "warning"
+                        ? "bg-yellow-50 border border-yellow-200"
                         : "bg-red-50 border border-red-200"
                     }`}
                   >
@@ -224,6 +362,8 @@ export default function PreOrderPage() {
                       className={
                         submitStatus.type === "success"
                           ? "text-green-600 shrink-0 mt-0.5"
+                          : submitStatus.type === "warning"
+                          ? "text-yellow-600 shrink-0 mt-0.5"
                           : "text-red-600 shrink-0 mt-0.5"
                       }
                     />
@@ -231,6 +371,8 @@ export default function PreOrderPage() {
                       className={
                         submitStatus.type === "success"
                           ? "text-green-800"
+                          : submitStatus.type === "warning"
+                          ? "text-yellow-800"
                           : "text-red-800"
                       }
                     >
@@ -239,10 +381,140 @@ export default function PreOrderPage() {
                   </div>
                 )}
 
+                {/* Rate Limit Warning */}
+                {rateLimitWarning && (
+                  <div className="mb-6 p-4 rounded-lg flex items-start gap-3 bg-yellow-50 border border-yellow-200">
+                    <AlertCircle
+                      size={20}
+                      className="text-yellow-600 shrink-0 mt-0.5"
+                    />
+                    <div className="text-yellow-800">
+                      <p className="font-semibold mb-1">⚠️ Pemberitahuan</p>
+                      <p className="text-sm">{rateLimitWarning.message}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Form Section 0: Order Type Selection */}
+                <fieldset className="mb-8 pb-8 border-b border-gray-200">
+                  <legend className="text-lg font-bold text-gray-900 mb-4">
+                    Tipe Pesanan *
+                  </legend>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Direct Order Option */}
+                    <button
+                      type="button"
+                      onClick={() => handleOrderTypeChange("direct")}
+                      className={`p-6 rounded-lg border-2 transition-all ${
+                        formData.orderType === "direct"
+                          ? "border-[#0c439a] bg-blue-50"
+                          : "border-gray-200 bg-white hover:border-gray-300"
+                      }`}
+                      disabled={isSubmitting}
+                    >
+                      <div className="flex items-start gap-3">
+                        <Package
+                          size={24}
+                          className={
+                            formData.orderType === "direct"
+                              ? "text-[#0c439a]"
+                              : "text-gray-400"
+                          }
+                        />
+                        <div className="text-left">
+                          <h3
+                            className={`font-semibold mb-1 ${
+                              formData.orderType === "direct"
+                                ? "text-[#0c439a]"
+                                : "text-gray-900"
+                            }`}
+                          >
+                            Pesanan Langsung
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            Pesan produk dalam jumlah besar untuk kebutuhan
+                            produksi Anda
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Sample Order Option */}
+                    <button
+                      type="button"
+                      onClick={() => handleOrderTypeChange("sample")}
+                      className={`p-6 rounded-lg border-2 transition-all ${
+                        formData.orderType === "sample"
+                          ? "border-[#ca161e] bg-red-50"
+                          : "border-gray-200 bg-white hover:border-gray-300"
+                      }`}
+                      disabled={isSubmitting}
+                    >
+                      <div className="flex items-start gap-3">
+                        <Beaker
+                          size={24}
+                          className={
+                            formData.orderType === "sample"
+                              ? "text-[#ca161e]"
+                              : "text-gray-400"
+                          }
+                        />
+                        <div className="text-left">
+                          <h3
+                            className={`font-semibold mb-1 ${
+                              formData.orderType === "sample"
+                                ? "text-[#ca161e]"
+                                : "text-gray-900"
+                            }`}
+                          >
+                            Pengambilan Sample
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            Coba produk kami terlebih dahulu (Max 100 kg)
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+
+                  {/* Order Type Info */}
+                  <div
+                    className={`mt-4 p-4 rounded-lg ${
+                      formData.orderType === "sample"
+                        ? "bg-red-50 border border-red-200"
+                        : "bg-blue-50 border border-blue-200"
+                    }`}
+                  >
+                    <p
+                      className={`text-sm ${
+                        formData.orderType === "sample"
+                          ? "text-red-800"
+                          : "text-blue-800"
+                      }`}
+                    >
+                      {formData.orderType === "sample" ? (
+                        <>
+                          <strong>📌 Sample Test:</strong> Anda dapat mengambil
+                          sample hingga 100 kg untuk memastikan produk kami
+                          sesuai dengan kebutuhan Anda sebelum melakukan
+                          pembelian dalam jumlah besar.
+                        </>
+                      ) : (
+                        <>
+                          <strong>📌 Direct Order:</strong> Pesan langsung dalam
+                          jumlah yang Anda butuhkan. Harga akan disesuaikan
+                          berdasarkan volume pesanan.
+                        </>
+                      )}
+                    </p>
+                  </div>
+                </fieldset>
+
                 {/* Form Section 1: Personal Info */}
                 <fieldset className="mb-8 pb-8 border-b border-gray-200">
                   <legend className="text-lg font-bold text-gray-900 mb-4">
-                    Informasi Pribadi
+                    {t("products.preOrder.sections.personalInfo")}
                   </legend>
 
                   <div className="space-y-5">
@@ -251,7 +523,8 @@ export default function PreOrderPage() {
                         htmlFor="fullName"
                         className="block text-sm font-semibold text-gray-700 mb-2"
                       >
-                        Nama Lengkap <span className="text-red-500">*</span>
+                        {t("products.preOrder.fields.fullName")}{" "}
+                        <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -261,7 +534,9 @@ export default function PreOrderPage() {
                         onChange={handleInputChange}
                         disabled={isSubmitting}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0c439a] focus:border-transparent transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
-                        placeholder="Masukkan nama lengkap Anda"
+                        placeholder={t(
+                          "products.preOrder.placeholders.fullName"
+                        )}
                         required
                       />
                     </div>
@@ -272,7 +547,8 @@ export default function PreOrderPage() {
                           htmlFor="email"
                           className="block text-sm font-semibold text-gray-700 mb-2"
                         >
-                          Email <span className="text-red-500">*</span>
+                          {t("products.preOrder.fields.email")}{" "}
+                          <span className="text-red-500">*</span>
                         </label>
                         <input
                           type="email"
@@ -282,7 +558,9 @@ export default function PreOrderPage() {
                           onChange={handleInputChange}
                           disabled={isSubmitting}
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0c439a] focus:border-transparent transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
-                          placeholder="email@example.com"
+                          placeholder={t(
+                            "products.preOrder.placeholders.email"
+                          )}
                           required
                         />
                       </div>
@@ -292,7 +570,8 @@ export default function PreOrderPage() {
                           htmlFor="phone"
                           className="block text-sm font-semibold text-gray-700 mb-2"
                         >
-                          Nomor WhatsApp <span className="text-red-500">*</span>
+                          {t("products.preOrder.fields.phone")}{" "}
+                          <span className="text-red-500">*</span>
                         </label>
                         <input
                           type="tel"
@@ -302,7 +581,9 @@ export default function PreOrderPage() {
                           onChange={handleInputChange}
                           disabled={isSubmitting}
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0c439a] focus:border-transparent transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
-                          placeholder="+62 xxx xxxx xxxx"
+                          placeholder={t(
+                            "products.preOrder.placeholders.phone"
+                          )}
                           required
                         />
                       </div>
@@ -313,7 +594,7 @@ export default function PreOrderPage() {
                 {/* Form Section 2: Company Info */}
                 <fieldset className="mb-8 pb-8 border-b border-gray-200">
                   <legend className="text-lg font-bold text-gray-900 mb-4">
-                    Informasi Perusahaan
+                    {t("products.preOrder.sections.companyInfo")}
                   </legend>
 
                   <div className="space-y-5">
@@ -322,7 +603,8 @@ export default function PreOrderPage() {
                         htmlFor="company"
                         className="block text-sm font-semibold text-gray-700 mb-2"
                       >
-                        Nama Perusahaan <span className="text-red-500">*</span>
+                        {t("products.preOrder.fields.company")}{" "}
+                        <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -332,7 +614,9 @@ export default function PreOrderPage() {
                         onChange={handleInputChange}
                         disabled={isSubmitting}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0c439a] focus:border-transparent transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
-                        placeholder="PT. Nama Perusahaan"
+                        placeholder={t(
+                          "products.preOrder.placeholders.company"
+                        )}
                         required
                       />
                     </div>
@@ -342,7 +626,7 @@ export default function PreOrderPage() {
                         htmlFor="industri"
                         className="block text-sm font-semibold text-gray-700 mb-2"
                       >
-                        Industri / Sektor
+                        {t("products.preOrder.fields.industry")}
                       </label>
                       <input
                         type="text"
@@ -352,7 +636,9 @@ export default function PreOrderPage() {
                         onChange={handleInputChange}
                         disabled={isSubmitting}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0c439a] focus:border-transparent transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
-                        placeholder="Contoh: Otomotif, Elektronik, Konstruksi"
+                        placeholder={t(
+                          "products.preOrder.placeholders.industry"
+                        )}
                       />
                     </div>
                   </div>
@@ -361,29 +647,49 @@ export default function PreOrderPage() {
                 {/* Form Section 3: Order Details */}
                 <fieldset className="mb-8 pb-8 border-b border-gray-200">
                   <legend className="text-lg font-bold text-gray-900 mb-4">
-                    Detail Pre-Order
+                    {t("products.preOrder.sections.orderDetails")}
                   </legend>
 
                   <div className="space-y-5">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div>
                         <label
-                          htmlFor="quantity"
+                          htmlFor="quantityKg"
                           className="block text-sm font-semibold text-gray-700 mb-2"
                         >
-                          Jumlah (Unit/Karton)
+                          Jumlah (kg){" "}
+                          {formData.orderType === "sample" && (
+                            <span className="text-gray-500 text-xs">
+                              (Max: 100 kg)
+                            </span>
+                          )}{" "}
+                          <span className="text-red-500">*</span>
                         </label>
                         <input
                           type="number"
-                          id="quantity"
-                          name="quantity"
-                          value={formData.quantity}
+                          id="quantityKg"
+                          name="quantityKg"
+                          value={formData.quantityKg}
                           onChange={handleInputChange}
                           disabled={isSubmitting}
                           min="1"
+                          max={
+                            formData.orderType === "sample" ? "100" : undefined
+                          }
+                          step="0.5"
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0c439a] focus:border-transparent transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
-                          placeholder="1"
+                          placeholder={
+                            formData.orderType === "sample"
+                              ? "Contoh: 50"
+                              : "Contoh: 100"
+                          }
+                          required
                         />
+                        <p className="text-xs text-gray-500 mt-1">
+                          {formData.orderType === "sample"
+                            ? "Minimal 1 kg, maksimal 100 kg untuk pengambilan sample"
+                            : "Masukkan jumlah dalam kilogram"}
+                        </p>
                       </div>
 
                       <div>
@@ -391,7 +697,7 @@ export default function PreOrderPage() {
                           htmlFor="packaging"
                           className="block text-sm font-semibold text-gray-700 mb-2"
                         >
-                          Pilihan Kemasan
+                          {t("products.preOrder.fields.packaging")}
                         </label>
                         <select
                           id="packaging"
@@ -401,18 +707,24 @@ export default function PreOrderPage() {
                           disabled={isSubmitting}
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0c439a] focus:border-transparent transition-all disabled:bg-gray-100 disabled:cursor-not-allowed bg-white"
                         >
-                          <option value="tong50kg">Tong Dus 50 kg</option>
-                          <option value="tong40kg">Tong Dus 40 kg</option>
+                          <option value="tong50kg">
+                            {t("products.preOrder.packaging.tong50kg")}
+                          </option>
+                          <option value="tong40kg">
+                            {t("products.preOrder.packaging.tong40kg")}
+                          </option>
                           <option value="drumPolos200kg">
-                            Drum Polos 200 kg
+                            {t("products.preOrder.packaging.drumPolos200kg")}
                           </option>
                           <option value="drumTulang200kg">
-                            Drum Tulang 200 kg
+                            {t("products.preOrder.packaging.drumTulang200kg")}
                           </option>
                           <option value="drumPlastik200kg">
-                            Drum Plastik 200 kg
+                            {t("products.preOrder.packaging.drumPlastik200kg")}
                           </option>
-                          <option value="bulltank1ton">Bulltank 1 Ton</option>
+                          <option value="bulltank1ton">
+                            {t("products.preOrder.packaging.bulltank1ton")}
+                          </option>
                         </select>
                       </div>
                     </div>
@@ -422,7 +734,7 @@ export default function PreOrderPage() {
                         htmlFor="message"
                         className="block text-sm font-semibold text-gray-700 mb-2"
                       >
-                        Catatan / Permintaan Khusus
+                        {t("products.preOrder.fields.notes")}
                       </label>
                       <textarea
                         id="message"
@@ -432,29 +744,30 @@ export default function PreOrderPage() {
                         disabled={isSubmitting}
                         rows="4"
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0c439a] focus:border-transparent transition-all resize-none disabled:bg-gray-100 disabled:cursor-not-allowed"
-                        placeholder="Tambahkan catatan khusus atau pertanyaan..."
+                        placeholder={t("products.preOrder.placeholders.notes")}
                       />
                     </div>
 
                     {/* Packaging Info Box */}
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                      <p className="text-sm text-blue-900">
-                        <strong>ℹ️ Info Kemasan:</strong>
+                      <div className="text-sm text-blue-900">
+                        <strong>
+                          ℹ️ {t("products.preOrder.packaging.title")}:
+                        </strong>
                         <ul className="mt-2 ml-4 space-y-1 text-xs">
                           <li>
-                            • <strong>Tong Dus:</strong> 50 kg dan 40 kg - untuk
-                            volume kecil hingga menengah
+                            • <strong>Tong Dus:</strong>{" "}
+                            {t("products.preOrder.packaging.tong50kg")} dan{" "}
+                            {t("products.preOrder.packaging.tong40kg")}
                           </li>
                           <li>
-                            • <strong>Drum:</strong> 200 kg - tersedia dalam
-                            berbagai jenis (polos, tulang, plastik)
+                            • <strong>Drum:</strong> 200 kg
                           </li>
                           <li>
-                            • <strong>Bulltank:</strong> 1 Ton - untuk volume
-                            besar dan penggunaan industrial
+                            • <strong>Bulltank:</strong> 1 Ton
                           </li>
                         </ul>
-                      </p>
+                      </div>
                     </div>
                   </div>
                 </fieldset>
@@ -465,6 +778,7 @@ export default function PreOrderPage() {
                     contactMethod={contactMethod}
                     onMethodChange={setContactMethod}
                     disabled={isSubmitting}
+                    t={t}
                   />
                 </div>
 
@@ -475,7 +789,9 @@ export default function PreOrderPage() {
                   className="w-full bg-gradient-to-r from-[#0c439a] to-[#ca161e] text-white py-4 px-6 rounded-lg font-bold flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:shadow-none"
                 >
                   <Send size={20} />
-                  {isSubmitting ? "Mengirim..." : "Kirim Pre-Order"}
+                  {isSubmitting
+                    ? t("products.preOrder.submitting")
+                    : t("products.preOrder.submitButton")}
                 </button>
               </form>
             </div>
@@ -525,7 +841,9 @@ export default function PreOrderPage() {
 
                 {/* Product Info */}
                 <div>
-                  <h3 className="text-sm text-gray-600 mb-1">PRODUK</h3>
+                  <h3 className="text-sm text-gray-600 mb-1">
+                    {t("products.preOrder.product")}
+                  </h3>
                   <h2 className="text-xl font-bold text-gray-900">
                     {product.name}
                   </h2>
@@ -534,19 +852,25 @@ export default function PreOrderPage() {
                 {/* Product Details */}
                 <div className="space-y-3 py-4 border-t border-b border-gray-200">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Kategori</span>
+                    <span className="text-gray-600">
+                      {t("products.preOrder.category")}
+                    </span>
                     <span className="font-semibold text-gray-900">
                       {product.category}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Tipe</span>
+                    <span className="text-gray-600">
+                      {t("products.preOrder.type")}
+                    </span>
                     <span className="font-semibold text-gray-900">
                       {product.type}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Aplikasi</span>
+                    <span className="text-gray-600">
+                      {t("products.preOrder.application")}
+                    </span>
                     <span className="font-semibold text-gray-900">
                       {product.application}
                     </span>
@@ -556,7 +880,7 @@ export default function PreOrderPage() {
                 {/* Features */}
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-3">
-                    Keunggulan
+                    {t("products.preOrder.advantages")}
                   </h4>
                   <ul className="space-y-2">
                     {product.features?.slice(0, 3).map((feature, idx) => (
@@ -576,24 +900,30 @@ export default function PreOrderPage() {
                 {/* Contact Info Box */}
                 <div className="bg-linear-to-br from-[#0c439a]/10 to-[#ca161e]/10 p-4 rounded-lg space-y-3">
                   <h4 className="font-semibold text-gray-900 text-sm">
-                    Butuh Bantuan?
+                    {t("products.preOrder.needHelp")}
                   </h4>
                   <div className="space-y-2 text-sm">
                     <a
-                      href="mailto:info@esabond.com"
+                      href={`mailto:${t(
+                        "products.preOrder.helpSection.email"
+                      )}`}
                       className="flex items-center gap-2 text-[#0c439a] hover:text-[#0a3478] transition-colors"
                     >
                       <Mail size={16} />
-                      <span>info@esabond.com</span>
+                      <span>{t("products.preOrder.helpSection.email")}</span>
                     </a>
                     <a
-                      href="https://wa.me/62xxxx"
+                      href={`https://wa.me/62${t(
+                        "products.preOrder.helpSection.phone"
+                      )
+                        .replace(/\D/g, "")
+                        .slice(-10)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 text-[#0c439a] hover:text-[#0a3478] transition-colors"
                     >
                       <Phone size={16} />
-                      <span>+62 xxx xxxx xxxx</span>
+                      <span>{t("products.preOrder.helpSection.phone")}</span>
                     </a>
                   </div>
                 </div>

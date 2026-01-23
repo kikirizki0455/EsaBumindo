@@ -1,93 +1,132 @@
 {
   "heroSection": {
-    "headline": {
-      "prefix": "Hubungi Kami",
-      "highlight": "Kami Siap Membantu"
-    },
-    "description": "Ada pertanyaan tentang produk atau layanan kami? Kami ingin mendengar dari Anda. Hubungi tim kami dan mari kita diskusikan bagaimana ESABOND dapat mendukung kebutuhan bisnis Anda.",
-    "cta": {
-      "primary": "Kirim Pesan",
-      "secondary": "Hubungi Kami"
-    }
+    "title": "Hubungi Kami",
+    "description": "Kami siap membantu kebutuhan Anda dengan solusi adhesive terbaik"
+  },
+  "antiSpamNotice": {
+    "title": "Perlindungan Spam Aktif:",
+    "message": "Untuk mencegah penyalahgunaan, setiap email dapat mengirim maksimal 3 pesan per jam. Terima kasih atas pengertiannya."
   },
   "contactForm": {
-    "title": "Hubungi Kami",
-    "description": "Isi detail di bawah dan kami akan merespons Anda secepatnya",
+    "title": "Kirim Pesan",
     "fields": {
-      "fullName": "Nama Lengkap",
-      "email": "Alamat Email",
-      "phone": "Nomor Telepon",
-      "company": "Nama Perusahaan",
-      "subject": "Subjek",
-      "message": "Pesan",
-      "placeholder": {
-        "fullName": "Masukkan nama lengkap Anda",
-        "email": "Masukkan alamat email Anda",
-        "phone": "Masukkan nomor telepon Anda",
-        "company": "Masukkan nama perusahaan Anda",
-        "subject": "Tentang apa ini?",
-        "message": "Ceritakan lebih lanjut tentang pertanyaan Anda..."
+      "name": {
+        "label": "Nama Lengkap *",
+        "placeholder": "Masukkan nama lengkap Anda"
+      },
+      "email": {
+        "label": "Email *",
+        "placeholder": "email@example.com"
+      },
+      "phone": {
+        "label": "No. Telepon",
+        "placeholder": "08xx xxxx xxxx"
+      },
+      "message": {
+        "label": "Pesan *",
+        "placeholder": "Tulis pesan Anda di sini... (minimal 10 karakter)",
+        "hint": "Hindari penggunaan terlalu banyak tautan (maksimal 3 URL)"
       }
     },
-    "button": "Kirim Pesan",
-    "success": "Terima kasih atas pesan Anda! Kami akan menghubungi Anda segera.",
-    "error": "Terjadi kesalahan. Silakan coba lagi."
+    "submitButton": "📤 Kirim Pesan",
+    "submittingButton": "Mengirim...",
+    "statusMessages": {
+      "success": {
+        "title": "✅ Berhasil",
+        "message": "Pesan Anda berhasil dikirim! Kami akan segera merespon."
+      },
+      "rateLimit": {
+        "title": "⏱️ Terlalu Cepat",
+        "message": "Terlalu banyak percobaan. Silakan coba lagi nanti.",
+        "tip": "Tip: Pastikan pesan Anda sudah lengkap sebelum mengirim untuk menghindari pengiriman berulang."
+      },
+      "spam": {
+        "title": "⚠️ Peringatan",
+        "message": "Pesan tidak valid. Silakan periksa kembali."
+      },
+      "error": {
+        "title": "❌ Gagal",
+        "message": "Gagal mengirim pesan. Silakan coba lagi."
+      },
+      "connectionError": {
+        "title": "❌ Kesalahan Koneksi",
+        "message": "Terjadi kesalahan koneksi. Silakan coba lagi nanti."
+      }
+    }
   },
   "contactInfo": {
-    "title": "Informasi Kontak",
-    "subtitle": "Hubungi kami melalui salah satu saluran berikut",
-    "items": [
-      {
-        "type": "address",
-        "title": "Alamat Kami",
-        "value": "Jakarta, Indonesia",
-        "icon": "location"
-      },
-      {
-        "type": "phone",
-        "title": "Telepon",
-        "value": "+62 (123) 456-7890",
-        "icon": "phone"
-      },
-      {
-        "type": "email",
-        "title": "Email",
-        "value": "contact@esabond.com",
-        "icon": "mail"
-      },
-      {
-        "type": "hours",
-        "title": "Jam Kerja",
-        "value": "Senin - Jumat: 9:00 AM - 5:00 PM",
-        "icon": "clock"
-      }
-    ]
+    "company": {
+      "title": "Esa Bumindo",
+      "description": "Solusi adhesive berkualitas tinggi untuk kebutuhan industri dan komersial Anda. Kami berkomitmen memberikan layanan terbaik dengan produk yang telah teruji."
+    },
+    "address": {
+      "title": "Alamat",
+      "line1": "Jl. Contoh No. 123, Kelurahan XYZ",
+      "line2": "Jakarta Selatan, DKI Jakarta 12345",
+      "line3": "Indonesia"
+    },
+    "phone": {
+      "title": "Telepon",
+      "number1": "+62 21 1234 5678",
+      "number2": "+62 812 3456 7890"
+    },
+    "email": {
+      "title": "Email",
+      "address1": "info@esabumindo.com",
+      "address2": "cs@esabumindo.com"
+    },
+    "hours": {
+      "title": "Jam Operasional",
+      "weekday": "Senin - Jumat: 08.00 - 17.00 WIB",
+      "saturday": "Sabtu: 08.00 - 14.00 WIB",
+      "closed": "Minggu & Libur: Tutup"
+    }
   },
   "faq": {
-    "title": "Pertanyaan yang Sering Diajukan",
-    "description": "Temukan jawaban untuk pertanyaan umum tentang produk dan layanan kami",
+    "title": "❓ Pertanyaan yang Sering Diajukan",
+    "description": "Temukan jawaban untuk pertanyaan umum tentang produk lem Esa Bumindo",
     "items": [
       {
-        "question": "Berapa jumlah pesanan minimum?",
-        "answer": "Jumlah pesanan minimum kami tergantung pada jenis produk. Silakan hubungi kami untuk detail spesifik."
+        "id": 1,
+        "question": "Lem apa yang cocok untuk aplikasi logam?",
+        "answer": "Untuk aplikasi logam, kami merekomendasikan produk Esa Bumindo Epoxy Adhesive Series yang memiliki daya rekat tinggi dan tahan lama. Produk ini telah teruji untuk mengikat berbagai jenis logam dengan kekuatan optimal.",
+        "category": "Produk"
       },
       {
-        "question": "Berapa lama waktu pengiriman?",
-        "answer": "Pengiriman biasanya memakan waktu 3-7 hari kerja tergantung lokasi Anda. Opsi pengiriman cepat tersedia."
+        "id": 2,
+        "question": "Berapa lama waktu pengeringan lem Esa Bumindo?",
+        "answer": "Waktu pengeringan tergantung pada jenis produk. Untuk series standar: 24 jam untuk pengeringan sempurna. Untuk series cepat: 4-6 jam. Untuk kondisi optimal, disarankan menunggu 24 jam sebelum membebani hasil perekat.",
+        "category": "Teknis"
       },
       {
-        "question": "Apakah Anda menawarkan diskon untuk pesanan besar?",
-        "answer": "Ya, kami menawarkan harga yang kompetitif untuk pesanan besar. Hubungi tim penjualan kami untuk penawaran khusus."
+        "id": 3,
+        "question": "Apakah lem Esa Bumindo aman untuk kulit?",
+        "answer": "Produk kami telah tersertifikasi dan aman digunakan. Namun, tetap disarankan menghindari kontak langsung dengan kulit. Jika terkena, cuci dengan air bersih segera. Gunakan sarung tangan saat aplikasi untuk keamanan maksimal.",
+        "category": "Keselamatan"
       },
       {
-        "question": "Metode pembayaran apa yang Anda terima?",
-        "answer": "Kami menerima transfer bank, kartu kredit, dan metode pembayaran lainnya. Silakan tanya untuk detail lebih lanjut."
+        "id": 4,
+        "question": "Berapa harga minimal untuk pembelian dalam jumlah besar?",
+        "answer": "Untuk pembelian dalam jumlah besar (>100 unit), kami menawarkan harga khusus dan dapat disesuaikan. Hubungi tim sales kami untuk penawaran terbaik dan terms pembayaran yang fleksibel.",
+        "category": "Harga"
+      },
+      {
+        "id": 5,
+        "question": "Apa jaminan kualitas produk Esa Bumindo?",
+        "answer": "Semua produk Esa Bumindo dilengkapi dengan garansi resmi selama 2 tahun dari tanggal pembelian. Kami menjamin kualitas dan performa sesuai dengan spesifikasi yang tertera. Jika ada cacat produksi, dapat ditukar gratis.",
+        "category": "Garansi"
+      },
+      {
+        "id": 6,
+        "question": "Bisakah lem diaplikasikan pada permukaan basah?",
+        "answer": "Tidak disarankan mengaplikasikan lem pada permukaan yang sangat basah. Permukaan harus dalam kondisi kering dan bersih untuk hasil optimal. Jika terpaksa, gunakan produk Water-resistant series kami yang khusus dirancang untuk kondisi lembab.",
+        "category": "Aplikasi"
       }
-    ]
-  },
-  "cta": {
-    "title": "Siap Bekerja Sama?",
-    "description": "Mari kita diskusikan bagaimana ESABOND dapat membantu mempercepat produksi Anda",
-    "button": "Hubungi Kami Sekarang"
+    ],
+    "cta": {
+      "title": "Tidak menemukan jawaban yang Anda cari?",
+      "description": "Tim customer service kami siap membantu Anda dengan pertanyaan tambahan.",
+      "button": "Hubungi Kami Sekarang"
+    }
   }
 }

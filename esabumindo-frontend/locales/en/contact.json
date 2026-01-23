@@ -1,93 +1,132 @@
 {
   "heroSection": {
-    "headline": {
-      "prefix": "Get in Touch",
-      "highlight": "We're Here to Help"
-    },
-    "description": "Have questions about our products or services? We'd love to hear from you. Contact our team and let's discuss how ESABOND can support your business needs.",
-    "cta": {
-      "primary": "Send Message",
-      "secondary": "Call Us"
-    }
+    "title": "Contact Us",
+    "description": "We are ready to help your adhesive solution needs"
+  },
+  "antiSpamNotice": {
+    "title": "Active Spam Protection:",
+    "message": "To prevent abuse, each email can send a maximum of 3 messages per hour. Thank you for your understanding."
   },
   "contactForm": {
-    "title": "Contact Us",
-    "description": "Fill in your details below and we'll get back to you as soon as possible",
+    "title": "Send Message",
     "fields": {
-      "fullName": "Full Name",
-      "email": "Email Address",
-      "phone": "Phone Number",
-      "company": "Company Name",
-      "subject": "Subject",
-      "message": "Message",
-      "placeholder": {
-        "fullName": "Enter your full name",
-        "email": "Enter your email address",
-        "phone": "Enter your phone number",
-        "company": "Enter your company name",
-        "subject": "What is this about?",
-        "message": "Tell us more about your inquiry..."
+      "name": {
+        "label": "Full Name *",
+        "placeholder": "Enter your full name"
+      },
+      "email": {
+        "label": "Email *",
+        "placeholder": "email@example.com"
+      },
+      "phone": {
+        "label": "Phone Number",
+        "placeholder": "+62 8xx xxxx xxxx"
+      },
+      "message": {
+        "label": "Message *",
+        "placeholder": "Type your message here... (minimum 10 characters)",
+        "hint": "Avoid using too many links (maximum 3 URLs)"
       }
     },
-    "button": "Send Message",
-    "success": "Thank you for your message! We'll contact you soon.",
-    "error": "Something went wrong. Please try again."
+    "submitButton": "📤 Send Message",
+    "submittingButton": "Sending...",
+    "statusMessages": {
+      "success": {
+        "title": "✅ Success",
+        "message": "Your message has been sent successfully! We will respond shortly."
+      },
+      "rateLimit": {
+        "title": "⏱️ Too Fast",
+        "message": "Too many attempts. Please try again later.",
+        "tip": "Tip: Make sure your message is complete before sending to avoid duplicate submissions."
+      },
+      "spam": {
+        "title": "⚠️ Warning",
+        "message": "Invalid message. Please check and try again."
+      },
+      "error": {
+        "title": "❌ Failed",
+        "message": "Failed to send message. Please try again."
+      },
+      "connectionError": {
+        "title": "❌ Connection Error",
+        "message": "A connection error occurred. Please try again later."
+      }
+    }
   },
   "contactInfo": {
-    "title": "Contact Information",
-    "subtitle": "Reach out to us through any of these channels",
-    "items": [
-      {
-        "type": "address",
-        "title": "Our Address",
-        "value": "Jakarta, Indonesia",
-        "icon": "location"
-      },
-      {
-        "type": "phone",
-        "title": "Phone",
-        "value": "+62 (123) 456-7890",
-        "icon": "phone"
-      },
-      {
-        "type": "email",
-        "title": "Email",
-        "value": "contact@esabond.com",
-        "icon": "mail"
-      },
-      {
-        "type": "hours",
-        "title": "Business Hours",
-        "value": "Monday - Friday: 9:00 AM - 5:00 PM",
-        "icon": "clock"
-      }
-    ]
+    "company": {
+      "title": "Esa Bumindo",
+      "description": "High-quality adhesive solutions for your industrial and commercial needs. We are committed to providing the best service with tested products."
+    },
+    "address": {
+      "title": "Address",
+      "line1": "Jl. Contoh No. 123, Kelurahan XYZ",
+      "line2": "Jakarta Selatan, DKI Jakarta 12345",
+      "line3": "Indonesia"
+    },
+    "phone": {
+      "title": "Phone",
+      "number1": "+62 21 1234 5678",
+      "number2": "+62 812 3456 7890"
+    },
+    "email": {
+      "title": "Email",
+      "address1": "info@esabumindo.com",
+      "address2": "cs@esabumindo.com"
+    },
+    "hours": {
+      "title": "Operating Hours",
+      "weekday": "Monday - Friday: 08:00 - 17:00 WIB",
+      "saturday": "Saturday: 08:00 - 14:00 WIB",
+      "closed": "Sunday & Holidays: Closed"
+    }
   },
   "faq": {
-    "title": "Frequently Asked Questions",
-    "description": "Find answers to common questions about our products and services",
+    "title": "❓ Frequently Asked Questions",
+    "description": "Find answers to common questions about Esa Bumindo adhesive products",
     "items": [
       {
-        "question": "What is the minimum order quantity?",
-        "answer": "Our minimum order quantity depends on the product type. Please contact us for specific details."
+        "id": 1,
+        "question": "What adhesive is suitable for metal applications?",
+        "answer": "For metal applications, we recommend Esa Bumindo Epoxy Adhesive Series which has high bonding strength and durability. This product has been tested to bond various types of metals with optimal strength.",
+        "category": "Product"
       },
       {
-        "question": "How long does delivery take?",
-        "answer": "Delivery typically takes 3-7 business days depending on your location. Rush delivery options are available."
+        "id": 2,
+        "question": "How long does Esa Bumindo adhesive take to dry?",
+        "answer": "Drying time depends on the product type. For standard series: 24 hours for complete drying. For fast series: 4-6 hours. For optimal conditions, it is recommended to wait 24 hours before applying load to the bonded joint.",
+        "category": "Technical"
       },
       {
-        "question": "Do you offer bulk discounts?",
-        "answer": "Yes, we offer competitive pricing for bulk orders. Contact our sales team for a custom quote."
+        "id": 3,
+        "question": "Is Esa Bumindo adhesive safe for skin?",
+        "answer": "Our products are certified and safe to use. However, it is recommended to avoid direct skin contact. If contact occurs, wash with clean water immediately. Wear gloves during application for maximum safety.",
+        "category": "Safety"
       },
       {
-        "question": "What payment methods do you accept?",
-        "answer": "We accept bank transfers, credit cards, and other payment methods. Please inquire for details."
+        "id": 4,
+        "question": "What is the minimum price for bulk purchases?",
+        "answer": "For bulk purchases (>100 units), we offer special prices that can be customized. Contact our sales team for the best offers and flexible payment terms.",
+        "category": "Price"
+      },
+      {
+        "id": 5,
+        "question": "What is the quality guarantee for Esa Bumindo products?",
+        "answer": "All Esa Bumindo products come with an official 2-year warranty from the date of purchase. We guarantee quality and performance in accordance with the stated specifications. If there are manufacturing defects, they can be exchanged for free.",
+        "category": "Warranty"
+      },
+      {
+        "id": 6,
+        "question": "Can adhesive be applied on wet surfaces?",
+        "answer": "It is not recommended to apply adhesive on very wet surfaces. Surfaces should be clean and dry for optimal results. If necessary, use our Water-resistant series which is specially designed for humid conditions.",
+        "category": "Application"
       }
-    ]
-  },
-  "cta": {
-    "title": "Ready to Work Together?",
-    "description": "Let's discuss how ESABOND can help accelerate your production",
-    "button": "Contact Us Now"
+    ],
+    "cta": {
+      "title": "Can't find the answer you're looking for?",
+      "description": "Our customer service team is ready to help you with additional questions.",
+      "button": "Contact Us Now"
+    }
   }
 }

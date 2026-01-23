@@ -15,11 +15,26 @@
     "subtitle": "Jelajahi katalog produk lengkap kami",
     "filterBy": "Filter berdasarkan Kategori",
     "sortBy": "Urutkan berdasarkan",
-    "noResults": "Tidak ada produk ditemukan"
+    "noResults": "Tidak ada produk ditemukan",
+    "searchPlaceholder": "Cari produk berdasarkan nama atau tipe...",
+    "filters": {
+      "title": "Filter",
+      "type": "Tipe Produk",
+      "application": "Aplikasi/Fitur",
+      "clearAll": "Hapus Semua Filter",
+      "all": "Semua"
+    },
+    "pagination": {
+      "previous": "Sebelumnya",
+      "next": "Selanjutnya",
+      "showing": "Menampilkan {{start}} hingga {{end}} dari {{total}} produk",
+      "goToPage": "Ke halaman",
+      "itemsPerPage": "Item per halaman"
+    }
   },
   "productCard": {
     "viewDetails": "Lihat Detail",
-    "addToCart": "Tambah ke Keranjang",
+    "addToCart": "Pesan Sekarang",
     "price": "Harga",
     "inStock": "Stok Tersedia",
     "outOfStock": "Stok Habis",
@@ -29,7 +44,7 @@
   "productDetail": {
     "backButton": "Kembali ke Produk",
     "shareButton": "Bagikan Produk",
-    "addToCart": "Tambah ke Keranjang",
+    "addToCart": "Pesan Sekarang",
     "requestQuote": "Minta Penawaran",
     "preOrder": "Pre-Order Sekarang",
     "downloadSpec": "Spesifikasi",

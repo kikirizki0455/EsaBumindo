@@ -2,6 +2,7 @@
 
 import { memo, useMemo, useState, useCallback } from "react";
 import Image from "next/image";
+import { useTranslation } from "@/hooks/use-translation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -11,6 +12,7 @@ const ProductTable = memo(function ProductTable({
   onDetail,
   onRequest,
 }) {
+  const { t } = useTranslation();
   const [imageErrors, setImageErrors] = useState(new Set());
 
   // Memoize products untuk menghindari re-render yang tidak perlu
@@ -76,13 +78,13 @@ const ProductTable = memo(function ProductTable({
             onClick={() => onDetail && onDetail(product.id)}
             className="flex-1 bg-[#ca161e] hover:bg-[#a01318] text-white rounded-sm"
           >
-            Detail
+            {t("products.productCard.viewDetails")}
           </Button>
           <Button
             onClick={() => onRequest && onRequest(product.id)}
             className="flex-1 bg-[#1f4faa] hover:bg-[#173d85] text-white rounded-sm"
           >
-            Pre Order
+            {t("products.productCard.addToCart")}
           </Button>
         </div>
       </CardContent>
@@ -108,16 +110,16 @@ const ProductTable = memo(function ProductTable({
                 <thead>
                   <tr className="border-b border-gray-200">
                     <th className="text-left py-4 px-4 font-semibold text-gray-900 w-1/4">
-                      Produk
+                      {t("products.productCard.specifications")}
                     </th>
                     <th className="text-left py-4 px-4 font-semibold text-gray-900 w-1/4">
-                      Aplikasi
+                      {t("products.productDetail.applicationInfo")}
                     </th>
                     <th className="text-left py-4 px-4 font-semibold text-gray-900 w-1/3">
-                      Fitur
+                      {t("products.productCard.features")}
                     </th>
                     <th className="text-center py-4 px-4 font-semibold text-gray-900 w-1/6">
-                      Aksi
+                      {t("products.productCard.viewDetails")}
                     </th>
                   </tr>
                 </thead>
@@ -156,7 +158,12 @@ const ProductTable = memo(function ProductTable({
                                   stroke="#d1d5db"
                                   strokeWidth="2"
                                 />
-                                <circle cx="100" cy="110" r="8" fill="#d1d5db" />
+                                <circle
+                                  cx="100"
+                                  cy="110"
+                                  r="8"
+                                  fill="#d1d5db"
+                                />
                               </svg>
                             )}
                           </div>
@@ -189,7 +196,8 @@ const ProductTable = memo(function ProductTable({
                           ))}
                           {product.features?.length > 3 && (
                             <li className="text-gray-500 text-sm italic">
-                              +{product.features.length - 3} lainnya
+                              +{product.features.length - 3}{" "}
+                              {t("products.productGrid.noResults")}
                             </li>
                           )}
                         </ul>
@@ -202,13 +210,13 @@ const ProductTable = memo(function ProductTable({
                             onClick={() => onDetail && onDetail(product.id)}
                             className="bg-[#ca161e] hover:bg-[#a01318] text-white rounded-sm text-sm px-4"
                           >
-                            Detail
+                            {t("products.productCard.viewDetails")}
                           </Button>
                           <Button
                             onClick={() => onRequest && onRequest(product.id)}
                             className="bg-[#1f4faa] hover:bg-[#173d85] text-white rounded-sm text-sm px-4"
                           >
-                            Pre Order
+                            {t("products.productCard.addToCart")}
                           </Button>
                         </div>
                       </td>
@@ -227,7 +235,9 @@ const ProductTable = memo(function ProductTable({
           </>
         ) : (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">Tidak ada produk tersedia</p>
+            <p className="text-gray-500 text-lg">
+              {t("products.productGrid.noResults")}
+            </p>
           </div>
         )}
       </div>

@@ -4,11 +4,20 @@ export default function ContactMethodSelector({
   contactMethod,
   onMethodChange,
   disabled = false,
+  t = null,
 }) {
+  // Fallback translations jika t tidak disediakan
+  const getLabel = (key, fallback) => {
+    return t ? t(key) : fallback;
+  };
+
   return (
     <fieldset className="pb-8 border-b border-gray-200">
       <legend className="text-lg font-bold text-gray-900 mb-4">
-        Metode Kontak Untuk Respons
+        {getLabel(
+          "products.preOrder.fields.contactMethod",
+          "Metode Kontak Untuk Respons"
+        )}
       </legend>
 
       <div className="space-y-3">
@@ -55,9 +64,14 @@ export default function ContactMethodSelector({
                       : "text-gray-600"
                   }`}
                 />
-                <div className="font-semibold text-gray-900 text-sm">Email</div>
+                <div className="font-semibold text-gray-900 text-sm">
+                  {getLabel("products.preOrder.contactMethods.email", "Email")}
+                </div>
                 <div className="text-xs text-gray-600">
-                  Lebih formal dan tertulis
+                  {getLabel(
+                    "products.preOrder.contactMethods.emailDesc",
+                    "Lebih formal dan tertulis"
+                  )}
                 </div>
               </div>
             </div>
@@ -102,10 +116,16 @@ export default function ContactMethodSelector({
                   }`}
                 />
                 <div className="font-semibold text-gray-900 text-sm">
-                  WhatsApp
+                  {getLabel(
+                    "products.preOrder.contactMethods.whatsapp",
+                    "WhatsApp"
+                  )}
                 </div>
                 <div className="text-xs text-gray-600">
-                  Lebih cepat dan personal
+                  {getLabel(
+                    "products.preOrder.contactMethods.whatsappDesc",
+                    "Lebih cepat dan personal"
+                  )}
                 </div>
               </div>
             </div>

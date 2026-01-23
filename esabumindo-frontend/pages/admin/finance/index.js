@@ -15,13 +15,13 @@ import {
 } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { useRouter } from "next/router";
-import axios from "axios";
 import api from "@/lib/axios";
 
 export default function FinancePage() {
   const router = useRouter();
   const [salaries, setSalaries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [calculating, setCalculating] = useState(false);
@@ -33,13 +33,16 @@ export default function FinancePage() {
   const fetchSalaries = async () => {
     try {
       setLoading(true);
+      setError(null);
       const response = await api.get("/salaries", {
-        // ← GANTI
         params: { month: selectedMonth, year: selectedYear },
       });
       setSalaries(response.data);
     } catch (error) {
       console.error("Error fetching salaries:", error);
+      setError(
+        "Gagal memuat data gaji. Pastikan backend berjalan di port 3001"
+      );
     } finally {
       setLoading(false);
     }
@@ -58,7 +61,6 @@ export default function FinancePage() {
     try {
       setCalculating(true);
       await api.post("/salaries/calculate", {
-        // ← GANTI
         month: selectedMonth,
         year: selectedYear,
       });
@@ -76,7 +78,7 @@ export default function FinancePage() {
     if (!confirm("Tandai gaji ini sebagai sudah dibayar?")) return;
 
     try {
-      await api.patch(`/salaries/${salaryId}/pay`); // ← GANTI
+      await api.patch(`/salaries/${salaryId}/pay`);
       fetchSalaries();
     } catch (error) {
       console.error("Error marking as paid:", error);

@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, Download, Share2, ShoppingCart } from "lucide-react";
+import { useTranslation } from "@/hooks/use-translation";
 import MainLayout from "../layouts/main-layout";
 import { BEST_SELLER_PRODUCTS, NEW_PRODUCTS } from "@/data/products";
 
@@ -33,6 +34,7 @@ const ProductTechnicalInfo = dynamic(
 export default function ProductDetailPage() {
   const router = useRouter();
   const { id } = router.query;
+  const { t, isHydrated } = useTranslation();
 
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,16 +50,17 @@ export default function ProductDetailPage() {
 
   // Find product by ID
   useEffect(() => {
-    if (!id) return;
+    // Don't do anything until we have both the router ID and hydration is complete
+    if (!id || !isHydrated) return;
 
     const timer = setTimeout(() => {
       const foundProduct = allProducts.find((p) => p.id === id);
       setProduct(foundProduct || null);
       setIsLoading(false);
-    }, 600);
+    }, 300); // Reduced delay for better UX
 
     return () => clearTimeout(timer);
-  }, [id]);
+  }, [id, isHydrated, allProducts]);
 
   // Handle share
   const handleShare = useCallback(async () => {
@@ -94,21 +97,22 @@ export default function ProductDetailPage() {
     setImageError(true);
   }, []);
 
-  if (isLoading) return <ProductDetailSkeleton />;
+  // Only render skeleton while loading OR if not hydrated
+  if (isLoading || !isHydrated) return <ProductDetailSkeleton />;
 
   if (!product) {
     return (
       <MainLayout>
-        <div className="min-h-screen bg-white flex items-center justifyify-center">
+        <div className="min-h-screen bg-white flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              Produk Tidak Ditemukan
+              {t("products.productDetail.productNotFound")}
             </h1>
             <Link
               href="/product"
               className="inline-block px-6 py-3 bg-[#0c439a] text-white rounded-lg hover:bg-[#0a3478] transition-colors"
             >
-              Kembali ke Produk
+              {t("products.productDetail.backToProducts")}
             </Link>
           </div>
         </div>
@@ -127,7 +131,7 @@ export default function ProductDetailPage() {
               className="flex items-center gap-2 text-[#0c439a] hover:text-[#0a3478] font-semibold transition-colors"
             >
               <ChevronLeft size={20} />
-              Kembali
+              {t("products.productDetail.backButton")}
             </button>
           </div>
         </div>
@@ -176,7 +180,7 @@ export default function ProductDetailPage() {
                 )}
               </div>
               <div className="text-sm text-gray-600">
-                Kategori:{" "}
+                {t("products.productDetail.category")}:{" "}
                 <span className="font-semibold">{product.category}</span>
               </div>
             </div>
@@ -197,7 +201,7 @@ export default function ProductDetailPage() {
                 {/* Features Quick List */}
                 <div className="mb-8">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                    Keunggulan Utama
+                    {t("products.productDetail.mainAdvantages")}
                   </h3>
                   <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {product.features?.map((feature, idx) => (
@@ -220,7 +224,7 @@ export default function ProductDetailPage() {
                   className="w-full bg-gradient-to-r from-[#0c439a] to-[#ca161e] text-white py-4 px-6 rounded-lg font-bold flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
                 >
                   <ShoppingCart size={20} />
-                  Pre-Order Sekarang
+                  {t("products.productDetail.preOrder")}
                 </button>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -229,14 +233,16 @@ export default function ProductDetailPage() {
                     className="border-2 border-[#0c439a] text-[#0c439a] py-3 px-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
                   >
                     <Download size={18} />
-                    Spesifikasi
+                    {t("products.productDetail.downloadSpec")}
                   </button>
                   <button
                     onClick={handleShare}
                     className="border-2 border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
                   >
                     <Share2 size={18} />
-                    {isCopied ? "Tersalin" : "Bagikan"}
+                    {isCopied
+                      ? t("products.productDetail.copied")
+                      : t("products.productDetail.share")}
                   </button>
                 </div>
               </div>
@@ -247,9 +253,18 @@ export default function ProductDetailPage() {
           <div className="border-b border-gray-200 mb-8">
             <div className="flex gap-8 overflow-x-auto">
               {[
-                { id: "overview", label: "Gambaran Umum" },
-                { id: "specifications", label: "Spesifikasi" },
-                { id: "technical", label: "Info Teknis" },
+                {
+                  id: "overview",
+                  label: t("products.productDetail.tabs.overview"),
+                },
+                {
+                  id: "specifications",
+                  label: t("products.productDetail.tabs.specifications"),
+                },
+                {
+                  id: "technical",
+                  label: t("products.productDetail.tabs.technical"),
+                },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -272,7 +287,7 @@ export default function ProductDetailPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="md:col-span-2">
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    Deskripsi Produk
+                    {t("products.productDetail.description")}
                   </h3>
                   <p className="text-gray-700 leading-relaxed mb-6">
                     {product.name} adalah solusi adhesive profesional dirancang
@@ -289,23 +304,29 @@ export default function ProductDetailPage() {
 
                 <div className="bg-linear-to-br from-[#0c439a]/10 to-[#ca161e]/10 p-6 rounded-lg">
                   <h4 className="font-bold text-gray-900 mb-4">
-                    Info Aplikasi
+                    {t("products.productDetail.applicationInfo")}
                   </h4>
                   <div className="space-y-3">
                     <div>
-                      <p className="text-sm text-gray-600">Industri</p>
+                      <p className="text-sm text-gray-600">
+                        {t("products.productDetail.industry")}
+                      </p>
                       <p className="font-semibold text-gray-900">
                         {product.application}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Kategori</p>
+                      <p className="text-sm text-gray-600">
+                        {t("products.productDetail.category")}
+                      </p>
                       <p className="font-semibold text-gray-900">
                         {product.category}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Tipe Adhesive</p>
+                      <p className="text-sm text-gray-600">
+                        {t("products.productDetail.adhesiveType")}
+                      </p>
                       <p className="font-semibold text-gray-900">
                         {product.type}
                       </p>

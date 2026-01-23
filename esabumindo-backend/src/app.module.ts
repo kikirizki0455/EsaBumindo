@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { PreOrderModule } from './pre-order/pre-order.module';
 
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
@@ -12,6 +13,7 @@ import { ArticlesModule } from './articles/articles.module';
 import { EmployeesModule } from './employees/employees.module';
 import { AttendancesModule } from './attendances/attendances.module';
 import { SalariesModule } from './salaries/salaries.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -22,8 +24,10 @@ import { SalariesModule } from './salaries/salaries.module';
 
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env.example',
     }),
-
+    EmailModule,
+    PreOrderModule,
     PrismaModule,
     UserModule,
     AuthModule,
@@ -31,6 +35,7 @@ import { SalariesModule } from './salaries/salaries.module';
     EmployeesModule,
     AttendancesModule,
     SalariesModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
