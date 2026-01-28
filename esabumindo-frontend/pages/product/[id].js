@@ -47,7 +47,7 @@ export default function ProductDetailPage() {
     () => [...BEST_SELLER_PRODUCTS, ...NEW_PRODUCTS],
     []
   );
-
+  
   // Find product by ID
   useEffect(() => {
     // Don't do anything until we have both the router ID and hydration is complete
@@ -144,7 +144,7 @@ export default function ProductDetailPage() {
               <div className="bg-gray-100 rounded-lg overflow-hidden aspect-square relative flex items-center justify-center">
                 {!imageError ? (
                   <Image
-                    src={`/images/products/${product.id}.png`}
+                    src={product.image}
                     alt={product.name}
                     fill
                     className="object-cover"

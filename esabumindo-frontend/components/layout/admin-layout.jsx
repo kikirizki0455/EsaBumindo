@@ -12,6 +12,7 @@ import {
   Home,
   LogOut,
   ChevronRight,
+  Calendar,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -40,6 +41,12 @@ const menuItems = [
     icon: DollarSign,
     href: "/admin/finance",
     description: "Kelola gaji & keuangan karyawan",
+  },
+  {
+    title: "Jadwal Produksi",
+    icon: Calendar,
+    href: "/admin/ppic/schedule",
+    description: "Kelola jadwal produksi & reactor",
   },
 ];
 

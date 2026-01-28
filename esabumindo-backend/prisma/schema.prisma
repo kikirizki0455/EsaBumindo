@@ -13,6 +13,10 @@ enum Role {
   DIREKTUR
   ADMIN
   KARYAWAN
+  PPIC
+  WAREHOUSE
+  QC
+  PRODUCTION
 }
 
 model User {
@@ -56,7 +60,7 @@ model Employee {
   joinDate     DateTime
   status       String       @default("active")
   createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  updatedAt    DateTime     @default(now())
 
   attendances Attendance[]
   salaries    Salary[]
@@ -101,7 +105,7 @@ model Salary {
   paidAt              DateTime?
   notes               String?
   createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  updatedAt           DateTime @default(now())
 
   @@unique([employeeId, month, year])
   @@index([employeeId])
@@ -119,7 +123,268 @@ model CompanySetting {
   shift2EndTime       String   @default("22:00")
   overtimeMultiplier  Decimal  @db.Decimal(3, 2) @default(1.0)
   createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  updatedAt           DateTime @default(now())
+}
+
+/**
+ * Product: Master data produk
+ */
+model Product {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  name        String
+  description String?
+  type        String?  // PVAC, STYRENE, EVA, etc
+  baseQty     Decimal  @db.Decimal(10, 2) @default(1) // Base unit dalam kg
+  status      String   @default("active")
+  createdAt   DateTime @default(now())  
+  updatedAt   DateTime @updatedAt
+
+  bom ProductionBom?
+  productionPlans ProductionPlan[]
+
+  @@index([code])
+  @@index([status])
+}
+
+/**
+ * ProductionBom: Bill of Material / Rencana Proses Manufaktur (BPM)
+ * Berisi formula/resep untuk setiap product
+ */
+model ProductionBom {
+  id        String   @id @default(uuid())
+  productId String   @unique
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  details   ProductionBomDetail[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([productId])
+}
+
+/**
+ * ProductionBomDetail: Detail BOM per material
+ * Gunakan percentage untuk fleksibilitas perhitungan saat produksi
+ * Contoh: Product 5502 resep 4400kg, bahan A 30%, B 20%, C 10%, D 15%, E 25%
+ */
+model ProductionBomDetail {
+  id            String         @id @default(uuid())
+  bomId         String
+  bom           ProductionBom  @relation(fields: [bomId], references: [id], onDelete: Cascade)
+  step          String         // A, B, C, ..., I (urutan proses)
+  materialId    String
+  material      Material       @relation(fields: [materialId], references: [id])
+  percentage    Decimal        @db.Decimal(5, 2) // Persentase dari target qty (0-100)
+  notes         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([bomId, step, materialId])
+  @@index([bomId])
+  @@index([materialId])
+}
+
+/**
+ * Material: Master data bahan baku
+ */
+model Material {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  name        String
+  unit        String   // kg, liter, pcs, dll
+  description String?
+  category    String?  // Raw Material, Packaging, etc
+  status      String   @default("active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  bomDetails         ProductionBomDetail[]
+  orderDetails       ProductionOrderDetail[]
+  stockMovements     StockMovement[]
+  materialStocks     MaterialStock[]
+
+  @@index([code])
+  @@index([status])
+}
+
+/**
+ * PackagingType: Tipe kemasan untuk produk
+ */
+model PackagingType {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  name        String   // 200kg drum polos, 40kg tong dus, etc
+  capacity    Decimal  @db.Decimal(10, 2) // Kapasitas per kemasan (kg)
+  unit        String   @default("kg")
+  description String?
+  status      String   @default("active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  @@index([code])
+}
+
+/**
+ * MaterialStock: Stok material per warehouse
+ */
+model MaterialStock {
+  id          String   @id @default(uuid())
+  materialId  String
+  material    Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  warehouseId String
+  warehouse   Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  quantity    Decimal  @db.Decimal(10, 2) @default(0)
+  minStock    Decimal  @db.Decimal(10, 2) @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([materialId, warehouseId])
+  @@index([materialId])
+  @@index([warehouseId])
+}
+
+/**
+ * Warehouse: Lokasi penyimpanan material
+ */
+model Warehouse {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  name      String
+  location  String?
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  materialStocks MaterialStock[]
+
+  @@index([code])
+}
+
+/**
+ * ProductionPlan: Rencana produksi (dibuat oleh PPIC)
+ * Status: DRAFT -> CONFIRMED -> IN_PROGRESS -> COMPLETED / CANCELLED
+ */
+model ProductionPlan {
+  id                  String   @id @default(uuid())
+  planDate            DateTime
+  reactor             String   // A, B, C, D
+  productId           String
+  product             Product  @relation(fields: [productId], references: [id])
+  plant               String   // P1 atau P2
+  targetQty           Decimal  @db.Decimal(10, 2)
+  noBatch             String?  // No Lot - generated during creation
+  noBPM               String?  // No BPM format: P1.202601070 (P{plant}.{year}{month}{day}{sequence})
+  status              String   @default("DRAFT")
+  notes               String?
+  createdBy           Int
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @default(now())
+  
+  // Schedule change tracking
+  scheduledChanges    ScheduledChange[]
+  orderDetails        ProductionOrderDetail[]
+  logs                ProductionLog[]
+
+  @@index([productId])
+  @@index([status])
+  @@index([planDate])
+  @@index([reactor])
+  @@index([plant])
+}
+
+/**
+ * ScheduledChange: Tracking perubahan jadwal produksi
+ * Hanya dicatat jika material sudah ditimbang (warehouseConfirmedAt exists)
+ */
+model ScheduledChange {
+  id                  String   @id @default(uuid())
+  productionPlanId    String
+  productionPlan      ProductionPlan @relation(fields: [productionPlanId], references: [id], onDelete: Cascade)
+  
+  // Perubahan apa
+  changeType          String   // DATE, QUANTITY, REACTOR, PRODUCT, NOTES
+  oldValue            String   // nilai sebelumnya
+  newValue            String   // nilai baru
+  
+  // Kondisi perubahan
+  materialWeighedCount Int     // berapa material yang sudah ditimbang saat perubahan
+  materialTotalCount   Int     // total material untuk plan ini
+  reason              String?  // Alasan perubahan
+  
+  // Audit trail
+  changedBy           Int
+  createdAt           DateTime @default(now())
+
+  @@index([productionPlanId])
+  @@index([changeType])
+  @@index([createdAt])
+}
+
+/**
+ * ProductionOrderDetail: Kebutuhan material per production plan
+ * Auto-generated dari BPM, tidak bisa diedit oleh PPIC
+ * Hanya warehouse yang bisa confirm dengan lot & actual_qty
+ */
+model ProductionOrderDetail {
+  id                    String          @id @default(uuid())
+  productionPlanId      String
+  productionPlan        ProductionPlan  @relation(fields: [productionPlanId], references: [id], onDelete: Cascade)
+  bomStep               String          // A, B, C, ..., I
+  materialId            String
+  material              Material        @relation(fields: [materialId], references: [id])
+  requiredQty           Decimal         @db.Decimal(10, 2)
+  actualQty             Decimal?        @db.Decimal(10, 2)
+  lotNumber             String?
+  warehouseConfirmedAt  DateTime?
+  warehouseConfirmedBy  Int?
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @default(now())
+
+  @@unique([productionPlanId, bomStep, materialId])
+  @@index([productionPlanId])
+  @@index([materialId])
+}
+
+/**
+ * ProductionLog: Timeline/event log (immutable - append only)
+ * Mencatat semua aktivitas dalam production plan
+ */
+model ProductionLog {
+  id               String          @id @default(uuid())
+  productionPlanId String
+  productionPlan   ProductionPlan  @relation(fields: [productionPlanId], references: [id], onDelete: Cascade)
+  role             String          // PPIC, WAREHOUSE, QC, PRODUCTION
+  type             String          // INFO, DELAY, QC_REJECT, ADJUST, MATERIAL_OUT
+  message          String
+  metadata         Json?           // Additional data as needed
+  createdBy        Int
+  createdAt        DateTime        @default(now())
+
+  @@index([productionPlanId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+/**
+ * StockMovement: Audit trail untuk pergerakan stok
+ */
+model StockMovement {
+  id            String   @id @default(uuid())
+  materialId    String
+  material      Material @relation(fields: [materialId], references: [id])
+  warehouseId   String
+  movementType  String   // IN, OUT
+  quantity      Decimal  @db.Decimal(10, 2)
+  referenceType String   // PRODUCTION_ORDER, PURCHASE, RETURN, ADJUSTMENT
+  referenceId   String?  // production_plan_id atau PO id
+  notes         String?
+  createdBy     Int
+  createdAt     DateTime @default(now())
+
+  @@index([materialId])
+  @@index([warehouseId])
+  @@index([referenceId])
+  @@index([createdAt])
 }
 
 /**

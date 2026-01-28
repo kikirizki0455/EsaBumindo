@@ -1,40 +1,220 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# 🚀 Fullstack Web Application
 
-## Getting Started
+**Next.js (Frontend) & NestJS (Backend)**
 
-First, run the development server:
+Project ini merupakan aplikasi **fullstack web** dengan arsitektur **monorepo**, di mana **frontend** dan **backend** berada dalam satu repository tetapi terpisah secara struktur dan tanggung jawab.
+
+---
+
+## 📁 Project Structure
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+project-root/
+├── frontend/        # Frontend - Next.js
+├── backend/         # Backend - NestJS
+├── .gitignore       # Global gitignore
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## 🖥 Frontend (Next.js)
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+Folder `frontend/` berisi aplikasi **Next.js** yang berfungsi sebagai **client-side** dan **server-side rendered UI**.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+### 🔧 Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js
+- React
+- TypeScript
+- Axios (HTTP Client)
 
-## Learn More
+### 📌 Tanggung Jawab Frontend
 
-To learn more about Next.js, take a look at the following resources:
+- Menampilkan antarmuka pengguna (UI)
+- Mengelola state dan interaksi user
+- Mengirim & menerima data dari backend melalui REST API
+- Routing dan page rendering
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+### 🌐 API Communication
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Frontend menggunakan **Axios** untuk berkomunikasi dengan backend (NestJS).
 
-## Deploy on Vercel
+Contoh:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```ts
+axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+Konfigurasi Axios disarankan terpusat, misalnya:
+
+```bash
+frontend/src/lib/axios.ts
+```
+
+---
+
+## ⚙️ Backend (NestJS)
+
+Folder `backend/` berisi aplikasi **NestJS** yang bertindak sebagai **REST API server**.
+
+### 🔧 Tech Stack
+
+- NestJS
+- TypeScript
+- TypeORM
+- PostgreSQL
+
+### 📌 Tanggung Jawab Backend
+
+- Menyediakan REST API
+- Business logic dan validasi data
+- Akses database menggunakan TypeORM
+- Manajemen entity, service, dan controller
+
+---
+
+## 🗄 Database (PostgreSQL)
+
+Aplikasi backend menggunakan **PostgreSQL** sebagai database utama dan **TypeORM** sebagai ORM.
+
+### 🔹 Alasan Menggunakan PostgreSQL
+
+- Stabil dan production-ready
+- Mendukung relasi kompleks
+- Performa baik untuk skala menengah hingga besar
+
+### 🔹 Contoh Konfigurasi TypeORM
+
+```ts
+TypeOrmModule.forRoot({
+  type: "postgres",
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  autoLoadEntities: true,
+  synchronize: true,
+});
+```
+
+### 🔹 Contoh Entity
+
+```ts
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+}
+```
+
+---
+
+## 🔄 Alur Komunikasi Sistem
+
+```text
+User
+ ↓
+Next.js (Frontend)
+ ↓ Axios
+NestJS Controller
+ ↓
+Service
+ ↓
+TypeORM
+ ↓
+PostgreSQL Database
+ ↓
+Response → Frontend
+```
+
+---
+
+## 🔐 Environment Variables
+
+File `.env` **tidak di-commit** ke repository.
+
+### Backend (`backend/.env.example`)
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_NAME=app_db
+```
+
+### Frontend (`frontend/.env.example`)
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
+
+---
+
+## ▶️ Running the Project
+
+### Backend
+
+```bash
+cd backend
+npm install
+npm run start:dev
+```
+
+Backend berjalan di:
+
+```
+http://localhost:3001
+```
+
+---
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend dapat diakses di:
+
+```
+http://localhost:3000
+```
+
+---
+
+## 🧪 Development Notes
+
+- Frontend dan backend dijalankan secara terpisah
+- Backend harus berjalan terlebih dahulu
+- Gunakan `.env.example` sebagai referensi konfigurasi
+
+---
+
+## 📌 Best Practice yang Digunakan
+
+- Monorepo structure
+- Multi `.gitignore` (global, frontend, backend)
+- Separation of concerns
+- Typed API dan database schema
+- Environment-based configuration
+
+---
+
+## 🧑‍💻 Author
+
+**Rizki Rahmat Hidayat**  
+Fullstack Developer
+
+---
+
+## 📄 License
+
+This project is intended for learning, development, and internal use.

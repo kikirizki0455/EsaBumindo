@@ -86,19 +86,18 @@ export default function PreOrderPage() {
 
       // Validation for sample order quantity
       if (name === "quantityKg" && formData.orderType === "sample") {
+        const validSampleSizes = [1, 5, 10, 15, 20, 50, 100];
         const numValue = parseFloat(value);
-        if (numValue > 100) {
+        if (!validSampleSizes.includes(numValue)) {
           setSubmitStatus({
             type: "warning",
             message:
-              "Jumlah sample maksimal 100 kg. Untuk pesanan lebih besar, silakan pilih Direct Order.",
+              "Pilih jumlah sample dari opsi yang tersedia: 1, 5, 10, 15, 20, 50, atau 100 kg",
           });
-          return;
         } else {
-          // Clear warning if quantity is valid
           setSubmitStatus(null);
         }
-      } else if (name === "quantityKg") {
+      } else if (name === "quantityKg" && formData.orderType === "direct") {
         // Clear warning for direct orders
         setSubmitStatus(null);
       }
@@ -123,8 +122,9 @@ export default function PreOrderPage() {
     setFormData((prev) => ({
       ...prev,
       orderType: type,
-      // Reset quantity when changing order type
+      // Reset quantity and packaging when changing order type
       quantityKg: type === "sample" ? "1" : "1",
+      packaging: type === "sample" ? "botol" : "cartongTong50kg",
     }));
     setSubmitStatus(null);
   }, []);
@@ -657,38 +657,45 @@ export default function PreOrderPage() {
                           htmlFor="quantityKg"
                           className="block text-sm font-semibold text-gray-700 mb-2"
                         >
-                          Jumlah (kg){" "}
-                          {formData.orderType === "sample" && (
-                            <span className="text-gray-500 text-xs">
-                              (Max: 100 kg)
-                            </span>
-                          )}{" "}
-                          <span className="text-red-500">*</span>
+                          Jumlah (kg) <span className="text-red-500">*</span>
                         </label>
-                        <input
-                          type="number"
-                          id="quantityKg"
-                          name="quantityKg"
-                          value={formData.quantityKg}
-                          onChange={handleInputChange}
-                          disabled={isSubmitting}
-                          min="1"
-                          max={
-                            formData.orderType === "sample" ? "100" : undefined
-                          }
-                          step="0.5"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0c439a] focus:border-transparent transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
-                          placeholder={
-                            formData.orderType === "sample"
-                              ? "Contoh: 50"
-                              : "Contoh: 100"
-                          }
-                          required
-                        />
+                        {formData.orderType === "sample" ? (
+                          <select
+                            id="quantityKg"
+                            name="quantityKg"
+                            value={formData.quantityKg}
+                            onChange={handleInputChange}
+                            disabled={isSubmitting}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0c439a] focus:border-transparent transition-all disabled:bg-gray-100 disabled:cursor-not-allowed bg-white"
+                            required
+                          >
+                            <option value="1">1 kg</option>
+                            <option value="5">5 kg</option>
+                            <option value="10">10 kg</option>
+                            <option value="15">15 kg</option>
+                            <option value="20">20 kg</option>
+                            <option value="50">50 kg</option>
+                            <option value="100">100 kg</option>
+                          </select>
+                        ) : (
+                          <input
+                            type="number"
+                            id="quantityKg"
+                            name="quantityKg"
+                            value={formData.quantityKg}
+                            onChange={handleInputChange}
+                            disabled={isSubmitting}
+                            min="1"
+                            step="0.5"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0c439a] focus:border-transparent transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                            placeholder="Contoh: 1000"
+                            required
+                          />
+                        )}
                         <p className="text-xs text-gray-500 mt-1">
                           {formData.orderType === "sample"
-                            ? "Minimal 1 kg, maksimal 100 kg untuk pengambilan sample"
-                            : "Masukkan jumlah dalam kilogram"}
+                            ? "Pilih jumlah sample yang diinginkan (1-100 kg)"
+                            : "Masukkan jumlah dalam kilogram (tanpa batasan)"}
                         </p>
                       </div>
 
@@ -707,24 +714,32 @@ export default function PreOrderPage() {
                           disabled={isSubmitting}
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0c439a] focus:border-transparent transition-all disabled:bg-gray-100 disabled:cursor-not-allowed bg-white"
                         >
-                          <option value="tong50kg">
-                            {t("products.preOrder.packaging.tong50kg")}
-                          </option>
-                          <option value="tong40kg">
-                            {t("products.preOrder.packaging.tong40kg")}
-                          </option>
-                          <option value="drumPolos200kg">
-                            {t("products.preOrder.packaging.drumPolos200kg")}
-                          </option>
-                          <option value="drumTulang200kg">
-                            {t("products.preOrder.packaging.drumTulang200kg")}
-                          </option>
-                          <option value="drumPlastik200kg">
-                            {t("products.preOrder.packaging.drumPlastik200kg")}
-                          </option>
-                          <option value="bulltank1ton">
-                            {t("products.preOrder.packaging.bulltank1ton")}
-                          </option>
+                          {formData.orderType === "sample" ? (
+                            <>
+                              <option value="botol">Botol</option>
+                              <option value="galon">Galon</option>
+                              <option value="pail">Pail</option>
+                              <option value="drum50kg">Drum 50 kg</option>
+                            </>
+                          ) : (
+                            <>
+                              <option value="cartongTong50kg">
+                                Carton Drum 50 kg
+                              </option>
+                              <option value="cartongTong40kg">
+                                Carton Drum 40 kg
+                              </option>
+                              <option value="plainDrum200kg">
+                                Plain Drum 200 kg
+                              </option>
+                              <option value="boneDrum200kg">
+                                Bone Drum 200 kg
+                              </option>
+                              <option value="bulltank1ton">
+                                Bulltank 1 Ton
+                              </option>
+                            </>
+                          )}
                         </select>
                       </div>
                     </div>
@@ -754,19 +769,32 @@ export default function PreOrderPage() {
                         <strong>
                           ℹ️ {t("products.preOrder.packaging.title")}:
                         </strong>
-                        <ul className="mt-2 ml-4 space-y-1 text-xs">
-                          <li>
-                            • <strong>Tong Dus:</strong>{" "}
-                            {t("products.preOrder.packaging.tong50kg")} dan{" "}
-                            {t("products.preOrder.packaging.tong40kg")}
-                          </li>
-                          <li>
-                            • <strong>Drum:</strong> 200 kg
-                          </li>
-                          <li>
-                            • <strong>Bulltank:</strong> 1 Ton
-                          </li>
-                        </ul>
+                        {formData.orderType === "sample" ? (
+                          <ul className="mt-2 ml-4 space-y-1 text-xs">
+                            <li>
+                              • <strong>Kemasan Sample:</strong> Botol, Galon,
+                              Pail, Drum 50 kg
+                            </li>
+                            <li>
+                              • <strong>Kapasitas:</strong> Maksimal 100 kg
+                            </li>
+                          </ul>
+                        ) : (
+                          <ul className="mt-2 ml-4 space-y-1 text-xs">
+                            <li>
+                              • <strong>Carton Drum:</strong> 50 kg dan 40 kg
+                            </li>
+                            <li>
+                              • <strong>Plain Drum:</strong> 200 kg
+                            </li>
+                            <li>
+                              • <strong>Bone Drum:</strong> 200 kg
+                            </li>
+                            <li>
+                              • <strong>Bulltank:</strong> 1 Ton
+                            </li>
+                          </ul>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -803,7 +831,7 @@ export default function PreOrderPage() {
                 <div className="bg-gray-100 rounded-lg overflow-hidden aspect-square relative flex items-center justify-center">
                   {!imageError ? (
                     <Image
-                      src={`/images/products/${product.id}.png`}
+                      src={product.image}
                       alt={product.name}
                       fill
                       className="object-cover"

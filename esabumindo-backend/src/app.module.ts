@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { PreOrderModule } from './pre-order/pre-order.module';
+import { ProductionModule } from './production/production.module';
 
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
@@ -17,17 +18,14 @@ import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
-    // ⬇️ INI YANG PENTING
-    ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), 'public'),
-    }),
-
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env.example',
     }),
+    // API Modules - HARUS DIDEFINISIKAN SEBELUM ServeStaticModule
     EmailModule,
     PreOrderModule,
+    ProductionModule,
     PrismaModule,
     UserModule,
     AuthModule,
@@ -35,7 +33,12 @@ import { EmailModule } from './email/email.module';
     EmployeesModule,
     AttendancesModule,
     SalariesModule,
-    EmailModule,
+
+    // ServeStaticModule HARUS PALING AKHIR untuk menghindari conflict
+    // dengan API routes
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'public'),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

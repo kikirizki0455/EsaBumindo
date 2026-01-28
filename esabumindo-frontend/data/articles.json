@@ -1,25 +1,45 @@
 {
   "articles": [
     {
-      "id": "19981e00-d9a5-42d6-8ffd-abfdb8f7f9e2",
-      "slug": "lem-kertas-tanggerang-murah",
-      "title": "lem kertas tanggerang murah",
-      "excerpt": "kegunaan lem kertas di industri besar",
-      "author": "R&D Team",
-      "coverImage": "https://down-id.img.susercontent.com/file/sg-11134201-824iv-mf84lplg7ytr3d@resize_w450_nl.webp",
-      "publishedAt": "2026-01-22T03:51:09.676Z",
+      "id": "21e1390d-e8d9-4387-a496-57278fddae70",
+      "slug": "pengujian-lem-cata-esabumindo-dengan-alat-modern",
+      "title": "pengujian lem cata esabumindo dengan alat modern",
+      "excerpt": "hasil dari lem yang di uji pada cat membuktikan lem produk esabumindo lebih unggul dari competitor x",
+      "author": "R&D Team Esabumindo",
+      "coverImage": "https://drive.google.com/drive/folders/1H6w--XN7oH2Gk-fx7JNMVc7-TJo2u5g3?hl=id",
+      "publishedAt": "2026-01-27T03:18:53.422Z",
       "status": "published"
     },
     {
-      "id": "e675ec40-95d2-4aa3-a897-897dddfa8b7d",
-      "slug": "lem-kayu-terbaik",
-      "title": "lem kayu terbaik",
-      "excerpt": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-      "author": "bung iki asdasd",
-      "coverImage": "https://i.pinimg.com/736x/fa/f9/d7/faf9d714d09a181218593e95e5387248.jpg",
-      "publishedAt": "2026-01-20T04:23:12.306Z",
+      "id": "2ab0bf8b-982c-4179-8a2b-7cae3cc51168",
+      "slug": "keunggulan-adhesive-berkualitas",
+      "title": "Keunggulan Adhesive Berkualitas untuk Aplikasi Industri",
+      "excerpt": "Pelajari mengapa adhesive berkualitas tinggi sangat penting untuk kesuksesan aplikasi industri Anda.",
+      "author": "PT Esabumindo",
+      "coverImage": "/uploads/articles/adhesive-quality-cover.jpg",
+      "publishedAt": "2025-01-15T00:00:00.000Z",
+      "status": "published"
+    },
+    {
+      "id": "8fcef68c-21c3-476b-8c17-d03593ecbb51",
+      "slug": "panduan-memilih-adhesive",
+      "title": "Panduan Memilih Adhesive yang Tepat untuk Proyek Anda",
+      "excerpt": "Tips praktis untuk memilih adhesive yang sesuai dengan kebutuhan spesifik proyek industri Anda.",
+      "author": "Tim Teknis Esabumindo",
+      "coverImage": "/uploads/articles/adhesive-guide-cover.jpg",
+      "publishedAt": "2025-01-10T00:00:00.000Z",
+      "status": "published"
+    },
+    {
+      "id": "09ef73de-3889-4e8d-88b1-10ed553ddd63",
+      "slug": "inovasi-teknologi-adhesive",
+      "title": "Inovasi Terbaru dalam Teknologi Adhesive",
+      "excerpt": "Temukan inovasi terbaru dalam teknologi adhesive yang mengubah cara industri bekerja.",
+      "author": "R&D Team",
+      "coverImage": "/uploads/articles/innovation-cover.jpg",
+      "publishedAt": "2025-01-05T00:00:00.000Z",
       "status": "published"
     }
   ],
-  "lastUpdated": "2026-01-22T04:18:03.568Z"
+  "lastUpdated": "2026-01-27T03:20:15.068Z"
 }

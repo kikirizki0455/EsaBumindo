@@ -12,7 +12,7 @@ export const BEST_SELLER_PRODUCTS = [
       "Waterproof",
     ],
     type: "PVAC",
-    image: "/images/products/1.png",
+    image: "/images/products/product-lem-terbaik.jpg",
     title: "Adhesive Pro X1",
   },
   {
@@ -28,7 +28,7 @@ export const BEST_SELLER_PRODUCTS = [
       "Cost effective",
     ],
     type: "Styrene",
-    image: "/images/products/2.png",
+    image: "/images/products/product-lem-terbaik.jpg",
     title: "Chemical Bond 200",
   },
   {
@@ -44,7 +44,7 @@ export const BEST_SELLER_PRODUCTS = [
       "Non-toxic",
     ],
     type: "Cyanoacrylate",
-    image: "/images/products/3.png",
+    image: "/images/products/product-lem-terbaik.jpg",
     title: "Super Glue Elite",
   },
   {
@@ -60,7 +60,7 @@ export const BEST_SELLER_PRODUCTS = [
       "UV resistant",
     ],
     type: "Epoxy",
-    image: "/images/products/4.png",
+    image: "/images/products/product-lem-terbaik.jpg",
     title: "Epoxy Master 500",
   },
 ];
@@ -79,7 +79,7 @@ export const NEW_PRODUCTS = [
       "Minimal residue",
     ],
     type: "Nanotech",
-    image: "/images/products/5.png",
+    image: "/images/products/product-lem-terbaik.jpg",
     title: "Nano Bond Plus",
   },
   {
@@ -95,7 +95,7 @@ export const NEW_PRODUCTS = [
       "All weather",
     ],
     type: "Sealant",
-    image: "/images/products/6.png",
+    image: "/images/products/product-lem-terbaik.jpg",
     title: "Flex Seal Pro",
   },
   {
@@ -111,7 +111,7 @@ export const NEW_PRODUCTS = [
       "Easy dispensing",
     ],
     type: "Thermal",
-    image: "/images/products/7.png",
+    image: "/images/products/product-lem-terbaik.jpg",
     title: "Thermal Adhesive X",
   },
   {
@@ -127,7 +127,7 @@ export const NEW_PRODUCTS = [
       "Indoor/outdoor",
     ],
     type: "Wood",
-    image: "/images/products/8.png",
+    image: "/images/products/product-lem-terbaik.jpg",
     title: "Wood Master Pro",
   },
 ];
