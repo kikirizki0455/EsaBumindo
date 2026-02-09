@@ -1,6 +1,7 @@
 "use client";
 
 import { memo } from "react";
+import Link from "next/link";
 import { useTranslation } from "@/hooks/use-translation";
 import { Button } from "@/components/ui/button";
 
@@ -61,15 +62,21 @@ const ProductHero = memo(function ProductHero() {
             <Button
               className="bg-gradient-to-r from-[#0c439a] to-[#0a3577] hover:opacity-90 text-white font-semibold px-8 py-3"
               size="lg"
+              asChild
             >
-              {t("products.heroSection.cta.primary")}
+              <a href="#product-grid">
+                {t("products.heroSection.cta.primary")}
+              </a>
             </Button>
             <Button
               variant="outline"
               className="border-2 border-[#ca161e] text-[#ca161e] hover:bg-[#ca161e]/5 font-semibold px-8 py-3"
               size="lg"
+              asChild
             >
-              {t("products.heroSection.cta.secondary")}
+              <Link href="/contact">
+                {t("products.heroSection.cta.secondary")}
+              </Link>
             </Button>
           </div>
         </div>

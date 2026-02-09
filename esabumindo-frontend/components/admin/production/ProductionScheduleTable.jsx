@@ -248,9 +248,7 @@ export default function ProductionScheduleTable({
                     </div>
                   </td>
                   <td className={styles.quantityCell}>
-                    <span className={styles.quantity}>
-                      {plan.targetQty} kg
-                    </span>
+                    <span className={styles.quantity}>{plan.targetQty} kg</span>
                   </td>
                   <td className={styles.statusCell}>
                     {getStatusBadge(plan.status)}
@@ -277,11 +275,7 @@ export default function ProductionScheduleTable({
                         <button
                           className={`${styles.btnAction} ${styles.btnDelete}`}
                           onClick={() => {
-                            if (
-                              confirm(
-                                "Yakin ingin menghapus jadwal ini?"
-                              )
-                            ) {
+                            if (confirm("Yakin ingin menghapus jadwal ini?")) {
                               onDelete(plan.id);
                             }
                           }}
@@ -307,8 +301,8 @@ export default function ProductionScheduleTable({
               <span className={styles.statLabel}>Total Qty:</span>
               <span className={styles.statValue}>
                 {filteredPlans
-                  .reduce((sum, p) => sum + (p.targetQty || 0), 0)
-                  .toFixed(2)}{" "}
+                  .reduce((sum, p) => sum + (parseFloat(p.targetQty) || 0), 0)
+                  .toFixed(2)}
                 kg
               </span>
             </div>
@@ -321,9 +315,7 @@ export default function ProductionScheduleTable({
             <div className={styles.statItem}>
               <span className={styles.statLabel}>Statuses:</span>
               <span className={styles.statValue}>
-                {
-                  [...new Set(filteredPlans.map((p) => p.status))].length
-                }
+                {[...new Set(filteredPlans.map((p) => p.status))].length}
               </span>
             </div>
           </div>

@@ -3,6 +3,7 @@ import { Eye, EyeOff, Lock, Mail, ArrowRight, Sparkles } from "lucide-react";
 import AuthLayout from "../layouts/auth-layout";
 import { apiFetch } from "@/lib/api";
 import { useRouter } from "next/router";
+import { setAuthData } from "@/lib/auth"; // ✅ FIX: Import setAuthData
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,22 +12,35 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
   const router = useRouter();
+
+  // ✅ FIX: Perbaiki handleSubmit - hapus setTimeout yang tidak perlu dan simpan auth data
   async function handleSubmit(e) {
     e.preventDefault();
     if (!email || !password) return alert("Mohon isi semua data");
 
     setLoading(true);
 
-    const res = await apiFetch("/auth/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await apiFetch("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
 
-    // Simulasi login
-    setTimeout(() => {
-      res.ok ? router.push("/admin") : alert("alert gagal ini hadir di fe");
+      const data = await res.json();
+
+      if (res.ok) {
+        // ✅ FIX: Simpan auth data ke localStorage
+        setAuthData(data.access_token, data.user);
+        router.push("/admin");
+      } else {
+        alert(data.message || "Login gagal, periksa email dan password");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Terjadi kesalahan saat login");
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   }
 
   return (

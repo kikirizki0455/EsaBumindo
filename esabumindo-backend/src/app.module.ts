@@ -4,7 +4,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { PreOrderModule } from './pre-order/pre-order.module';
 import { ProductionModule } from './production/production.module';
-
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { AppService } from './app.service';
@@ -20,7 +19,7 @@ import { EmailModule } from './email/email.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env.example',
+      envFilePath: '.env',
     }),
     // API Modules - HARUS DIDEFINISIKAN SEBELUM ServeStaticModule
     EmailModule,
@@ -33,7 +32,6 @@ import { EmailModule } from './email/email.module';
     EmployeesModule,
     AttendancesModule,
     SalariesModule,
-
     // ServeStaticModule HARUS PALING AKHIR untuk menghindari conflict
     // dengan API routes
     ServeStaticModule.forRoot({

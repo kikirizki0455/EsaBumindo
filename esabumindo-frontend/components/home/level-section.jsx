@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import imgImagePt3 from "@/public/asset/image/factory.webp";
 import { ArrowRight, TrendingUp, Zap } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
@@ -156,14 +157,18 @@ export function LevelSection() {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
-                <button className="group bg-[#ff4136] hover:bg-[#ff4136]/90 text-white font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 uppercase tracking-wide text-sm md:text-base flex items-center justify-center gap-2">
-                  {t("home.levelSection.cta.primary")}
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                </button>
+                <Link href="/products">
+                  <button className="group bg-[#ff4136] hover:bg-[#ff4136]/90 text-white font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 uppercase tracking-wide text-sm md:text-base flex items-center justify-center gap-2">
+                    {t("home.levelSection.cta.primary")}
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </button>
+                </Link>
 
-                <button className="bg-white hover:bg-gray-50 border-2 border-[#ff4136] text-[#ff4136] font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 uppercase tracking-wide text-sm md:text-base">
-                  {t("home.levelSection.cta.secondary")}
-                </button>
+                <Link href="/contact">
+                  <button className="bg-white hover:bg-gray-50 border-2 border-[#ff4136] text-[#ff4136] font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 uppercase tracking-wide text-sm md:text-base">
+                    {t("home.levelSection.cta.secondary")}
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

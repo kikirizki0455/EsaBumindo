@@ -9,11 +9,19 @@ import {
   TrendingUp,
   Calendar,
   Clock,
-  ArrowRight,
+  ArrowUpRight,
+  Activity,
+  Zap,
+  AlertCircle,
+  CheckCircle2,
+  UserPlus,
+  Wallet,
+  BadgeDollarSign,
+  PiggyBank,
+  CreditCard,
 } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { useRouter } from "next/router";
-import { Button } from "@/components/ui/button";
 import api from "@/lib/axios";
 
 export default function DashboardPage() {
@@ -27,6 +35,8 @@ export default function DashboardPage() {
     salary: { thisMonth: 0, paid: 0, pending: 0 },
   });
   const [recentActivities, setRecentActivities] = useState([]);
+  const [recentEmployees, setRecentEmployees] = useState([]);
+  const [salaryData, setSalaryData] = useState([]);
 
   useEffect(() => {
     fetchDashboardData();
@@ -37,7 +47,6 @@ export default function DashboardPage() {
       setLoading(true);
       setError(null);
 
-      // Fetch all data in parallel
       const [articlesRes, employeesRes, attendancesRes, salariesRes] =
         await Promise.all([
           api.get("/articles"),
@@ -61,7 +70,6 @@ export default function DashboardPage() {
       const attendances = attendancesRes.data || [];
       const salaries = salariesRes.data || [];
 
-      // Calculate stats
       const today = new Date().toISOString().split("T")[0];
       const todayAttendances = attendances.filter(
         (att) => new Date(att.date).toISOString().split("T")[0] === today
@@ -96,7 +104,16 @@ export default function DashboardPage() {
         },
       });
 
-      // Recent activities (simplified)
+      // Recent employees
+      setRecentEmployees(
+        employees
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 5)
+      );
+
+      // Salary data for display
+      setSalaryData(salaries.slice(0, 5));
+
       const activities = [
         ...articles.slice(0, 3).map((a) => ({
           type: "article",
@@ -110,16 +127,21 @@ export default function DashboardPage() {
           title: `${a.employee?.name || "Karyawan"} melakukan absensi`,
           date: a.createdAt,
         })),
+        ...salaries.slice(0, 2).map((s) => ({
+          type: "salary",
+          title: `Gaji ${s.employee?.name || "Karyawan"} ${
+            s.status === "paid" ? "dibayar" : "diproses"
+          }`,
+          date: s.createdAt,
+        })),
       ]
         .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .slice(0, 5);
+        .slice(0, 6);
 
       setRecentActivities(activities);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
-      setError(
-        "Gagal memuat dashboard. Pastikan backend berjalan di port 3001"
-      );
+      setError("Gagal memuat data dashboard");
     } finally {
       setLoading(false);
     }
@@ -130,48 +152,86 @@ export default function DashboardPage() {
     year: "numeric",
   });
 
+  const getActivityIcon = (type) => {
+    switch (type) {
+      case "article":
+        return <FileText className="w-5 h-5 text-white" />;
+      case "attendance":
+        return <Clock className="w-5 h-5 text-white" />;
+      case "salary":
+        return <DollarSign className="w-5 h-5 text-white" />;
+      default:
+        return <Activity className="w-5 h-5 text-white" />;
+    }
+  };
+
+  const getActivityColor = (type) => {
+    switch (type) {
+      case "article":
+        return "bg-gradient-to-br from-blue-500 to-cyan-500";
+      case "attendance":
+        return "bg-gradient-to-br from-violet-500 to-purple-500";
+      case "salary":
+        return "bg-gradient-to-br from-amber-500 to-orange-500";
+      default:
+        return "bg-gradient-to-br from-slate-500 to-slate-600";
+    }
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-            Dashboard Esabumindo
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Selamat datang di sistem admin panel Esabumindo Chemical Adhesive
-          </p>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+              Dashboard Overview
+            </h1>
+            <p className="text-sm text-slate-500 mt-1">
+              Selamat datang kembali! Berikut ringkasan aktivitas hari ini.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              Sistem Online
+            </span>
+            <span className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 text-xs font-medium">
+              {currentMonth}
+            </span>
+          </div>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-            ⚠️ {error}
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 shrink-0" />
+            <span>{error}</span>
           </div>
         )}
 
-        {/* Main Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Main Stats Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Articles */}
           <div
-            className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 cursor-pointer hover:shadow-md transition-shadow"
             onClick={() => router.push("/admin/artikel")}
+            className="group bg-white rounded-2xl p-5 cursor-pointer border border-slate-200/50 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <FileText className="h-6 w-6 text-blue-600" />
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                <FileText className="w-6 h-6 text-white" />
               </div>
-              <ArrowRight className="h-5 w-5 text-gray-400" />
+              <ArrowUpRight className="w-5 h-5 text-slate-300 group-hover:text-blue-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
             </div>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-3xl font-bold text-slate-900">
               {stats.articles.total}
             </p>
-            <p className="text-sm text-gray-500 mt-1">Total Artikel</p>
-            <div className="flex items-center gap-3 mt-3 text-xs">
-              <span className="text-green-600">
-                {stats.articles.published} Dipublikasikan
+            <p className="text-sm text-slate-500 mt-1">Total Artikel</p>
+            <div className="flex items-center gap-2 mt-3">
+              <span className="px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 text-xs font-medium">
+                {stats.articles.published} Published
               </span>
-              <span className="text-orange-600">
+              <span className="px-2 py-1 rounded-md bg-amber-100 text-amber-700 text-xs font-medium">
                 {stats.articles.draft} Draft
               </span>
             </div>
@@ -179,145 +239,264 @@ export default function DashboardPage() {
 
           {/* Employees */}
           <div
-            className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 cursor-pointer hover:shadow-md transition-shadow"
-            onClick={() => router.push("/admin/karyawan")}
+            onClick={() => router.push("/admin/employee")}
+            className="group bg-white rounded-2xl p-5 cursor-pointer border border-slate-200/50 hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-300"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <Users className="h-6 w-6 text-green-600" />
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                <Users className="w-6 h-6 text-white" />
               </div>
-              <ArrowRight className="h-5 w-5 text-gray-400" />
+              <ArrowUpRight className="w-5 h-5 text-slate-300 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
             </div>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-3xl font-bold text-slate-900">
               {stats.employees.total}
             </p>
-            <p className="text-sm text-gray-500 mt-1">Total Karyawan</p>
-            <div className="flex items-center gap-3 mt-3 text-xs">
-              <span className="text-green-600">
+            <p className="text-sm text-slate-500 mt-1">Total Karyawan</p>
+            <div className="flex items-center gap-2 mt-3">
+              <span className="px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 text-xs font-medium">
                 {stats.employees.active} Aktif
               </span>
-              <span className="text-red-600">
-                {stats.employees.inactive} Tidak Aktif
+              <span className="px-2 py-1 rounded-md bg-red-100 text-red-700 text-xs font-medium">
+                {stats.employees.inactive} Nonaktif
               </span>
             </div>
           </div>
 
-          {/* Attendance Today */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <Calendar className="h-6 w-6 text-purple-600" />
+          {/* Attendance */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/50">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shadow-lg shadow-violet-500/30">
+                <Calendar className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex items-center gap-1 text-emerald-600 text-xs font-semibold">
+                <TrendingUp className="w-3 h-3" />
+                +12%
               </div>
             </div>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-3xl font-bold text-slate-900">
               {stats.attendance.today}
             </p>
-            <p className="text-sm text-gray-500 mt-1">Absensi Hari Ini</p>
-            <div className="flex items-center gap-3 mt-3 text-xs">
-              <span className="text-gray-600">
-                {stats.attendance.thisMonth} Bulan Ini
+            <p className="text-sm text-slate-500 mt-1">Absensi Hari Ini</p>
+            <div className="mt-3 flex items-center gap-2">
+              <div className="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-violet-500 to-purple-500 rounded-full"
+                  style={{
+                    width: `${Math.min(
+                      (stats.attendance.today / stats.employees.active) * 100,
+                      100
+                    )}%`,
+                  }}
+                />
+              </div>
+              <span className="text-xs text-slate-500">
+                {stats.attendance.thisMonth} /bln
               </span>
             </div>
           </div>
 
           {/* Salary */}
           <div
-            className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 cursor-pointer hover:shadow-md transition-shadow"
-            onClick={() => router.push("/admin/keuangan")}
+            onClick={() => router.push("/admin/finance")}
+            className="group bg-white rounded-2xl p-5 cursor-pointer border border-slate-200/50 hover:border-amber-300 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-300"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                <DollarSign className="h-6 w-6 text-primary" />
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30">
+                <DollarSign className="w-6 h-6 text-white" />
               </div>
-              <ArrowRight className="h-5 w-5 text-gray-400" />
+              <ArrowUpRight className="w-5 h-5 text-slate-300 group-hover:text-amber-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
             </div>
-            <p className="text-xl md:text-2xl font-bold text-primary truncate">
+            <p className="text-2xl font-bold text-slate-900 truncate">
               {formatCurrency(stats.salary.thisMonth)}
             </p>
-            <p className="text-sm text-gray-500 mt-1">Total Gaji Bulan Ini</p>
-            <div className="flex items-center gap-2 mt-3 text-xs">
-              <span className="text-green-600">
-                {formatCurrency(stats.salary.paid)} Dibayar
+            <p className="text-sm text-slate-500 mt-1">Total Gaji Bulan Ini</p>
+            <div className="flex items-center gap-2 mt-3">
+              <span className="px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 text-xs font-medium truncate">
+                {formatCurrency(stats.salary.paid)} Paid
               </span>
             </div>
           </div>
         </div>
 
+        {/* Finance Overview */}
+        <div className="bg-white rounded-2xl border border-slate-200/50 overflow-hidden">
+          <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+                <Wallet className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h2 className="font-bold text-slate-900">Ringkasan Keuangan</h2>
+                <p className="text-xs text-slate-500">Periode {currentMonth}</p>
+              </div>
+            </div>
+            <button
+              onClick={() => router.push("/admin/finance")}
+              className="px-3 py-1.5 rounded-lg bg-amber-500 text-white text-sm font-medium hover:bg-amber-600 transition-colors"
+            >
+              Lihat Detail
+            </button>
+          </div>
+          <div className="p-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Total Gaji */}
+              <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-4 border border-slate-200">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center">
+                    <BadgeDollarSign className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="text-sm font-medium text-slate-600">
+                    Total Gaji
+                  </span>
+                </div>
+                <p className="text-2xl font-bold text-slate-900">
+                  {formatCurrency(stats.salary.thisMonth)}
+                </p>
+              </div>
+
+              {/* Sudah Dibayar */}
+              <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl p-4 border border-emerald-200">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center">
+                    <CheckCircle2 className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="text-sm font-medium text-emerald-700">
+                    Sudah Dibayar
+                  </span>
+                </div>
+                <p className="text-2xl font-bold text-emerald-700">
+                  {formatCurrency(stats.salary.paid)}
+                </p>
+              </div>
+
+              {/* Belum Dibayar */}
+              <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-4 border border-amber-200">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+                    <CreditCard className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="text-sm font-medium text-amber-700">
+                    Belum Dibayar
+                  </span>
+                </div>
+                <p className="text-2xl font-bold text-amber-700">
+                  {formatCurrency(stats.salary.pending)}
+                </p>
+              </div>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="mt-5">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-slate-600">
+                  Progress Pembayaran
+                </span>
+                <span className="text-sm font-semibold text-slate-700">
+                  {stats.salary.thisMonth > 0
+                    ? Math.round(
+                        (stats.salary.paid / stats.salary.thisMonth) * 100
+                      )
+                    : 0}
+                  %
+                </span>
+              </div>
+              <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-emerald-500 to-green-500 rounded-full transition-all duration-500"
+                  style={{
+                    width: `${
+                      stats.salary.thisMonth > 0
+                        ? (stats.salary.paid / stats.salary.thisMonth) * 100
+                        : 0
+                    }%`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Quick Actions */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="bg-white rounded-2xl border border-slate-200/50 p-5">
+          <h2 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <Zap className="w-5 h-5 text-amber-500" />
             Aksi Cepat
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <Button
-              onClick={() => router.push("/admin/artikel/buat")}
-              variant="outline"
-              className="w-full justify-start"
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <button
+              onClick={() => router.push("/admin/artikel/new")}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 text-blue-700 hover:shadow-md hover:shadow-blue-500/10 transition-all group"
             >
-              <FileText className="h-4 w-4 mr-2" />
-              Buat Artikel Baru
-            </Button>
-            <Button
-              onClick={() => router.push("/admin/karyawan/tambah")}
-              variant="outline"
-              className="w-full justify-start"
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <FileText className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-medium text-sm">Buat Artikel</span>
+            </button>
+            <button
+              onClick={() => router.push("/admin/employee/add-employee")}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-100 text-emerald-700 hover:shadow-md hover:shadow-emerald-500/10 transition-all group"
             >
-              <Users className="h-4 w-4 mr-2" />
-              Tambah Karyawan
-            </Button>
-            <Button
-              onClick={() => router.push("/admin/karyawan")}
-              variant="outline"
-              className="w-full justify-start"
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <UserPlus className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-medium text-sm">Tambah Karyawan</span>
+            </button>
+            <button
+              onClick={() => router.push("/admin/employee")}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-violet-50 to-purple-50 border border-violet-100 text-violet-700 hover:shadow-md hover:shadow-violet-500/10 transition-all group"
             >
-              <Clock className="h-4 w-4 mr-2" />
-              Input Absensi
-            </Button>
-            <Button
-              onClick={() => router.push("/admin/keuangan")}
-              variant="outline"
-              className="w-full justify-start"
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Users className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-medium text-sm">Kelola Karyawan</span>
+            </button>
+            <button
+              onClick={() => router.push("/admin/finance")}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100 text-amber-700 hover:shadow-md hover:shadow-amber-500/10 transition-all group"
             >
-              <TrendingUp className="h-4 w-4 mr-2" />
-              Hitung Gaji
-            </Button>
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <TrendingUp className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-medium text-sm">Kelola Gaji</span>
+            </button>
           </div>
         </div>
 
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Recent Activities */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <div className="bg-white rounded-2xl border border-slate-200/50 p-5">
+            <h2 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <Activity className="w-5 h-5 text-blue-500" />
               Aktivitas Terbaru
             </h2>
             {loading ? (
-              <p className="text-sm text-gray-500">Memuat...</p>
+              <div className="flex items-center justify-center py-8">
+                <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+              </div>
             ) : recentActivities.length === 0 ? (
-              <p className="text-sm text-gray-500">Belum ada aktivitas</p>
+              <p className="text-sm text-slate-500 text-center py-8">
+                Belum ada aktivitas
+              </p>
             ) : (
               <div className="space-y-3">
                 {recentActivities.map((activity, index) => (
                   <div
                     key={index}
-                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50"
+                    className="flex items-start gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors"
                   >
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        activity.type === "article"
-                          ? "bg-blue-100"
-                          : "bg-green-100"
-                      }`}
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${getActivityColor(
+                        activity.type
+                      )}`}
                     >
-                      {activity.type === "article" ? (
-                        <FileText className="h-4 w-4 text-blue-600" />
-                      ) : (
-                        <Clock className="h-4 w-4 text-green-600" />
-                      )}
+                      {getActivityIcon(activity.type)}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-gray-900">{activity.title}</p>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-sm text-slate-700 font-medium">
+                        {activity.title}
+                      </p>
+                      <p className="text-xs text-slate-500 mt-1">
                         {formatDate(activity.date)}
                       </p>
                     </div>
@@ -327,37 +506,121 @@ export default function DashboardPage() {
             )}
           </div>
 
-          {/* Info Card */}
-          <div className="bg-gradient-to-br from-primary to-primary-600 rounded-lg p-6 text-white">
-            <h2 className="text-xl font-bold mb-2">
-              Sistem Admin Panel Esabumindo
-            </h2>
-            <p className="text-primary-50 mb-4 text-sm">
-              Kelola artikel, karyawan, dan keuangan perusahaan dengan mudah
-            </p>
-            <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-                <span>Management artikel dengan auto-generate slug</span>
+          {/* Recent Employees */}
+          <div className="bg-white rounded-2xl border border-slate-200/50 p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-bold text-slate-900 flex items-center gap-2">
+                <Users className="w-5 h-5 text-emerald-500" />
+                Karyawan Terbaru
+              </h2>
+              <button
+                onClick={() => router.push("/admin/employee")}
+                className="text-xs text-emerald-600 hover:text-emerald-700 font-medium"
+              >
+                Lihat Semua
+              </button>
+            </div>
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="w-8 h-8 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-                <span>Sistem absensi dengan perhitungan otomatis</span>
+            ) : recentEmployees.length === 0 ? (
+              <p className="text-sm text-slate-500 text-center py-8">
+                Belum ada karyawan
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {recentEmployees.map((employee, index) => (
+                  <div
+                    key={index}
+                    onClick={() =>
+                      router.push(`/admin/employee/edit/${employee.id}`)
+                    }
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center text-white font-bold">
+                      {employee.name?.charAt(0)?.toUpperCase() || "?"}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-slate-700 font-medium truncate">
+                        {employee.name}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {employee.position || "Karyawan"}
+                      </p>
+                    </div>
+                    <span
+                      className={`px-2 py-1 rounded-md text-xs font-medium ${
+                        employee.status === "active"
+                          ? "bg-emerald-100 text-emerald-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {employee.status === "active" ? "Aktif" : "Nonaktif"}
+                    </span>
+                  </div>
+                ))}
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-                <span>Perhitungan gaji & lembur otomatis</span>
+            )}
+          </div>
+        </div>
+
+        {/* System Info Card */}
+        <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-6 text-white relative overflow-hidden">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-br from-violet-400 to-purple-400 rounded-full blur-3xl"></div>
+          </div>
+
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
+                <PiggyBank className="w-6 h-6 text-white" />
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-                <span>Mobile-first responsive design</span>
+              <div>
+                <h2 className="text-xl font-bold">Esabumindo Admin</h2>
+                <p className="text-emerald-400 text-xs font-medium">
+                  Content & HR Management
+                </p>
               </div>
             </div>
-            <div className="mt-6 pt-6 border-t border-white/20">
-              <p className="text-xs text-primary-50">
-                Periode:{" "}
-                <span className="font-semibold text-white">{currentMonth}</span>
-              </p>
+
+            <p className="text-slate-300 mb-5 text-sm leading-relaxed">
+              Sistem terintegrasi untuk mengelola artikel, karyawan, absensi,
+              dan penggajian perusahaan.
+            </p>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex items-center gap-3 p-2.5 rounded-xl bg-white/5">
+                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                <span className="text-sm">Manajemen Artikel</span>
+              </div>
+              <div className="flex items-center gap-3 p-2.5 rounded-xl bg-white/5">
+                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                <span className="text-sm">Data Karyawan</span>
+              </div>
+              <div className="flex items-center gap-3 p-2.5 rounded-xl bg-white/5">
+                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                <span className="text-sm">Sistem Absensi</span>
+              </div>
+              <div className="flex items-center gap-3 p-2.5 rounded-xl bg-white/5">
+                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                <span className="text-sm">Penggajian</span>
+              </div>
+            </div>
+
+            <div className="mt-6 pt-5 border-t border-white/10 flex items-center justify-between">
+              <div>
+                <p className="text-xs text-slate-400">Periode Aktif</p>
+                <p className="text-sm font-semibold text-white mt-0.5">
+                  {currentMonth}
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                v2.0.0
+              </div>
             </div>
           </div>
         </div>

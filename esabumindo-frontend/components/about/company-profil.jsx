@@ -1,4 +1,5 @@
 import { Award, Target, Zap, TrendingUp } from "lucide-react";
+import Link from "next/link";
 import { useTranslation } from "../../hooks/use-translation";
 
 // Strength Card Component
@@ -197,9 +198,11 @@ export default function CompanySection() {
                 <p className="text-sm md:text-base text-white/90 mb-6">
                   {t("companyProfile.cta.description")}
                 </p>
-                <button className="w-full bg-[#ff4136] hover:bg-[#ff4136]/90 text-white font-semibold px-6 py-3 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl uppercase tracking-wide text-sm">
-                  {t("companyProfile.cta.button")}
-                </button>
+                <Link href="/contact">
+                  <button className="w-full bg-[#ff4136] hover:bg-[#ff4136]/90 text-white font-semibold px-6 py-3 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl uppercase tracking-wide text-sm">
+                    {t("companyProfile.cta.button")}
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

@@ -1,4 +1,4 @@
-// src/articles/articles.controller.ts (WITH AUTH - OPTIONAL)
+// src/articles/articles.controller.ts - UPDATED & FIXED
 
 import {
   Controller,
@@ -13,51 +13,43 @@ import {
   UseInterceptors,
   UploadedFile,
   Patch,
-  UseGuards,
-  Request,
   BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 import { ArticlesService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
-// import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-// import { RolesGuard } from '../auth/guards/roles.guard';
-// import { Roles } from '../auth/decorators/roles.decorator';
 
 @Controller('articles')
 export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
-  // PUBLIC ENDPOINTS - Tidak perlu auth
+  // PUBLIC ENDPOINTS
   @Get('published')
   async findPublished() {
     return this.articlesService.findPublished();
   }
 
-  // PROTECTED ENDPOINTS - Perlu auth (uncomment guards kalau sudah implement auth)
-  @Get()
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('ADMIN', 'DIREKTUR')
-  async findAll() {
-    return this.articlesService.findAll();
-  }
-
-  @Get('stats')
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('ADMIN', 'DIREKTUR')
-  async getStats() {
-    return this.articlesService.getStats();
-  }
-  // PUBLIC (slug)
   @Get('slug/:slug')
   async findBySlug(@Param('slug') slug: string) {
     return this.articlesService.findBySlug(slug);
   }
 
-  // ADMIN (id)
+  // ADMIN ENDPOINTS
+  @Get()
+  async findAll() {
+    return this.articlesService.findAll();
+  }
+
+  @Get('stats')
+  async getStats() {
+    return this.articlesService.getStats();
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.articlesService.findOne(id);
@@ -65,21 +57,11 @@ export class ArticlesController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('ADMIN', 'DIREKTUR')
-  async create(
-    @Body() createArticleDto: CreateArticleDto,
-    // @Request() req, // Uncomment ini untuk dapat user dari token
-  ) {
-    // Kalau mau ambil author dari token JWT:
-    // createArticleDto.author = req.user.name;
-
+  async create(@Body() createArticleDto: CreateArticleDto) {
     return this.articlesService.create(createArticleDto);
   }
 
   @Put(':id')
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('ADMIN', 'DIREKTUR')
   async update(
     @Param('id') id: string,
     @Body() updateArticleDto: UpdateArticleDto,
@@ -88,28 +70,29 @@ export class ArticlesController {
   }
 
   @Patch(':id/toggle-publish')
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('ADMIN', 'DIREKTUR')
   async togglePublish(@Param('id') id: string) {
     return this.articlesService.togglePublish(id);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('ADMIN', 'DIREKTUR')
   async remove(@Param('id') id: string) {
     return this.articlesService.remove(id);
   }
 
-  // Upload image endpoint - Protected
-  @Post('upload')
-  // @UseGuards(JwtAuthGuard)
+  // ✅ UPLOAD IMAGE ENDPOINT - FIXED
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './public/uploads/articles',
+        destination: (req, file, cb) => {
+          // ✅ Ensure directory exists
+          const uploadPath = './public/uploads/articles';
+          if (!fs.existsSync(uploadPath)) {
+            fs.mkdirSync(uploadPath, { recursive: true });
+          }
+          cb(null, uploadPath);
+        },
         filename: (req, file, cb) => {
           const uniqueSuffix =
             Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -138,10 +121,11 @@ export class ArticlesController {
       throw new BadRequestException('No file uploaded');
     }
 
+    // ✅ Return response sesuai format yang diharapkan frontend
     return {
       filename: file.filename,
-      path: `/uploads/articles/${file.filename}`,
-      url: `${process.env.API_URL || 'http://localhost:3001'}/uploads/articles/${file.filename}`,
+      path: `/uploads/articles/${file.filename}`, // Path relatif untuk disimpan di database
+      url: `${process.env.API_URL || 'http://localhost:3001'}/uploads/articles/${file.filename}`, // Full URL untuk preview
       size: file.size,
       mimetype: file.mimetype,
       originalName: file.originalname,

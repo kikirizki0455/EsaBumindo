@@ -1,4 +1,4 @@
-// pages/admin/artikel/buat.jsx - UPDATED WITH BLOCK EDITOR
+// pages/admin/artikel/buat.jsx - DISESUAIKAN DENGAN NESTJS BACKEND
 
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -13,6 +13,8 @@ import {
   Eye,
   HelpCircle,
   Link as LinkIcon,
+  Upload,
+  X,
 } from "lucide-react";
 import { generateSlug } from "@/lib/utils";
 import api from "@/lib/axios";
@@ -21,6 +23,8 @@ export default function CreateArticle() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [autoSlug, setAutoSlug] = useState(true);
+  const [coverImagePreview, setCoverImagePreview] = useState("");
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -29,7 +33,7 @@ export default function CreateArticle() {
     coverImage: "",
     author: "",
     status: "draft",
-    contentBlocks: [], // ✅ NEW: Array of content blocks
+    contentBlocks: [], // Array of content blocks
   });
 
   const handleInputChange = (e) => {
@@ -56,6 +60,66 @@ export default function CreateArticle() {
     }));
   };
 
+  // ✅ Handler untuk upload cover image - SESUAI DENGAN NESTJS ENDPOINT
+  const handleCoverImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validasi file
+    if (!file.type.startsWith("image/")) {
+      alert("File harus berupa gambar!");
+      return;
+    }
+
+    // Validasi ukuran (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Ukuran file maksimal 5MB!");
+      return;
+    }
+
+    try {
+      setUploadingImage(true);
+
+      // Create FormData - sesuai dengan controller NestJS
+      const formData = new FormData();
+      formData.append("file", file); // ✅ Key "file" sesuai dengan @UploadedFile() di controller
+
+      // Upload ke endpoint /articles/upload
+      const response = await api.post("/articles/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      // Response dari NestJS: { filename, path, url, size, mimetype, originalName }
+      const imagePath = response.data.path; // Misal: /uploads/articles/article-123456.jpg
+
+      setFormData((prev) => ({
+        ...prev,
+        coverImage: imagePath,
+      }));
+
+      // Set preview - gunakan full URL jika perlu
+      setCoverImagePreview(response.data.url || imagePath);
+
+      alert("Gambar berhasil diupload!");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert(error.response?.data?.message || "Gagal upload gambar");
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  // ✅ Remove cover image
+  const removeCoverImage = () => {
+    setFormData((prev) => ({
+      ...prev,
+      coverImage: "",
+    }));
+    setCoverImagePreview("");
+  };
+
   const handleSubmit = async (e, status) => {
     e.preventDefault();
 
@@ -77,18 +141,22 @@ export default function CreateArticle() {
 
     try {
       setLoading(true);
+
+      // ✅ Data sesuai dengan CreateArticleDto
       const dataToSubmit = {
         title: formData.title,
-        slug: formData.slug,
-        excerpt: formData.excerpt,
-        coverImage: formData.coverImage,
+        slug: formData.slug || undefined, // Optional - akan auto-generate di backend jika kosong
+        excerpt: formData.excerpt || undefined,
+        coverImage: formData.coverImage || undefined,
         author: formData.author,
         status: status || formData.status,
-        contentBlocks: formData.contentBlocks, // ✅ Kirim blocks
-        // publishedAt: status === "published" ? new Date().toISOString() : null,
+        contentBlocks: formData.contentBlocks, // Array of ContentBlockDto
       };
 
-      await api.post("/articles", dataToSubmit);
+      // POST ke /articles endpoint
+      const response = await api.post("/articles", dataToSubmit);
+
+      console.log("Article created:", response.data);
       alert("Artikel berhasil dibuat!");
       router.push("/admin/artikel");
     } catch (error) {
@@ -140,7 +208,10 @@ export default function CreateArticle() {
           <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
             <div className="flex items-start justify-between mb-2">
               <label className="block text-sm font-semibold text-gray-700">
-                URL Slug <span className="text-red-500">*</span>
+                URL Slug{" "}
+                <span className="text-gray-400 text-xs">
+                  (Opsional - Auto Generate)
+                </span>
               </label>
               <Button
                 type="button"
@@ -157,15 +228,14 @@ export default function CreateArticle() {
                 type="text"
                 value={formData.slug}
                 onChange={handleSlugChange}
-                placeholder="tips-memilih-lem-terbaik"
+                placeholder="tips-memilih-lem-terbaik (kosongkan untuk auto-generate)"
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#060771] font-mono text-sm"
-                required
               />
             </div>
             <p className="text-xs text-gray-500 mt-2">
               Preview URL:{" "}
               <span className="font-mono text-[#060771]">
-                /artikel/{formData.slug || "url-anda"}
+                /artikel/{formData.slug || "[auto-generated]"}
               </span>
             </p>
           </div>
@@ -209,19 +279,102 @@ export default function CreateArticle() {
             />
           </div>
 
-          {/* Cover Image */}
+          {/* ✅ Cover Image - FILE UPLOAD */}
           <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              URL Gambar Cover
-            </label>
-            <input
-              type="url"
-              name="coverImage"
-              value={formData.coverImage}
-              onChange={handleInputChange}
-              placeholder="https://example.com/gambar.jpg"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#060771]"
-            />
+            <div className="flex items-start justify-between mb-2">
+              <label className="block text-sm font-semibold text-gray-700">
+                Gambar Cover
+              </label>
+              <div className="group relative">
+                <HelpCircle className="h-4 w-4 text-gray-400 cursor-help" />
+                <div className="hidden group-hover:block absolute right-0 top-6 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg z-10">
+                  Upload gambar cover untuk artikel. Format: JPG, PNG, WEBP. Max
+                  5MB.
+                </div>
+              </div>
+            </div>
+
+            {!coverImagePreview ? (
+              // ✅ Upload Button
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#060771] transition-colors">
+                <input
+                  type="file"
+                  id="coverImageInput"
+                  accept="image/*"
+                  onChange={handleCoverImageUpload}
+                  className="hidden"
+                  disabled={uploadingImage}
+                />
+                <label
+                  htmlFor="coverImageInput"
+                  className="cursor-pointer flex flex-col items-center"
+                >
+                  <div className="bg-gray-100 p-4 rounded-full mb-3">
+                    <Upload className="h-8 w-8 text-gray-400" />
+                  </div>
+                  <p className="text-sm font-semibold text-gray-700 mb-1">
+                    {uploadingImage
+                      ? "Mengupload..."
+                      : "Klik untuk upload gambar"}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Format: JPG, PNG, WEBP • Max 5MB
+                  </p>
+                </label>
+              </div>
+            ) : (
+              // ✅ Preview dengan tombol hapus
+              <div className="relative">
+                <div className="aspect-video rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                  <img
+                    src={coverImagePreview}
+                    alt="Cover preview"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                {/* Tombol hapus */}
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="sm"
+                  onClick={removeCoverImage}
+                  className="absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white"
+                >
+                  <X className="h-4 w-4 mr-1" />
+                  Hapus
+                </Button>
+
+                {/* Info file */}
+                <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-xs text-green-700">
+                    ✅ Gambar berhasil diupload
+                  </p>
+                  <p className="text-xs text-gray-600 mt-1 break-all">
+                    Path: {formData.coverImage}
+                  </p>
+                </div>
+
+                {/* Tombol ganti gambar */}
+                <div className="mt-3">
+                  <input
+                    type="file"
+                    id="coverImageReplace"
+                    accept="image/*"
+                    onChange={handleCoverImageUpload}
+                    className="hidden"
+                    disabled={uploadingImage}
+                  />
+                  <label
+                    htmlFor="coverImageReplace"
+                    className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 cursor-pointer"
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    {uploadingImage ? "Mengupload..." : "Ganti Gambar"}
+                  </label>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* ✅ BLOCK EDITOR - MAIN CONTENT */}

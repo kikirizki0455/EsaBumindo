@@ -1291,9 +1291,9 @@ export class ProductionService {
 
       console.log('Product created:', product.id);
 
-      // Create BOM if details provided
+      // Create BOM if details provided - FIXED: use productionBom instead of productBom
       if (data.bomDetails && data.bomDetails.length > 0) {
-        const bom = await (this.prisma as any).productBom.create({
+        const bom = await (this.prisma as any).productionBom.create({
           data: {
             productId: product.id,
           },
@@ -1301,7 +1301,7 @@ export class ProductionService {
 
         console.log('BOM created:', bom.id);
 
-        // Create BOM details
+        // Create BOM details - FIXED: use productionBomDetail
         const details: any[] = [];
         for (const detail of data.bomDetails) {
           if (!detail.materialId || detail.percentage <= 0) {
@@ -1320,7 +1320,9 @@ export class ProductionService {
             continue;
           }
 
-          const bomDetail = await (this.prisma as any).productBomDetail.create({
+          const bomDetail = await (
+            this.prisma as any
+          ).productionBomDetail.create({
             data: {
               bomId: bom.id,
               materialId: detail.materialId,
@@ -1336,7 +1338,6 @@ export class ProductionService {
           );
         }
 
-        // FIX BARIS INI - hapus backslash
         console.log(`Total BOM details created: ${details.length}`);
       }
 
@@ -1393,20 +1394,19 @@ export class ProductionService {
 
       // Update BOM details if provided
       if (data.bomDetails && data.bomDetails.length > 0) {
-        // Get or create BOM
+        // Get or create BOM - FIXED: use productionBom
         let bom = product.bom;
 
         if (!bom) {
-          bom = await (this.prisma as any).productBom.create({
+          bom = await (this.prisma as any).productionBom.create({
             data: {
               productId: productId,
-              totalPercentage: 100,
             },
           });
         }
 
-        // Delete existing BOM details
-        await (this.prisma as any).productBomDetail.deleteMany({
+        // Delete existing BOM details - FIXED: use productionBomDetail
+        await (this.prisma as any).productionBomDetail.deleteMany({
           where: { bomId: bom.id },
         });
 
@@ -1426,7 +1426,9 @@ export class ProductionService {
             continue;
           }
 
-          const bomDetail = await (this.prisma as any).productBomDetail.create({
+          const bomDetail = await (
+            this.prisma as any
+          ).productionBomDetail.create({
             data: {
               bomId: bom.id,
               materialId: detail.materialId,

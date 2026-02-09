@@ -1,45 +1,15 @@
 {
   "articles": [
     {
-      "id": "21e1390d-e8d9-4387-a496-57278fddae70",
-      "slug": "pengujian-lem-cata-esabumindo-dengan-alat-modern",
-      "title": "pengujian lem cata esabumindo dengan alat modern",
-      "excerpt": "hasil dari lem yang di uji pada cat membuktikan lem produk esabumindo lebih unggul dari competitor x",
-      "author": "R&D Team Esabumindo",
-      "coverImage": "https://drive.google.com/drive/folders/1H6w--XN7oH2Gk-fx7JNMVc7-TJo2u5g3?hl=id",
-      "publishedAt": "2026-01-27T03:18:53.422Z",
-      "status": "published"
-    },
-    {
       "id": "2ab0bf8b-982c-4179-8a2b-7cae3cc51168",
       "slug": "keunggulan-adhesive-berkualitas",
       "title": "Keunggulan Adhesive Berkualitas untuk Aplikasi Industri",
       "excerpt": "Pelajari mengapa adhesive berkualitas tinggi sangat penting untuk kesuksesan aplikasi industri Anda.",
       "author": "PT Esabumindo",
       "coverImage": "/uploads/articles/adhesive-quality-cover.jpg",
-      "publishedAt": "2025-01-15T00:00:00.000Z",
-      "status": "published"
-    },
-    {
-      "id": "8fcef68c-21c3-476b-8c17-d03593ecbb51",
-      "slug": "panduan-memilih-adhesive",
-      "title": "Panduan Memilih Adhesive yang Tepat untuk Proyek Anda",
-      "excerpt": "Tips praktis untuk memilih adhesive yang sesuai dengan kebutuhan spesifik proyek industri Anda.",
-      "author": "Tim Teknis Esabumindo",
-      "coverImage": "/uploads/articles/adhesive-guide-cover.jpg",
-      "publishedAt": "2025-01-10T00:00:00.000Z",
-      "status": "published"
-    },
-    {
-      "id": "09ef73de-3889-4e8d-88b1-10ed553ddd63",
-      "slug": "inovasi-teknologi-adhesive",
-      "title": "Inovasi Terbaru dalam Teknologi Adhesive",
-      "excerpt": "Temukan inovasi terbaru dalam teknologi adhesive yang mengubah cara industri bekerja.",
-      "author": "R&D Team",
-      "coverImage": "/uploads/articles/innovation-cover.jpg",
-      "publishedAt": "2025-01-05T00:00:00.000Z",
+      "publishedAt": "2026-01-29T09:48:32.637Z",
       "status": "published"
     }
   ],
-  "lastUpdated": "2026-01-27T03:20:15.068Z"
+  "lastUpdated": "2026-01-30T07:46:01.959Z"
 }

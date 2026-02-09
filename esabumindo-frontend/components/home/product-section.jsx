@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import imgImagePt4 from "@/public/asset/image/esabumindo-founder.webp";
 import AdhesiveIcon from "@/public/asset/icon/polymere.svg";
 import { useTranslation } from "@/hooks/use-translation";
@@ -71,13 +72,17 @@ export function ProductSection() {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
-                <button className="bg-[#060771] hover:bg-[#060771]/90 text-white font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 uppercase tracking-wide text-sm md:text-base">
-                  {isHydrated ? t("home.productSection.cta.primary") : ""}
-                </button>
+                <Link href="/products">
+                  <button className="bg-[#060771] hover:bg-[#060771]/90 text-white font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 uppercase tracking-wide text-sm md:text-base">
+                    {isHydrated ? t("home.productSection.cta.primary") : ""}
+                  </button>
+                </Link>
 
-                <button className="bg-white hover:bg-gray-50 border-2 border-[#060771] text-[#060771] font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 uppercase tracking-wide text-sm md:text-base">
-                  {isHydrated ? t("home.productSection.cta.secondary") : ""}
-                </button>
+                <Link href="/contact">
+                  <button className="bg-white hover:bg-gray-50 border-2 border-[#060771] text-[#060771] font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 uppercase tracking-wide text-sm md:text-base">
+                    {isHydrated ? t("home.productSection.cta.secondary") : ""}
+                  </button>
+                </Link>
               </div>
             </div>
 

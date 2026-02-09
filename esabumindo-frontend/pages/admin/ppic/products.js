@@ -1,21 +1,78 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { apiFetch } from "@/lib/api";
-import styles from "@/styles/admin.module.css";
+import AdminLayout from "@/components/layout/admin-layout";
+import {
+  Package,
+  Plus,
+  Pencil,
+  Trash2,
+  CheckCircle,
+  AlertTriangle,
+  Filter,
+} from "lucide-react";
 
+/**
+ * Toast Notification Component
+ */
+const Toast = ({ message, type, onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  const bgColor =
+    type === "success" ? "#10b981" : type === "error" ? "#ef4444" : "#3b82f6";
+  const icon = type === "success" ? "✅" : type === "error" ? "❌" : "ℹ️";
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: "20px",
+        right: "20px",
+        background: bgColor,
+        color: "white",
+        padding: "16px 24px",
+        borderRadius: "8px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+        zIndex: 9999,
+        minWidth: "300px",
+        maxWidth: "500px",
+        display: "flex",
+        alignItems: "center",
+        gap: "12px",
+      }}
+    >
+      <span style={{ fontSize: "20px" }}>{icon}</span>
+      <span style={{ flex: 1, fontWeight: 500 }}>{message}</span>
+      <button
+        onClick={onClose}
+        style={{
+          background: "rgba(255,255,255,0.2)",
+          border: "none",
+          color: "white",
+          width: "24px",
+          height: "24px",
+          borderRadius: "50%",
+          cursor: "pointer",
+          fontSize: "16px",
+        }}
+      >
+        ×
+      </button>
+    </div>
+  );
+};
 
 export default function ProductManagementPage() {
   const router = useRouter();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    code: "",
-    type: "PVAC",
-    description: "",
-  });
+  const [toast, setToast] = useState(null);
+  const [filter, setFilter] = useState("all"); // all, with-bom, without-bom
 
   const productTypes = [
     "PVAC",
@@ -32,10 +89,13 @@ export default function ProductManagementPage() {
     fetchProducts();
   }, []);
 
+  const showToast = (message, type = "info") => {
+    setToast({ message, type });
+  };
+
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      // Fetch dari endpoint yang benar
       const res = await apiFetch("/production/master/products");
       if (res.ok) {
         const data = await res.json();
@@ -43,14 +103,16 @@ export default function ProductManagementPage() {
           ? data
           : data.data || data.products || [];
         setProducts(productsArray);
+        showToast(`${productsArray.length} produk dimuat`, "success");
       } else {
-        // Gunakan dummy data jika API belum ready
         console.warn("Failed to fetch products, using dummy data");
         setProducts(getDummyProducts());
+        showToast("Menggunakan data demo", "info");
       }
     } catch (error) {
       console.error("Error fetching products:", error);
       setProducts(getDummyProducts());
+      showToast("Error loading products", "error");
     } finally {
       setLoading(false);
     }
@@ -59,10 +121,11 @@ export default function ProductManagementPage() {
   const getDummyProducts = () => [
     {
       id: "1",
-      code: "PROD-001",
-      name: "Adhesive PVAC Premium",
+      code: "EB - 5502",
+      name: "EB - 5502",
       type: "PVAC",
-      description: "Polyvinyl Acetate adhesive untuk aplikasi premium",
+      description: "Polyvinyl Acetate adhesive",
+      bom: null, // No BOM
       createdAt: new Date().toISOString(),
     },
     {
@@ -70,23 +133,8 @@ export default function ProductManagementPage() {
       code: "PROD-002",
       name: "Styrene Resin Standard",
       type: "STYRENE",
-      description: "Styrene resin untuk aplikasi standard",
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: "3",
-      code: "PROD-003",
-      name: "EVA Compound Mix",
-      type: "EVA",
-      description: "Ethylene Vinyl Acetate compound",
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: "4",
-      code: "PROD-004",
-      name: "Acrylic All Purpose",
-      type: "ALL ACR",
-      description: "Acrylate polymer untuk kegunaan umum",
+      description: "Styrene resin",
+      bom: { details: [{ id: 1 }, { id: 2 }] }, // Has BOM
       createdAt: new Date().toISOString(),
     },
   ];
@@ -96,43 +144,32 @@ export default function ProductManagementPage() {
   };
 
   const handleEdit = (product) => {
-    setEditingId(product.id);
-    setFormData({
-      name: product.name,
-      code: product.code,
-      type: product.type,
-      description: product.description,
-    });
-    setShowForm(true);
+    router.push(`/admin/ppic/product-edit/${product.id}`);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleDelete = async (product) => {
+    if (!confirm(`Yakin ingin menghapus produk "${product.name}"?`)) return;
 
-    if (editingId) {
-      // Update product
-      setProducts(
-        products.map((p) => (p.id === editingId ? { ...p, ...formData } : p))
-      );
-    } else {
-      // Add new product
-      setProducts([
-        ...products,
+    try {
+      const res = await apiFetch(
+        `/production/master/products/${product.id}/delete`,
         {
-          id: Math.random().toString(36),
-          ...formData,
-          createdAt: new Date().toISOString(),
-        },
-      ]);
-    }
+          method: "PUT",
+        }
+      );
 
-    setShowForm(false);
-    setFormData({ name: "", code: "", type: "PVAC", description: "" });
-  };
-
-  const handleDelete = (id) => {
-    if (confirm("Yakin ingin menghapus produk ini?")) {
-      setProducts(products.filter((p) => p.id !== id));
+      if (res.ok) {
+        setProducts(products.filter((p) => p.id !== product.id));
+        showToast("Produk berhasil dihapus", "success");
+      } else {
+        // Fallback: hapus dari state lokal
+        setProducts(products.filter((p) => p.id !== product.id));
+        showToast("Produk dihapus (mode demo)", "info");
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      setProducts(products.filter((p) => p.id !== product.id));
+      showToast("Produk dihapus secara lokal", "info");
     }
   };
 
@@ -140,205 +177,249 @@ export default function ProductManagementPage() {
     router.push("/admin/ppic/dashboard");
   };
 
-  if (loading) return <div className={styles.loading}>Loading...</div>;
+  // Check if product has BOM
+  const hasBOM = (product) => {
+    return product.bom && product.bom.details && product.bom.details.length > 0;
+  };
+
+  // Get BOM material count
+  const getBOMCount = (product) => {
+    if (!product.bom || !product.bom.details) return 0;
+    return product.bom.details.length;
+  };
+
+  // Filter products
+  const filteredProducts = products.filter((product) => {
+    if (filter === "with-bom") return hasBOM(product);
+    if (filter === "without-bom") return !hasBOM(product);
+    return true;
+  });
+
+  // Stats
+  const stats = {
+    total: products.length,
+    withBOM: products.filter(hasBOM).length,
+    withoutBOM: products.filter((p) => !hasBOM(p)).length,
+  };
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-500"></div>
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
-    <div className={styles.container}>
-      <div style={{ marginBottom: "20px" }}>
-        <button
-          className={styles.btnSecondary}
-          onClick={handleBack}
-          style={{ display: "flex", alignItems: "center", gap: "8px" }}
-        >
-          ← Dashboard
-        </button>
-      </div>
+    <AdminLayout>
+      <div className="space-y-6">
+        {/* Toast */}
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
 
-      <div className={styles.header}>
-        <h1>📦 Manajemen Produk</h1>
-        <button className={styles.btnPrimary} onClick={handleAdd}>
-          ➕ Tambah Produk
-        </button>
-      </div>
-
-      {showForm && (
-        <div
-          style={{
-            background: "white",
-            padding: "20px",
-            borderRadius: "8px",
-            marginBottom: "20px",
-          }}
-        >
-          <h3 style={{ margin: "0 0 15px 0", color: "#333" }}>
-            {editingId ? "✏️ Edit Produk" : "➕ Tambah Produk Baru"}
-          </h3>
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.formRow}>
-              <div className={styles.formGroup}>
-                <label>Kode Produk *</label>
-                <input
-                  type="text"
-                  value={formData.code}
-                  onChange={(e) =>
-                    setFormData({ ...formData, code: e.target.value })
-                  }
-                  required
-                  placeholder="PROD-001"
-                />
+        {/* Header */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center">
+                <Package className="w-5 h-5 text-white" />
               </div>
+              Manajemen Produk
+            </h1>
+            <p className="text-sm text-slate-500 mt-1 ml-13">
+              Kelola produk dan Bill of Materials (BOM)
+            </p>
+          </div>
+          <button
+            onClick={handleAdd}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-500 to-purple-500 text-white font-medium hover:shadow-lg hover:shadow-violet-500/30 transition-all"
+          >
+            <Plus className="w-5 h-5" />
+            Tambah Produk Baru
+          </button>
+        </div>
 
-              <div className={styles.formGroup}>
-                <label>Nama Produk *</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  required
-                  placeholder="Nama produk"
-                />
-              </div>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div
+            onClick={() => setFilter("all")}
+            className={`p-5 rounded-xl cursor-pointer transition-all border-2 ${
+              filter === "all"
+                ? "bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/30"
+                : "bg-white text-slate-900 border-slate-200 hover:border-blue-300"
+            }`}
+          >
+            <div className="text-3xl font-bold">{stats.total}</div>
+            <div className="text-sm opacity-80 mt-1">Total Produk</div>
+          </div>
+
+          <div
+            onClick={() => setFilter("with-bom")}
+            className={`p-5 rounded-xl cursor-pointer transition-all border-2 ${
+              filter === "with-bom"
+                ? "bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/30"
+                : "bg-white text-slate-900 border-slate-200 hover:border-emerald-300"
+            }`}
+          >
+            <div className="text-3xl font-bold">{stats.withBOM}</div>
+            <div className="text-sm opacity-80 mt-1 flex items-center gap-1">
+              <CheckCircle className="w-4 h-4" /> Dengan BOM
             </div>
+          </div>
 
-            <div className={styles.formRow}>
-              <div className={styles.formGroup}>
-                <label>Tipe Produk *</label>
-                <select
-                  value={formData.type}
-                  onChange={(e) =>
-                    setFormData({ ...formData, type: e.target.value })
-                  }
-                  required
-                >
-                  {productTypes.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
+          <div
+            onClick={() => setFilter("without-bom")}
+            className={`p-5 rounded-xl cursor-pointer transition-all border-2 ${
+              filter === "without-bom"
+                ? "bg-amber-500 text-white border-amber-500 shadow-lg shadow-amber-500/30"
+                : "bg-white text-slate-900 border-slate-200 hover:border-amber-300"
+            }`}
+          >
+            <div className="text-3xl font-bold">{stats.withoutBOM}</div>
+            <div className="text-sm opacity-80 mt-1 flex items-center gap-1">
+              <AlertTriangle className="w-4 h-4" /> Tanpa BOM
+            </div>
+          </div>
+        </div>
+
+        {/* Info Alert for products without BOM */}
+        {stats.withoutBOM > 0 && (
+          <div className="bg-amber-50 border border-amber-200 border-l-4 border-l-amber-500 rounded-lg p-4">
+            <p className="text-amber-800 text-sm">
+              <strong>
+                ⚠️ {stats.withoutBOM} produk belum memiliki BOM/Formula.
+              </strong>{" "}
+              Produk tanpa BOM tidak bisa dijadwalkan untuk produksi. Klik
+              tombol "Edit" untuk menambahkan formula.
+            </p>
+          </div>
+        )}
+
+        {/* Products Table */}
+        {filteredProducts.length === 0 ? (
+          <div className="bg-white rounded-xl p-12 text-center border border-slate-200">
+            <Package className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+            <p className="text-slate-500">
+              {filter === "without-bom"
+                ? "Semua produk sudah memiliki BOM 🎉"
+                : filter === "with-bom"
+                ? "Tidak ada produk dengan BOM"
+                : "Tidak ada produk"}
+            </p>
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200">
+                    <th className="text-left px-6 py-4 text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                      Kode
+                    </th>
+                    <th className="text-left px-6 py-4 text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                      Nama Produk
+                    </th>
+                    <th className="text-left px-6 py-4 text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                      Tipe
+                    </th>
+                    <th className="text-center px-6 py-4 text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                      Status BOM
+                    </th>
+                    <th className="text-center px-6 py-4 text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                      Aksi
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {filteredProducts.map((product, idx) => (
+                    <tr
+                      key={product.id}
+                      className={`hover:bg-slate-50 transition-colors ${
+                        !hasBOM(product) ? "border-l-4 border-l-amber-400" : ""
+                      }`}
+                    >
+                      <td className="px-6 py-4">
+                        <code className="text-sm bg-slate-100 px-3 py-1 rounded font-mono">
+                          {product.code}
+                        </code>
+                      </td>
+                      <td className="px-6 py-4 font-semibold text-slate-900">
+                        {product.name}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span
+                          className="px-3 py-1 rounded-full text-xs font-semibold"
+                          style={{
+                            background: getTypeColor(product.type).bg,
+                            color: getTypeColor(product.type).text,
+                          }}
+                        >
+                          {product.type || "-"}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        {hasBOM(product) ? (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold">
+                            <CheckCircle className="w-3.5 h-3.5" />
+                            {getBOMCount(product)} Material
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">
+                            <AlertTriangle className="w-3.5 h-3.5" />
+                            Belum Ada
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={() => handleEdit(product)}
+                            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+                              hasBOM(product)
+                                ? "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                                : "bg-violet-500 text-white hover:bg-violet-600 shadow-md hover:shadow-lg"
+                            }`}
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                            {hasBOM(product) ? "Edit" : "Tambah BOM"}
+                          </button>
+                          <button
+                            onClick={() => handleDelete(product)}
+                            className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition-all"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
                   ))}
-                </select>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Deskripsi</label>
-                <input
-                  type="text"
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  placeholder="Deskripsi produk"
-                />
-              </div>
+                </tbody>
+              </table>
             </div>
-
-            <div className={styles.formActions}>
-              <button
-                type="button"
-                className={styles.btnSecondary}
-                onClick={() => setShowForm(false)}
-              >
-                Batal
-              </button>
-              <button type="submit" className={styles.btnPrimary}>
-                {editingId ? "Update" : "Tambah"} Produk
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {products.length === 0 ? (
-        <div className={styles.emptyState}>Tidak ada produk</div>
-      ) : (
-        <div className={styles.tableContainer}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Kode</th>
-                <th>Nama Produk</th>
-                <th>Tipe</th>
-                <th>Deskripsi</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((product) => (
-                <tr key={product.id} className={styles.tableRow}>
-                  <td>
-                    <code
-                      style={{
-                        fontSize: "12px",
-                        background: "#f5f5f5",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                      }}
-                    >
-                      {product.code}
-                    </code>
-                  </td>
-                  <td style={{ fontWeight: 600 }}>{product.name}</td>
-                  <td>
-                    <span
-                      style={{
-                        padding: "4px 10px",
-                        borderRadius: "4px",
-                        background: getTypeColor(product.type).bg,
-                        color: getTypeColor(product.type).text,
-                        fontSize: "12px",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {product.type}
-                    </span>
-                  </td>
-                  <td style={{ fontSize: "13px", color: "#666" }}>
-                    {product.description || "-"}
-                  </td>
-                  <td>
-                    <div style={{ display: "flex", gap: "8px" }}>
-                      <button
-                        className={styles.btnAction}
-                        onClick={() => handleEdit(product)}
-                        style={{ fontSize: "12px", padding: "6px 12px" }}
-                      >
-                        ✏️ Edit
-                      </button>
-                      <button
-                        className={styles.btnAction}
-                        onClick={() => handleDelete(product.id)}
-                        style={{
-                          fontSize: "12px",
-                          padding: "6px 12px",
-                          background: "#ffe6e6",
-                          color: "#cc0000",
-                        }}
-                      >
-                        🗑️ Hapus
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
+          </div>
+        )}
+      </div>
+    </AdminLayout>
   );
 }
 
 function getTypeColor(type) {
   const colors = {
-    PVAC: { bg: "#e6f2ff", text: "#0066cc" },
-    STYRENE: { bg: "#f0e6ff", text: "#6600cc" },
-    EVA: { bg: "#e6ffe6", text: "#00aa00" },
-    "ALL ACR": { bg: "#fff3e6", text: "#ff6600" },
-    PSA: { bg: "#ffe6f0", text: "#cc0066" },
-    VINYL: { bg: "#e6ffff", text: "#0099cc" },
-    DEMPUL: { bg: "#ffe6e6", text: "#cc0000" },
-    WIP: { bg: "#f0f0f0", text: "#666" },
+    PVAC: { bg: "#dbeafe", text: "#1d4ed8" },
+    STYRENE: { bg: "#f3e8ff", text: "#7c3aed" },
+    EVA: { bg: "#d1fae5", text: "#059669" },
+    "ALL ACR": { bg: "#ffedd5", text: "#ea580c" },
+    PSA: { bg: "#fce7f3", text: "#db2777" },
+    VINYL: { bg: "#cffafe", text: "#0891b2" },
+    DEMPUL: { bg: "#fee2e2", text: "#dc2626" },
+    WIP: { bg: "#f3f4f6", text: "#6b7280" },
   };
-  return colors[type] || { bg: "#f0f0f0", text: "#666" };
+  return colors[type] || { bg: "#f3f4f6", text: "#6b7280" };
 }

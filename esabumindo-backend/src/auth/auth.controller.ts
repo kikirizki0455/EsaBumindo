@@ -20,8 +20,6 @@ import { RolesGuard } from './guard/roles.guard';
 
 @Controller('auth')
 export class AuthController {
-
-
   constructor(
     private authService: AuthService,
     private userService: UserService,
@@ -53,28 +51,32 @@ export class AuthController {
       sameSite: 'lax',
       maxAge: 24 * 60 * 60 * 1000,
     });
+
+    // ✅ FIX: Return access_token dan user agar frontend bisa menyimpannya
     return {
       message: 'login berhasil',
-      data: {
+      access_token: result.access_token,
+      user: {
         id: result.user.id,
         email: result.user.email,
         name: result.user.name,
+        role: result.user.role,
       },
     };
   }
 
   @Post('logout')
-logout(@Res({ passthrough: true }) res: Response) {
-  res.clearCookie('access_token', {
-    httpOnly: true,
-    secure: false,
-    sameSite: 'lax',
-  });
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('access_token', {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+    });
 
-  return {
-    message: 'berhasil logout',
-  };
-}
+    return {
+      message: 'berhasil logout',
+    };
+  }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)

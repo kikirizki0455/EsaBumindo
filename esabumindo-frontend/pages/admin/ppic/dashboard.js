@@ -1,17 +1,35 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { apiFetch } from "@/lib/api";
-import styles from "@/styles/admin.module.css";
+import AdminLayout from "@/components/layout/admin-layout";
+import {
+  Factory,
+  Package,
+  Boxes,
+  Calendar,
+  TrendingUp,
+  AlertCircle,
+  CheckCircle2,
+  Clock,
+  ArrowUpRight,
+  ChevronRight,
+  Zap,
+  BarChart3,
+  PieChart,
+  Activity,
+  AlertTriangle,
+  FileText,
+  Settings,
+  ChevronLeft,
+  ChevronDown,
+  Filter,
+  RefreshCw,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 /**
  * Page: PPIC Dashboard
- *
- * Features:
- * - Overview schedule changes tracking
- * - Monthly report perubahan jadwal
- * - Breakdown by change type (DATE, QUANTITY, REACTOR, PRODUCT, NOTES)
- * - Impact analysis (berapa material sudah ditimbang saat perubahan)
- * - Production schedule status summary
+ * Modern UI dengan statistik produksi yang lengkap
  */
 export default function PPICDashboardPage() {
   const router = useRouter();
@@ -21,6 +39,7 @@ export default function PPICDashboardPage() {
     confirmedSchedules: 0,
     inProgressSchedules: 0,
     completedSchedules: 0,
+    cancelledSchedules: 0,
     totalChanges: 0,
     affectedPlans: 0,
     changesSummary: {
@@ -31,8 +50,9 @@ export default function PPICDashboardPage() {
       NOTES: 0,
     },
     scheduleChanges: [],
-    statusDistribution: [],
     weeklyScheduleData: [],
+    reactorUtilization: [],
+    productTypeDistribution: [],
   });
 
   const [loading, setLoading] = useState(true);
@@ -58,8 +78,7 @@ export default function PPICDashboardPage() {
       });
 
       const res = await apiFetch(`/production/ppic/dashboard?${query}`);
-      
-      // Gunakan dummy data jika endpoint belum ready
+
       if (!res.ok) {
         console.warn("Using dummy data for dashboard");
         setStats(getDummyDashboardData());
@@ -71,7 +90,6 @@ export default function PPICDashboardPage() {
       setStats(data);
     } catch (error) {
       console.error("Error:", error);
-      // Fallback ke dummy data
       setStats(getDummyDashboardData());
     } finally {
       setLoading(false);
@@ -79,323 +97,498 @@ export default function PPICDashboardPage() {
   };
 
   const getDummyDashboardData = () => ({
-    totalSchedules: 5,
-    draftSchedules: 2,
-    confirmedSchedules: 2,
-    inProgressSchedules: 1,
-    completedSchedules: 0,
-    totalChanges: 2,
-    affectedPlans: 1,
+    totalSchedules: 24,
+    draftSchedules: 5,
+    confirmedSchedules: 8,
+    inProgressSchedules: 6,
+    completedSchedules: 4,
+    cancelledSchedules: 1,
+    totalChanges: 12,
+    affectedPlans: 3,
     changesSummary: {
-      DATE: 1,
-      QUANTITY: 1,
-      REACTOR: 0,
-      PRODUCT: 0,
-      NOTES: 0,
+      DATE: 5,
+      QUANTITY: 3,
+      REACTOR: 2,
+      PRODUCT: 1,
+      NOTES: 1,
     },
-    scheduleChanges: [],
+    scheduleChanges: [
+      {
+        id: 1,
+        createdAt: new Date().toISOString(),
+        changeType: "DATE",
+        oldValue: "2026-02-08",
+        newValue: "2026-02-10",
+        materialWeighedCount: 3,
+        materialTotalCount: 5,
+        reason: "Keterlambatan bahan baku",
+        productionPlan: { product: { name: "EB-5502" } },
+      },
+      {
+        id: 2,
+        createdAt: new Date(Date.now() - 86400000).toISOString(),
+        changeType: "QUANTITY",
+        oldValue: "1000",
+        newValue: "800",
+        materialWeighedCount: 4,
+        materialTotalCount: 5,
+        reason: "Penyesuaian permintaan",
+        productionPlan: { product: { name: "ST-3301" } },
+      },
+    ],
     weeklyScheduleData: [
-      { label: "Sen", value: 1 },
-      { label: "Sel", value: 2 },
-      { label: "Rab", value: 1 },
-      { label: "Kam", value: 0 },
-      { label: "Jum", value: 1 },
-      { label: "Sab", value: 0 },
-      { label: "Min", value: 0 },
+      { label: "Sen", value: 4, completed: 2 },
+      { label: "Sel", value: 5, completed: 3 },
+      { label: "Rab", value: 3, completed: 2 },
+      { label: "Kam", value: 6, completed: 4 },
+      { label: "Jum", value: 4, completed: 3 },
+      { label: "Sab", value: 2, completed: 1 },
+      { label: "Min", value: 0, completed: 0 },
+    ],
+    reactorUtilization: [
+      { reactor: "A", utilization: 85, schedules: 6 },
+      { reactor: "B", utilization: 72, schedules: 5 },
+      { reactor: "C", utilization: 68, schedules: 4 },
+      { reactor: "D", utilization: 45, schedules: 3 },
+    ],
+    productTypeDistribution: [
+      { type: "PVAC", count: 8, color: "from-blue-500 to-cyan-500" },
+      { type: "STYRENE", count: 5, color: "from-violet-500 to-purple-500" },
+      { type: "EVA", count: 4, color: "from-emerald-500 to-green-500" },
+      { type: "ALL ACR", count: 3, color: "from-orange-500 to-amber-500" },
+      { type: "PSA", count: 2, color: "from-pink-500 to-rose-500" },
+      { type: "OTHER", count: 2, color: "from-slate-500 to-gray-500" },
     ],
   });
 
-  const handleCreateSchedule = () => {
-    router.push("/admin/ppic/schedule-create");
-  };
+  const currentMonth = new Date(
+    filter.year,
+    filter.month - 1
+  ).toLocaleDateString("id-ID", {
+    month: "long",
+    year: "numeric",
+  });
 
-  const handleViewSchedules = () => {
-    router.push("/admin/ppic/schedule");
-  };
-
-  const handleManageProducts = () => {
-    router.push("/admin/ppic/products");
-  };
-
-  const handleManageMaterials = () => {
-    router.push("/admin/ppic/materials");
-  };
-
-  if (loading)
-    return (
-      <div className={styles.container}>
-        <div className={styles.loading}>Loading dashboard...</div>
-      </div>
-    );
+  const completionRate =
+    stats.totalSchedules > 0
+      ? Math.round((stats.completedSchedules / stats.totalSchedules) * 100)
+      : 0;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h1>📈 PPIC Dashboard</h1>
-        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-          <button className={styles.btnSecondary} onClick={handleManageProducts}>
-            📦 Produk
-          </button>
-          <button className={styles.btnSecondary} onClick={handleManageMaterials}>
-            🧪 Bahan Baku
-          </button>
-          <button className={styles.btnSecondary} onClick={handleViewSchedules}>
-            📅 Lihat Jadwal
-          </button>
-          <button className={styles.btnPrimary} onClick={handleCreateSchedule}>
-            ➕ Buat Jadwal Baru
-          </button>
-        </div>
-      </div>
+    <AdminLayout>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
+              Dashboard PPIC
+            </h1>
+            <p className="text-sm text-slate-500 mt-1">
+              Production Planning & Inventory Control - {currentMonth}
+            </p>
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* Plant Filter */}
+            <select
+              value={filter.plant}
+              onChange={(e) => setFilter({ ...filter, plant: e.target.value })}
+              className="px-3 py-2 rounded-xl bg-white border border-slate-200 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/50"
+            >
+              <option value="P1">Plant 1</option>
+              <option value="P2">Plant 2</option>
+            </select>
 
-      {error && <div className={styles.error}>{error}</div>}
+            {/* Month Filter */}
+            <select
+              value={filter.month}
+              onChange={(e) =>
+                setFilter({ ...filter, month: parseInt(e.target.value) })
+              }
+              className="px-3 py-2 rounded-xl bg-white border border-slate-200 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/50"
+            >
+              {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                <option key={m} value={m}>
+                  {new Date(filter.year, m - 1).toLocaleDateString("id-ID", {
+                    month: "long",
+                  })}
+                </option>
+              ))}
+            </select>
 
-      {/* Filters */}
-      <div className={styles.filters}>
-        <select
-          value={filter.plant}
-          onChange={(e) => setFilter({ ...filter, plant: e.target.value })}
-        >
-          <option value="P1">Plant 1</option>
-          <option value="P2">Plant 2</option>
-        </select>
+            {/* Year Filter */}
+            <select
+              value={filter.year}
+              onChange={(e) =>
+                setFilter({ ...filter, year: parseInt(e.target.value) })
+              }
+              className="px-3 py-2 rounded-xl bg-white border border-slate-200 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/50"
+            >
+              {Array.from(
+                { length: 5 },
+                (_, i) => new Date().getFullYear() - i
+              ).map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
 
-        <select
-          value={filter.month}
-          onChange={(e) =>
-            setFilter({ ...filter, month: parseInt(e.target.value) })
-          }
-        >
-          {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
-            <option key={m} value={m}>
-              {new Date(filter.year, m - 1).toLocaleDateString("id-ID", {
-                month: "long",
-              })}
-            </option>
-          ))}
-        </select>
-
-        <select
-          value={filter.year}
-          onChange={(e) =>
-            setFilter({ ...filter, year: parseInt(e.target.value) })
-          }
-        >
-          {Array.from(
-            { length: 5 },
-            (_, i) => new Date().getFullYear() - i
-          ).map((y) => (
-            <option key={y} value={y}>
-              {y}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* KPI Cards */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: "15px",
-          marginBottom: "30px",
-        }}
-      >
-        <KPICard
-          title="Total Jadwal"
-          value={stats.totalSchedules}
-          icon="📅"
-          color="#0066cc"
-        />
-        <KPICard
-          title="Draft"
-          value={stats.draftSchedules}
-          icon="📝"
-          color="#999"
-        />
-        <KPICard
-          title="Confirmed"
-          value={stats.confirmedSchedules}
-          icon="✓"
-          color="#0066cc"
-        />
-        <KPICard
-          title="In Progress"
-          value={stats.inProgressSchedules}
-          icon="⏳"
-          color="#ff9900"
-        />
-        <KPICard
-          title="Completed"
-          value={stats.completedSchedules}
-          icon="✓✓"
-          color="#00aa00"
-        />
-      </div>
-
-      {/* Tabs */}
-      <div
-        style={{
-          background: "white",
-          borderRadius: "8px",
-          overflow: "hidden",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-          marginBottom: "20px",
-        }}
-      >
-        <div className={styles.tabs}>
-          <button
-            className={`${styles.tab} ${
-              activeTab === "overview" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("overview")}
-          >
-            📊 Overview
-          </button>
-          <button
-            className={`${styles.tab} ${
-              activeTab === "changes" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("changes")}
-          >
-            ⚠️ Tracking Perubahan ({stats.totalChanges})
-          </button>
-          <button
-            className={`${styles.tab} ${
-              activeTab === "analysis" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("analysis")}
-          >
-            📈 Analisis
-          </button>
+            <button
+              onClick={fetchDashboardData}
+              className="p-2 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
+              title="Refresh"
+            >
+              <RefreshCw className={cn("w-5 h-5", loading && "animate-spin")} />
+            </button>
+          </div>
         </div>
 
-        <div className={styles.tabContent}>
-          {activeTab === "overview" && <OverviewTab stats={stats} />}
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
 
-          {activeTab === "changes" && (
-            <ChangesTab changes={stats.scheduleChanges} />
-          )}
+        {/* Main Stats Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {/* Total Schedules */}
+          <div
+            onClick={() => router.push("/admin/ppic/schedule")}
+            className="group bg-white rounded-2xl p-4 cursor-pointer border border-slate-200/50 hover:border-violet-300 hover:shadow-lg hover:shadow-violet-500/10 transition-all duration-300"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shadow-lg shadow-violet-500/30">
+                <Calendar className="w-5 h-5 text-white" />
+              </div>
+              <ArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-violet-500 transition-all" />
+            </div>
+            <p className="text-2xl font-bold text-slate-900">
+              {stats.totalSchedules}
+            </p>
+            <p className="text-xs text-slate-500 mt-1">Total Jadwal</p>
+          </div>
 
-          {activeTab === "analysis" && (
-            <AnalysisTab
-              changesSummary={stats.changesSummary}
-              scheduleChanges={stats.scheduleChanges}
-              affectedPlans={stats.affectedPlans}
-            />
-          )}
+          {/* Draft */}
+          <div className="bg-white rounded-2xl p-4 border border-slate-200/50">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-400 to-slate-500 flex items-center justify-center">
+                <FileText className="w-5 h-5 text-white" />
+              </div>
+            </div>
+            <p className="text-2xl font-bold text-slate-900">
+              {stats.draftSchedules}
+            </p>
+            <p className="text-xs text-slate-500 mt-1">Draft</p>
+          </div>
+
+          {/* Confirmed */}
+          <div className="bg-white rounded-2xl p-4 border border-slate-200/50">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                <CheckCircle2 className="w-5 h-5 text-white" />
+              </div>
+            </div>
+            <p className="text-2xl font-bold text-slate-900">
+              {stats.confirmedSchedules}
+            </p>
+            <p className="text-xs text-slate-500 mt-1">Confirmed</p>
+          </div>
+
+          {/* In Progress */}
+          <div className="bg-white rounded-2xl p-4 border border-slate-200/50">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+                <Clock className="w-5 h-5 text-white" />
+              </div>
+            </div>
+            <p className="text-2xl font-bold text-slate-900">
+              {stats.inProgressSchedules}
+            </p>
+            <p className="text-xs text-slate-500 mt-1">In Progress</p>
+          </div>
+
+          {/* Completed */}
+          <div className="bg-white rounded-2xl p-4 border border-slate-200/50">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center">
+                <CheckCircle2 className="w-5 h-5 text-white" />
+              </div>
+            </div>
+            <p className="text-2xl font-bold text-slate-900">
+              {stats.completedSchedules}
+            </p>
+            <p className="text-xs text-slate-500 mt-1">Completed</p>
+          </div>
+
+          {/* Completion Rate */}
+          <div className="bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl p-4 text-white">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-white" />
+              </div>
+            </div>
+            <p className="text-2xl font-bold">{completionRate}%</p>
+            <p className="text-xs text-white/80 mt-1">Completion Rate</p>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="bg-white rounded-2xl border border-slate-200/50 overflow-hidden">
+          <div className="flex border-b border-slate-100 overflow-x-auto">
+            {[
+              { id: "overview", label: "Overview", icon: BarChart3 },
+              {
+                id: "changes",
+                label: `Perubahan (${stats.totalChanges})`,
+                icon: AlertTriangle,
+              },
+              { id: "analysis", label: "Analisis", icon: PieChart },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={cn(
+                  "flex items-center gap-2 px-5 py-4 text-sm font-medium transition-colors whitespace-nowrap",
+                  activeTab === tab.id
+                    ? "text-violet-600 border-b-2 border-violet-500 bg-violet-50/50"
+                    : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+                )}
+              >
+                <tab.icon className="w-4 h-4" />
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="p-5">
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="w-10 h-10 border-4 border-violet-500 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            ) : (
+              <>
+                {activeTab === "overview" && (
+                  <OverviewTab stats={stats} router={router} />
+                )}
+                {activeTab === "changes" && (
+                  <ChangesTab changes={stats.scheduleChanges} />
+                )}
+                {activeTab === "analysis" && (
+                  <AnalysisTab
+                    changesSummary={stats.changesSummary}
+                    scheduleChanges={stats.scheduleChanges}
+                    affectedPlans={stats.affectedPlans}
+                    productTypeDistribution={stats.productTypeDistribution}
+                  />
+                )}
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="bg-white rounded-2xl border border-slate-200/50 p-5">
+          <h2 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <Zap className="w-5 h-5 text-violet-500" />
+            Aksi Cepat PPIC
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <button
+              onClick={() => router.push("/admin/ppic/schedule-create")}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-violet-50 to-purple-50 border border-violet-100 text-violet-700 hover:shadow-md hover:shadow-violet-500/10 transition-all group"
+            >
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Calendar className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-medium text-sm">Buat Jadwal</span>
+            </button>
+            <button
+              onClick={() => router.push("/admin/ppic/schedule")}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 text-blue-700 hover:shadow-md hover:shadow-blue-500/10 transition-all group"
+            >
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Factory className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-medium text-sm">Lihat Jadwal</span>
+            </button>
+            <button
+              onClick={() => router.push("/admin/ppic/products")}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-100 text-emerald-700 hover:shadow-md hover:shadow-emerald-500/10 transition-all group"
+            >
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Package className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-medium text-sm">Kelola Produk</span>
+            </button>
+            <button
+              onClick={() => router.push("/admin/ppic/materials")}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100 text-amber-700 hover:shadow-md hover:shadow-amber-500/10 transition-all group"
+            >
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Boxes className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-medium text-sm">Bahan Baku</span>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 }
 
 /**
  * Component: Overview Tab
  */
-function OverviewTab({ stats }) {
+function OverviewTab({ stats, router }) {
   return (
-    <div>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
-          gap: "20px",
-          marginBottom: "20px",
-        }}
-      >
-        {/* Schedule Status Distribution */}
-        <div
-          style={{
-            background: "#f9f9f9",
-            padding: "20px",
-            borderRadius: "8px",
-          }}
-        >
-          <h4 style={{ margin: "0 0 15px 0", color: "#333" }}>
-            📊 Distribusi Status Jadwal
-          </h4>
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "10px" }}
-          >
-            <StatusBar
-              label="Draft"
-              value={stats.draftSchedules}
-              total={stats.totalSchedules}
-              color="#999"
-            />
-            <StatusBar
-              label="Confirmed"
-              value={stats.confirmedSchedules}
-              total={stats.totalSchedules}
-              color="#0066cc"
-            />
-            <StatusBar
-              label="In Progress"
-              value={stats.inProgressSchedules}
-              total={stats.totalSchedules}
-              color="#ff9900"
-            />
-            <StatusBar
-              label="Completed"
-              value={stats.completedSchedules}
-              total={stats.totalSchedules}
-              color="#00aa00"
-            />
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Weekly Schedule Chart */}
+        <div className="bg-slate-50 rounded-xl p-5">
+          <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+            <BarChart3 className="w-5 h-5 text-violet-500" />
+            Jadwal Mingguan
+          </h3>
+          <div className="h-48">
+            <WeeklyBarChart data={stats.weeklyScheduleData} />
           </div>
         </div>
 
-        {/* Schedule Changes Summary */}
-        <div
-          style={{
-            background: "#f9f9f9",
-            padding: "20px",
-            borderRadius: "8px",
-          }}
-        >
-          <h4 style={{ margin: "0 0 15px 0", color: "#333" }}>
-            ⚠️ Ringkasan Perubahan
-          </h4>
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span style={{ color: "#666" }}>Total Perubahan Tercatat:</span>
-              <span style={{ fontWeight: 600, color: "#0066cc" }}>
-                {stats.totalChanges}
-              </span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span style={{ color: "#666" }}>Jadwal Terpengaruh:</span>
-              <span style={{ fontWeight: 600, color: "#ff6600" }}>
-                {stats.affectedPlans}
-              </span>
-            </div>
-            <div
-              style={{
-                borderTop: "1px solid #eee",
-                paddingTop: "8px",
-                marginTop: "8px",
-              }}
-            >
-              <div
-                style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}
-              >
-                Catatan: Perubahan dicatat hanya jika ada material yang sudah
-                ditimbang
+        {/* Reactor Utilization */}
+        <div className="bg-slate-50 rounded-xl p-5">
+          <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+            <Factory className="w-5 h-5 text-emerald-500" />
+            Utilisasi Reactor
+          </h3>
+          <div className="space-y-4">
+            {stats.reactorUtilization?.map((reactor) => (
+              <div key={reactor.reactor}>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={cn(
+                        "w-8 h-8 rounded-lg flex items-center justify-center font-bold text-white text-sm",
+                        reactor.reactor === "A"
+                          ? "bg-gradient-to-br from-blue-500 to-cyan-500"
+                          : reactor.reactor === "B"
+                          ? "bg-gradient-to-br from-emerald-500 to-green-500"
+                          : reactor.reactor === "C"
+                          ? "bg-gradient-to-br from-amber-500 to-orange-500"
+                          : "bg-gradient-to-br from-rose-500 to-pink-500"
+                      )}
+                    >
+                      {reactor.reactor}
+                    </div>
+                    <span className="text-sm font-medium text-slate-700">
+                      Reactor {reactor.reactor}
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-sm font-bold text-slate-900">
+                      {reactor.utilization}%
+                    </span>
+                    <span className="text-xs text-slate-500 ml-2">
+                      ({reactor.schedules} jadwal)
+                    </span>
+                  </div>
+                </div>
+                <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                  <div
+                    className={cn(
+                      "h-full rounded-full transition-all duration-500",
+                      reactor.utilization >= 80
+                        ? "bg-gradient-to-r from-emerald-500 to-green-500"
+                        : reactor.utilization >= 50
+                        ? "bg-gradient-to-r from-amber-500 to-orange-500"
+                        : "bg-gradient-to-r from-slate-400 to-slate-500"
+                    )}
+                    style={{ width: `${reactor.utilization}%` }}
+                  />
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Weekly Schedule Chart */}
-      <div
-        style={{ background: "#f9f9f9", padding: "20px", borderRadius: "8px" }}
-      >
-        <h4 style={{ margin: "0 0 15px 0", color: "#333" }}>
-          📈 Jadwal Mingguan
-        </h4>
-        <div style={{ height: "250px" }}>
-          <SimpleBarChart data={stats.weeklyScheduleData} />
+      {/* Status Distribution */}
+      <div className="bg-slate-50 rounded-xl p-5">
+        <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+          <PieChart className="w-5 h-5 text-blue-500" />
+          Distribusi Status Jadwal
+        </h3>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {[
+            {
+              label: "Draft",
+              value: stats.draftSchedules,
+              color: "bg-slate-400",
+            },
+            {
+              label: "Confirmed",
+              value: stats.confirmedSchedules,
+              color: "bg-blue-500",
+            },
+            {
+              label: "In Progress",
+              value: stats.inProgressSchedules,
+              color: "bg-amber-500",
+            },
+            {
+              label: "Completed",
+              value: stats.completedSchedules,
+              color: "bg-emerald-500",
+            },
+            {
+              label: "Cancelled",
+              value: stats.cancelledSchedules,
+              color: "bg-red-500",
+            },
+          ].map((item) => {
+            const percentage =
+              stats.totalSchedules > 0
+                ? Math.round((item.value / stats.totalSchedules) * 100)
+                : 0;
+            return (
+              <div
+                key={item.label}
+                className="bg-white rounded-xl p-4 border border-slate-100"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <div className={cn("w-3 h-3 rounded-full", item.color)}></div>
+                  <span className="text-xs text-slate-500">{item.label}</span>
+                </div>
+                <p className="text-xl font-bold text-slate-900">{item.value}</p>
+                <p className="text-xs text-slate-400">{percentage}%</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Changes Summary */}
+      <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-5 border border-amber-100">
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="font-semibold text-amber-900 mb-2 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-amber-500" />
+              Ringkasan Perubahan Jadwal
+            </h3>
+            <p className="text-sm text-amber-700">
+              Total <span className="font-bold">{stats.totalChanges}</span>{" "}
+              perubahan tercatat, mempengaruhi{" "}
+              <span className="font-bold">{stats.affectedPlans}</span> jadwal
+              produksi.
+            </p>
+          </div>
+          <button
+            onClick={() => router.push("/admin/ppic/schedule")}
+            className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium hover:bg-amber-600 transition-colors"
+          >
+            Lihat Detail
+          </button>
         </div>
       </div>
     </div>
@@ -406,108 +599,124 @@ function OverviewTab({ stats }) {
  * Component: Changes Tab
  */
 function ChangesTab({ changes }) {
-  return (
-    <div style={{ overflowX: "auto" }}>
-      {changes.length === 0 ? (
-        <div className={styles.emptyState}>
-          Tidak ada perubahan jadwal pada periode ini
+  if (!changes || changes.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center">
+          <CheckCircle2 className="w-8 h-8 text-slate-400" />
         </div>
-      ) : (
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Tanggal</th>
-              <th>Produk</th>
-              <th>Tipe Perubahan</th>
-              <th>Dari → Ke</th>
-              <th>Material Ditimbang</th>
-              <th>Impact</th>
-              <th>Alasan</th>
-            </tr>
-          </thead>
-          <tbody>
-            {changes.map((change) => {
-              const impactPercent = Math.round(
-                (change.materialWeighedCount / change.materialTotalCount) * 100
-              );
-              const isHighImpact = impactPercent > 50;
+        <p className="text-slate-500">
+          Tidak ada perubahan jadwal pada periode ini
+        </p>
+      </div>
+    );
+  }
 
-              return (
-                <tr key={change.id}>
-                  <td style={{ fontSize: "12px" }}>
-                    {new Date(change.createdAt).toLocaleDateString("id-ID", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </td>
-                  <td style={{ fontWeight: 600 }}>
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full">
+        <thead>
+          <tr className="border-b border-slate-200">
+            <th className="text-left py-3 px-4 text-xs font-semibold text-slate-500 uppercase">
+              Tanggal
+            </th>
+            <th className="text-left py-3 px-4 text-xs font-semibold text-slate-500 uppercase">
+              Produk
+            </th>
+            <th className="text-left py-3 px-4 text-xs font-semibold text-slate-500 uppercase">
+              Tipe
+            </th>
+            <th className="text-left py-3 px-4 text-xs font-semibold text-slate-500 uppercase">
+              Perubahan
+            </th>
+            <th className="text-center py-3 px-4 text-xs font-semibold text-slate-500 uppercase">
+              Material
+            </th>
+            <th className="text-center py-3 px-4 text-xs font-semibold text-slate-500 uppercase">
+              Impact
+            </th>
+            <th className="text-left py-3 px-4 text-xs font-semibold text-slate-500 uppercase">
+              Alasan
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {changes.map((change) => {
+            const impactPercent = Math.round(
+              (change.materialWeighedCount / change.materialTotalCount) * 100
+            );
+            const isHighImpact = impactPercent > 50;
+
+            return (
+              <tr
+                key={change.id}
+                className="border-b border-slate-100 hover:bg-slate-50"
+              >
+                <td className="py-3 px-4 text-sm text-slate-600">
+                  {new Date(change.createdAt).toLocaleDateString("id-ID", {
+                    day: "2-digit",
+                    month: "short",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </td>
+                <td className="py-3 px-4">
+                  <span className="font-semibold text-slate-900">
                     {change.productionPlan?.product?.name || "N/A"}
-                  </td>
-                  <td>
-                    <span
-                      style={{
-                        padding: "4px 10px",
-                        borderRadius: "4px",
-                        background: "#fff3e6",
-                        color: "#ff6600",
-                        fontSize: "12px",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {change.changeType}
-                    </span>
-                  </td>
-                  <td>
-                    <div style={{ fontSize: "12px" }}>
-                      <code
-                        style={{ background: "#f5f5f5", padding: "2px 6px" }}
-                      >
-                        {change.oldValue}
-                      </code>
-                      {" → "}
-                      <code
-                        style={{ background: "#f5f5f5", padding: "2px 6px" }}
-                      >
-                        {change.newValue}
-                      </code>
-                    </div>
-                  </td>
-                  <td style={{ textAlign: "center", fontWeight: 600 }}>
-                    {change.materialWeighedCount}/{change.materialTotalCount}
-                  </td>
-                  <td>
-                    <span
-                      style={{
-                        padding: "4px 10px",
-                        borderRadius: "4px",
-                        background: isHighImpact ? "#ffe6e6" : "#e6f2ff",
-                        color: isHighImpact ? "#cc0000" : "#0066cc",
-                        fontSize: "12px",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {impactPercent}%{isHighImpact && " ⚠️"}
-                    </span>
-                  </td>
-                  <td style={{ fontSize: "12px", maxWidth: "200px" }}>
-                    {change.reason ? (
-                      <span title={change.reason}>
-                        {change.reason.substring(0, 30)}
-                        {change.reason.length > 30 ? "..." : ""}
-                      </span>
-                    ) : (
-                      <span style={{ color: "#999" }}>-</span>
+                  </span>
+                </td>
+                <td className="py-3 px-4">
+                  <span
+                    className={cn(
+                      "px-2 py-1 rounded-md text-xs font-semibold",
+                      change.changeType === "DATE"
+                        ? "bg-blue-100 text-blue-700"
+                        : change.changeType === "QUANTITY"
+                        ? "bg-amber-100 text-amber-700"
+                        : change.changeType === "REACTOR"
+                        ? "bg-violet-100 text-violet-700"
+                        : change.changeType === "PRODUCT"
+                        ? "bg-red-100 text-red-700"
+                        : "bg-slate-100 text-slate-700"
                     )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      )}
+                  >
+                    {change.changeType}
+                  </span>
+                </td>
+                <td className="py-3 px-4 text-sm">
+                  <code className="bg-slate-100 px-2 py-0.5 rounded text-slate-600">
+                    {change.oldValue}
+                  </code>
+                  <span className="mx-2 text-slate-400">→</span>
+                  <code className="bg-emerald-100 px-2 py-0.5 rounded text-emerald-700">
+                    {change.newValue}
+                  </code>
+                </td>
+                <td className="py-3 px-4 text-center">
+                  <span className="font-semibold text-slate-700">
+                    {change.materialWeighedCount}/{change.materialTotalCount}
+                  </span>
+                </td>
+                <td className="py-3 px-4 text-center">
+                  <span
+                    className={cn(
+                      "px-2 py-1 rounded-md text-xs font-bold",
+                      isHighImpact
+                        ? "bg-red-100 text-red-700"
+                        : "bg-emerald-100 text-emerald-700"
+                    )}
+                  >
+                    {impactPercent}% {isHighImpact && "⚠️"}
+                  </span>
+                </td>
+                <td className="py-3 px-4 text-sm text-slate-500 max-w-[200px] truncate">
+                  {change.reason || "-"}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -515,60 +724,41 @@ function ChangesTab({ changes }) {
 /**
  * Component: Analysis Tab
  */
-function AnalysisTab({ changesSummary, scheduleChanges, affectedPlans }) {
+function AnalysisTab({
+  changesSummary,
+  scheduleChanges,
+  affectedPlans,
+  productTypeDistribution,
+}) {
   const totalChanges = Object.values(changesSummary).reduce((a, b) => a + b, 0);
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
-        gap: "20px",
-      }}
-    >
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Change Type Distribution */}
-      <div
-        style={{ background: "#f9f9f9", padding: "20px", borderRadius: "8px" }}
-      >
-        <h4 style={{ margin: "0 0 15px 0", color: "#333" }}>
-          📊 Distribusi Tipe Perubahan
-        </h4>
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+      <div className="bg-slate-50 rounded-xl p-5">
+        <h3 className="font-semibold text-slate-900 mb-4">
+          Distribusi Tipe Perubahan
+        </h3>
+        <div className="space-y-4">
           {Object.entries(changesSummary).map(([type, count]) => {
             const percentage =
               totalChanges > 0 ? Math.round((count / totalChanges) * 100) : 0;
             return (
               <div key={type}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginBottom: "4px",
-                    fontSize: "13px",
-                  }}
-                >
-                  <span style={{ color: "#666", fontWeight: 600 }}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-slate-600">
                     {getChangeTypeLabel(type)}
                   </span>
-                  <span style={{ color: "#0066cc", fontWeight: 600 }}>
+                  <span className="text-sm font-bold text-slate-900">
                     {count} ({percentage}%)
                   </span>
                 </div>
-                <div
-                  style={{
-                    width: "100%",
-                    height: "20px",
-                    background: "#e6f2ff",
-                    borderRadius: "4px",
-                    overflow: "hidden",
-                  }}
-                >
+                <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
                   <div
+                    className="h-full rounded-full transition-all duration-500"
                     style={{
                       width: `${percentage}%`,
-                      height: "100%",
-                      background: getChangeTypeColor(type),
-                      transition: "width 0.3s",
+                      backgroundColor: getChangeTypeColor(type),
                     }}
                   />
                 </div>
@@ -578,279 +768,129 @@ function AnalysisTab({ changesSummary, scheduleChanges, affectedPlans }) {
         </div>
       </div>
 
-      {/* High Impact Changes */}
-      <div
-        style={{ background: "#f9f9f9", padding: "20px", borderRadius: "8px" }}
-      >
-        <h4 style={{ margin: "0 0 15px 0", color: "#333" }}>
-          ⚠️ Perubahan Berdampak Tinggi ({affectedPlans})
-        </h4>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-            maxHeight: "300px",
-            overflowY: "auto",
-          }}
-        >
-          {scheduleChanges
-            .filter(
-              (c) => (c.materialWeighedCount / c.materialTotalCount) * 100 > 50
-            )
-            .slice(0, 10)
-            .map((change) => (
+      {/* Product Type Distribution */}
+      <div className="bg-slate-50 rounded-xl p-5">
+        <h3 className="font-semibold text-slate-900 mb-4">
+          Distribusi Tipe Produk
+        </h3>
+        <div className="space-y-3">
+          {productTypeDistribution?.map((item) => (
+            <div key={item.type} className="flex items-center gap-3">
               <div
-                key={change.id}
-                style={{
-                  padding: "10px",
-                  background: "#ffe6e6",
-                  borderLeft: "3px solid #cc0000",
-                  borderRadius: "4px",
-                }}
+                className={cn(
+                  "w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-r",
+                  item.color
+                )}
               >
-                <div
-                  style={{ fontSize: "12px", fontWeight: 600, color: "#333" }}
-                >
-                  {change.productionPlan?.product?.name}
-                </div>
-                <div
-                  style={{ fontSize: "11px", color: "#666", marginTop: "4px" }}
-                >
-                  {change.changeType}: {change.oldValue} → {change.newValue}
-                </div>
-                <div
-                  style={{
-                    fontSize: "11px",
-                    color: "#cc0000",
-                    marginTop: "4px",
-                  }}
-                >
-                  ⚠️{" "}
-                  {Math.round(
-                    (change.materialWeighedCount / change.materialTotalCount) *
-                      100
-                  )}
-                  % material sudah ditimbang
+                <Package className="w-5 h-5 text-white" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-slate-700">
+                    {item.type}
+                  </span>
+                  <span className="text-sm font-bold text-slate-900">
+                    {item.count}
+                  </span>
                 </div>
               </div>
-            ))}
-          {scheduleChanges.filter(
-            (c) => (c.materialWeighedCount / c.materialTotalCount) * 100 > 50
-          ).length === 0 && (
-            <p style={{ color: "#999", margin: 0, fontSize: "13px" }}>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* High Impact Changes */}
+      <div className="bg-slate-50 rounded-xl p-5 lg:col-span-2">
+        <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+          <AlertTriangle className="w-5 h-5 text-red-500" />
+          Perubahan Berdampak Tinggi
+        </h3>
+        {scheduleChanges.filter(
+          (c) => (c.materialWeighedCount / c.materialTotalCount) * 100 > 50
+        ).length === 0 ? (
+          <div className="text-center py-6">
+            <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto mb-2" />
+            <p className="text-sm text-slate-500">
               Tidak ada perubahan berdampak tinggi
             </p>
-          )}
-        </div>
-      </div>
-
-      {/* Key Insights */}
-      <div
-        style={{
-          background: "#f9f9f9",
-          padding: "20px",
-          borderRadius: "8px",
-          gridColumn: "1 / -1",
-        }}
-      >
-        <h4 style={{ margin: "0 0 15px 0", color: "#333" }}>💡 Insights</h4>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-            gap: "15px",
-          }}
-        >
-          <InsightCard
-            title="Tipe Perubahan Terbanyak"
-            value={
-              Object.entries(changesSummary).length > 0
-                ? Object.entries(changesSummary).reduce((a, b) =>
-                    b[1] > a[1] ? b : a
-                  )[0]
-                : "N/A"
-            }
-            icon="📌"
-          />
-          <InsightCard
-            title="Total Jadwal Terpengaruh"
-            value={affectedPlans}
-            icon="⚠️"
-          />
-          <InsightCard
-            title="Rata-rata Impact Per Perubahan"
-            value={
-              scheduleChanges.length > 0
-                ? Math.round(
-                    (scheduleChanges.reduce(
-                      (sum, c) =>
-                        sum +
-                        (c.materialWeighedCount / c.materialTotalCount) * 100,
-                      0
-                    ) /
-                      scheduleChanges.length) *
-                      100
-                  ) / 100
-                : 0
-            }
-            unit="%"
-            icon="📊"
-          />
-        </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {scheduleChanges
+              .filter(
+                (c) =>
+                  (c.materialWeighedCount / c.materialTotalCount) * 100 > 50
+              )
+              .slice(0, 4)
+              .map((change) => (
+                <div
+                  key={change.id}
+                  className="p-4 bg-red-50 border border-red-100 rounded-xl"
+                >
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="font-semibold text-red-900">
+                        {change.productionPlan?.product?.name}
+                      </p>
+                      <p className="text-sm text-red-700 mt-1">
+                        {change.changeType}: {change.oldValue} →{" "}
+                        {change.newValue}
+                      </p>
+                    </div>
+                    <span className="px-2 py-1 rounded-md bg-red-200 text-red-800 text-xs font-bold">
+                      {Math.round(
+                        (change.materialWeighedCount /
+                          change.materialTotalCount) *
+                          100
+                      )}
+                      %
+                    </span>
+                  </div>
+                </div>
+              ))}
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 /**
- * Component: KPI Card
+ * Component: Weekly Bar Chart
  */
-function KPICard({ title, value, icon, color }) {
-  return (
-    <div
-      style={{
-        background: "white",
-        padding: "20px",
-        borderRadius: "8px",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        borderTop: `4px solid ${color}`,
-        textAlign: "center",
-      }}
-    >
-      <div style={{ fontSize: "24px", marginBottom: "10px" }}>{icon}</div>
-      <div style={{ fontSize: "28px", fontWeight: 700, color: color }}>
-        {value}
-      </div>
-      <div style={{ fontSize: "12px", color: "#999", marginTop: "8px" }}>
-        {title}
-      </div>
-    </div>
-  );
-}
-
-/**
- * Component: Status Bar
- */
-function StatusBar({ label, value, total, color }) {
-  const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
-
-  return (
-    <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "4px",
-          fontSize: "13px",
-        }}
-      >
-        <span style={{ color: "#666" }}>{label}</span>
-        <span style={{ fontWeight: 600, color: color }}>
-          {value} ({percentage}%)
-        </span>
-      </div>
-      <div
-        style={{
-          width: "100%",
-          height: "8px",
-          background: "#eee",
-          borderRadius: "4px",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            width: `${percentage}%`,
-            height: "100%",
-            background: color,
-            transition: "width 0.3s",
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
-/**
- * Component: Simple Bar Chart
- */
-function SimpleBarChart({ data }) {
+function WeeklyBarChart({ data }) {
   if (!data || data.length === 0) {
-    return <div style={{ color: "#999" }}>Data tidak tersedia</div>;
+    return (
+      <div className="text-slate-400 text-center py-8">Data tidak tersedia</div>
+    );
   }
 
-  const maxValue = Math.max(...data.map((d) => d.value), 100);
+  const maxValue = Math.max(...data.map((d) => d.value), 1);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: "8px",
-        alignItems: "flex-end",
-        height: "100%",
-      }}
-    >
+    <div className="flex items-end justify-between h-full gap-2 px-2">
       {data.map((item, idx) => (
-        <div
-          key={idx}
-          style={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "8px",
-          }}
-        >
-          <div
-            style={{
-              width: "100%",
-              height: `${(item.value / maxValue) * 180}px`,
-              background: "#0066cc",
-              borderRadius: "4px 4px 0 0",
-            }}
-            title={`${item.label}: ${item.value}`}
-          />
-          <div style={{ fontSize: "11px", color: "#666", textAlign: "center" }}>
-            {item.label}
+        <div key={idx} className="flex-1 flex flex-col items-center gap-2">
+          <div className="w-full flex flex-col items-center justify-end h-32">
+            <div
+              className="w-full bg-gradient-to-t from-violet-500 to-purple-400 rounded-t-lg transition-all duration-500 relative group"
+              style={{
+                height: `${(item.value / maxValue) * 100}%`,
+                minHeight: item.value > 0 ? "20px" : "0",
+              }}
+            >
+              {item.value > 0 && (
+                <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-violet-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {item.value}
+                </span>
+              )}
+            </div>
           </div>
+          <span className="text-xs font-medium text-slate-500">
+            {item.label}
+          </span>
         </div>
       ))}
-    </div>
-  );
-}
-
-/**
- * Component: Insight Card
- */
-function InsightCard({ title, value, unit, icon }) {
-  return (
-    <div
-      style={{
-        padding: "15px",
-        background: "white",
-        borderRadius: "6px",
-        border: "1px solid #eee",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "start",
-        }}
-      >
-        <div>
-          <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
-            {title}
-          </div>
-          <div style={{ fontSize: "24px", fontWeight: 700, color: "#0066cc" }}>
-            {value}
-            {unit && <span style={{ fontSize: "16px" }}>{unit}</span>}
-          </div>
-        </div>
-        <div style={{ fontSize: "24px" }}>{icon}</div>
-      </div>
     </div>
   );
 }
@@ -874,11 +914,11 @@ function getChangeTypeLabel(type) {
  */
 function getChangeTypeColor(type) {
   const colors = {
-    DATE: "#0066cc",
-    QUANTITY: "#ff6600",
-    REACTOR: "#ff9900",
-    PRODUCT: "#cc0000",
-    NOTES: "#00aa00",
+    DATE: "#3b82f6",
+    QUANTITY: "#f59e0b",
+    REACTOR: "#8b5cf6",
+    PRODUCT: "#ef4444",
+    NOTES: "#22c55e",
   };
-  return colors[type] || "#999";
+  return colors[type] || "#64748b";
 }

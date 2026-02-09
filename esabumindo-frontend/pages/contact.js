@@ -233,7 +233,7 @@ export default function ContactUsPage() {
             <div className="absolute inset-0 bg-black/40 z-10"></div>
             {!isImageLoaded && <SkeletonLoader className="absolute inset-0" />}
             <Image
-              src="/asset/contact-hero.jpg"
+              src="/asset/image/plant2.1.jpeg"
               alt={t("contact.heroSection.title")}
               fill
               className="object-cover"

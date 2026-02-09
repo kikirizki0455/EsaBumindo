@@ -1,7 +1,8 @@
 import { Quote, Users } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { useTranslation } from "../../hooks/use-translation";
-
+w
 // Profile Avatar Component
 function Founder({ name, imageSrc }) {
   return (
@@ -283,13 +284,17 @@ export default function CoFounderSection() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-[#ff4136] hover:bg-[#ff4136]/90 text-white font-semibold px-8 py-3 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl uppercase tracking-wide text-sm">
-                  {t("founder.cta.contact")}
-                </button>
+                <Link href="/contact">
+                  <button className="bg-[#ff4136] hover:bg-[#ff4136]/90 text-white font-semibold px-8 py-3 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl uppercase tracking-wide text-sm">
+                    {t("founder.cta.contact")}
+                  </button>
+                </Link>
 
-                <button className="bg-white hover:bg-gray-100 text-[#060771] font-semibold px-8 py-3 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl uppercase tracking-wide text-sm">
-                  {t("founder.cta.learnMore")}
-                </button>
+                <Link href="/about">
+                  <button className="bg-white hover:bg-gray-100 text-[#060771] font-semibold px-8 py-3 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl uppercase tracking-wide text-sm">
+                    {t("founder.cta.learnMore")}
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
