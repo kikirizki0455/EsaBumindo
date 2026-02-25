@@ -5,15 +5,11 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useTranslation } from "@/hooks/use-translation";
+import { useLocalizedProducts } from "@/hooks/use-localized-products";
 import { useProductFilters } from "@/hooks/use-product-filters";
 import ProductHero from "@/components/product/product-hero";
 import ProductFilters from "@/components/product/product-filters";
 import ProductPagination from "@/components/product/product-pagination";
-import {
-  BEST_SELLER_PRODUCTS,
-  NEW_PRODUCTS,
-  APPLICATIONS,
-} from "@/data/products";
 import MainLayout from "./layouts/main-layout";
 import { generatePageMeta, generateBreadcrumbSchema } from "@/lib/seo-utils";
 
@@ -25,9 +21,6 @@ const ApplicationsSection = dynamic(
     ssr: false,
   }
 );
-
-// Combine all products into one list
-const ALL_PRODUCTS = [...BEST_SELLER_PRODUCTS, ...NEW_PRODUCTS];
 
 // ✅ SEO Meta Data
 const seoMeta = generatePageMeta({
@@ -46,39 +39,135 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   { name: "Products", url: "https://esabumindo.com/product" },
 ]);
 
+// ============================================================================
+// SKELETON COMPONENTS - Digunakan saat loading tanpa translation keys
+// ============================================================================
+
+const ProductTableSkeleton = () => (
+  <div className="hidden lg:block overflow-x-auto">
+    <table className="w-full">
+      <thead>
+        <tr className="border-b border-gray-200">
+          <th className="text-left py-4 px-4 w-1/4">
+            <div className="h-5 bg-gray-200 rounded w-24 animate-pulse" />
+          </th>
+          <th className="text-left py-4 px-4 w-1/4">
+            <div className="h-5 bg-gray-200 rounded w-20 animate-pulse" />
+          </th>
+          <th className="text-left py-4 px-4 w-1/3">
+            <div className="h-5 bg-gray-200 rounded w-16 animate-pulse" />
+          </th>
+          <th className="text-center py-4 px-4 w-1/6">
+            <div className="h-5 bg-gray-200 rounded w-14 mx-auto animate-pulse" />
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {[...Array(5)].map((_, i) => (
+          <tr key={i} className="border-b border-gray-100">
+            <td className="py-6 px-4">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-gray-200 rounded animate-pulse" />
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-200 rounded w-32 animate-pulse" />
+                  <div className="h-3 bg-gray-100 rounded w-20 animate-pulse" />
+                </div>
+              </div>
+            </td>
+            <td className="py-6 px-4">
+              <div className="h-4 bg-gray-200 rounded w-28 animate-pulse" />
+            </td>
+            <td className="py-6 px-4">
+              <div className="space-y-2">
+                <div className="h-3 bg-gray-100 rounded w-full animate-pulse" />
+                <div className="h-3 bg-gray-100 rounded w-3/4 animate-pulse" />
+              </div>
+            </td>
+            <td className="py-6 px-4">
+              <div className="flex gap-2 justify-center">
+                <div className="h-8 bg-gray-200 rounded w-20 animate-pulse" />
+                <div className="h-8 bg-gray-200 rounded w-20 animate-pulse" />
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
+const ProductCardSkeleton = () => (
+  <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+    {[...Array(4)].map((_, i) => (
+      <div
+        key={i}
+        className="bg-white border border-gray-200 rounded-lg overflow-hidden"
+      >
+        <div className="aspect-[4/3] bg-gray-200 animate-pulse" />
+        <div className="p-6 space-y-3">
+          <div className="h-5 bg-gray-200 rounded w-3/4 animate-pulse" />
+          <div className="h-4 bg-gray-100 rounded w-1/2 animate-pulse" />
+          <div className="space-y-2">
+            <div className="h-3 bg-gray-100 rounded w-full animate-pulse" />
+            <div className="h-3 bg-gray-100 rounded w-5/6 animate-pulse" />
+          </div>
+          <div className="flex gap-3 pt-2">
+            <div className="flex-1 h-10 bg-gray-200 rounded animate-pulse" />
+            <div className="flex-1 h-10 bg-gray-200 rounded animate-pulse" />
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
+const FilterSkeleton = () => (
+  <div className="mb-8">
+    <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+      <div className="h-10 bg-gray-200 rounded-lg flex-1 max-w-md animate-pulse" />
+      <div className="h-10 bg-gray-200 rounded-lg w-48 animate-pulse" />
+    </div>
+  </div>
+);
+
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
 export default function ProductPage() {
   const router = useRouter();
   const { t, isHydrated } = useTranslation();
   const [isPageHydrated, setIsPageHydrated] = useState(false);
 
-  // Use the custom hook for filtering
+  // Use localized products hook for multi-language support
+  const {
+    products: localizedProducts,
+    applications: localizedApplications,
+    isLoading: isProductsLoading,
+  } = useLocalizedProducts();
+
+  // Use the custom hook for filtering with localized products
   const {
     searchQuery,
     selectedType,
-    selectedApplication,
     currentPage,
     itemsPerPage,
     availableTypes,
-    availableApplications,
     paginatedProducts,
     totalPages,
     totalItems,
     hasActiveFilters,
     handleSearchChange,
     handleTypeChange,
-    handleApplicationChange,
     handlePageChange,
     handleItemsPerPageChange,
     handleClearFilters,
-  } = useProductFilters(ALL_PRODUCTS);
+  } = useProductFilters(localizedProducts);
 
   // Fix hydration mismatch - only render after component mounts on client
   useEffect(() => {
     setIsPageHydrated(true);
   }, []);
-
-  // Memoize data untuk menghindari re-render yang tidak perlu
-  const applicationsData = useMemo(() => APPLICATIONS, []);
 
   // Handler untuk detail produk - navigate ke halaman detail
   const handleDetail = useCallback(
@@ -107,32 +196,8 @@ export default function ProductPage() {
     }
   }, [router]);
 
-  // Don't render anything until hydration is complete
-  if (!isPageHydrated || !isHydrated) {
-    return (
-      <>
-        <Head>
-          <title>{t("products.loading")}</title>
-        </Head>
-        <MainLayout>
-          <div className="min-h-screen bg-white">
-            <ProductHero />
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-              <div className="animate-pulse space-y-8">
-                <div className="h-12 bg-gray-200 rounded w-1/3" />
-                <div className="h-8 bg-gray-200 rounded w-full" />
-                <div className="space-y-4">
-                  {[...Array(6)].map((_, i) => (
-                    <div key={i} className="h-20 bg-gray-100 rounded" />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </MainLayout>
-      </>
-    );
-  }
+  // Cek apakah sudah siap untuk render konten dengan translation
+  const isReady = isPageHydrated && isHydrated && !isProductsLoading;
 
   return (
     <>
@@ -173,7 +238,7 @@ export default function ProductPage() {
       </Head>
 
       <MainLayout>
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white overflow-x-hidden">
           {/* Hero Section */}
           <ProductHero />
 
@@ -183,28 +248,38 @@ export default function ProductPage() {
               <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
                 <div className="mb-8">
-                  <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                    {t("products.productGrid.title")}
-                  </h1>
+                  {isReady ? (
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                      {t("products.productGrid.title")}
+                    </h1>
+                  ) : (
+                    <div className="h-10 bg-gray-200 rounded w-48 mb-2 animate-pulse" />
+                  )}
                   <div className="w-16 h-1 bg-gradient-to-r from-[#0c439a] to-[#ca161e]" />
                 </div>
 
-                {/* Filter Section */}
-                <ProductFilters
-                  searchQuery={searchQuery}
-                  onSearchChange={handleSearchChange}
-                  selectedType={selectedType}
-                  onTypeChange={handleTypeChange}
-                  selectedApplication={selectedApplication}
-                  onApplicationChange={handleApplicationChange}
-                  availableTypes={availableTypes}
-                  availableApplications={availableApplications}
-                  hasActiveFilters={hasActiveFilters}
-                  onClearFilters={handleClearFilters}
-                />
+                {/* Filter Section - Simplified */}
+                {isReady ? (
+                  <ProductFilters
+                    searchQuery={searchQuery}
+                    onSearchChange={handleSearchChange}
+                    selectedType={selectedType}
+                    onTypeChange={handleTypeChange}
+                    availableTypes={availableTypes}
+                    hasActiveFilters={hasActiveFilters}
+                    onClearFilters={handleClearFilters}
+                  />
+                ) : (
+                  <FilterSkeleton />
+                )}
 
                 {/* Products Display */}
-                {paginatedProducts && paginatedProducts.length > 0 ? (
+                {!isReady ? (
+                  <>
+                    <ProductTableSkeleton />
+                    <ProductCardSkeleton />
+                  </>
+                ) : paginatedProducts && paginatedProducts.length > 0 ? (
                   <>
                     {/* Desktop Table View - Hidden on mobile */}
                     <div className="hidden lg:block overflow-x-auto">
@@ -277,7 +352,7 @@ export default function ProductPage() {
                                   {product.features?.length > 3 && (
                                     <li className="text-gray-500 text-sm italic">
                                       +{product.features.length - 3}{" "}
-                                      {t("products.productGrid.noResults")}
+                                      {t("products.productGrid.moreFeatures")}
                                     </li>
                                   )}
                                 </ul>
@@ -321,7 +396,7 @@ export default function ProductPage() {
                               loading="lazy"
                             />
                           </div>
-                          <div className="p-6">
+                          <div className="p-6 ">
                             <h3 className="mb-2 font-semibold text-gray-900">
                               {product.title}
                             </h3>
@@ -379,24 +454,34 @@ export default function ProductPage() {
             </section>
 
             {/* Applications Section */}
-            <ApplicationsSection applications={applicationsData} />
+            <ApplicationsSection applications={localizedApplications} />
 
             {/* CTA Section */}
             <section className="py-16 md:py-20 bg-gradient-to-r from-[#0c439a] to-[#ca161e]">
               <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center max-w-3xl mx-auto">
-                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                    {t("products.cta.title")}
-                  </h2>
-                  <p className="text-lg text-white/90 mb-8">
-                    {t("products.cta.description")}
-                  </p>
-                  <button
-                    onClick={handleContact}
-                    className="inline-block px-8 py-4 bg-white text-[#0c439a] font-bold rounded-lg hover:bg-gray-100 transition-colors duration-300"
-                  >
-                    {t("products.cta.button")}
-                  </button>
+                  {isReady ? (
+                    <>
+                      <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                        {t("products.cta.title")}
+                      </h2>
+                      <p className="text-lg text-white/90 mb-8">
+                        {t("products.cta.description")}
+                      </p>
+                      <button
+                        onClick={handleContact}
+                        className="inline-block px-8 py-4 bg-white text-[#0c439a] font-bold rounded-lg hover:bg-gray-100 transition-colors duration-300"
+                      >
+                        {t("products.cta.button")}
+                      </button>
+                    </>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="h-10 bg-white/20 rounded w-64 mx-auto animate-pulse" />
+                      <div className="h-6 bg-white/10 rounded w-full max-w-sm mx-auto animate-pulse" />
+                      <div className="h-12 bg-white/30 rounded w-40 mx-auto animate-pulse" />
+                    </div>
+                  )}
                 </div>
               </div>
             </section>

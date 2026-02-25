@@ -1,15 +1,63 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Head from "next/head";
-import HeroSection from "@/components/hero-section";
-import CompanyProfil from "@/components/about/company-profil";
-import Founder from "@/components/about/founder";
-import History from "@/components/about/history";
+import dynamic from "next/dynamic";
 import MainLayout from "./layouts/main-layout";
 import {
   generatePageMeta,
   generateOrganizationStructuredData,
   generateBreadcrumbSchema,
 } from "@/lib/seo-utils";
+
+// Dynamic imports dengan lazy loading - below the fold components
+const HeroSection = dynamic(() => import("@/components/hero-section"), {
+  ssr: true,
+  loading: () => (
+    <section className="py-16 md:py-24 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex flex-col lg:flex-row items-center gap-12">
+          <div className="lg:w-1/2 space-y-4">
+            <div className="h-12 bg-gray-200 rounded animate-pulse" />
+            <div className="h-8 bg-gray-200 rounded w-3/4 animate-pulse" />
+            <div className="h-24 bg-gray-100 rounded animate-pulse" />
+          </div>
+          <div className="lg:w-1/2 h-[400px] bg-gray-200 rounded-2xl animate-pulse" />
+        </div>
+      </div>
+    </section>
+  ),
+});
+
+const History = dynamic(() => import("@/components/about/history"), {
+  ssr: false,
+  loading: () => (
+    <section className="py-12 lg:py-20 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="text-center mb-12">
+          <div className="h-10 bg-gray-200 rounded w-48 mx-auto animate-pulse" />
+        </div>
+        <div className="space-y-8">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="h-32 bg-gray-200 rounded animate-pulse" />
+          ))}
+        </div>
+      </div>
+    </section>
+  ),
+});
+
+const CompanyProfil = dynamic(
+  () => import("@/components/about/company-profil"),
+  {
+    ssr: false,
+    loading: () => (
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="h-64 bg-gray-100 rounded animate-pulse" />
+        </div>
+      </section>
+    ),
+  }
+);
 
 // ✅ SEO Meta Data untuk About Page
 const seoMeta = generatePageMeta({
@@ -32,17 +80,6 @@ const breadcrumbSchema = generateBreadcrumbSchema([
 const organizationSchema = generateOrganizationStructuredData();
 
 export default function About() {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // ✅ Simulate minimal loading time
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 100); // Reduced from 2000ms to 100ms untuk performa <5ms
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <>
       <Head>
@@ -89,14 +126,9 @@ export default function About() {
       </Head>
 
       <MainLayout>
-        {!loading && (
-          <>
-            <HeroSection />
-            <History />
-            <CompanyProfil />
-            <Founder />
-          </>
-        )}
+        <HeroSection />
+        <History />
+        <CompanyProfil />
       </MainLayout>
     </>
   );

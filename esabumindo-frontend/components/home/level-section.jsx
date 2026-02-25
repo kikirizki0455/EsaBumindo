@@ -1,48 +1,62 @@
 import Image from "next/image";
 import Link from "next/link";
-import imgImagePt3 from "@/public/asset/image/factory.webp";
 import { ArrowRight, TrendingUp, Zap } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
+import { memo } from "react";
 
-export function LevelSection() {
-  const { t } = useTranslation();
+// Use string path instead of static import for better code splitting
+const imgImagePt3 = "/asset/image/factory.webp";
+
+export const LevelSection = memo(function LevelSection() {
+  const { t, isHydrated } = useTranslation();
+
+  // Skeleton saat belum hydrated
+  if (!isHydrated) {
+    return (
+      <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div className="h-[400px] bg-gray-200 rounded-2xl animate-pulse" />
+            <div className="space-y-4">
+              <div className="h-8 bg-gray-200 rounded w-32 animate-pulse" />
+              <div className="h-16 bg-gray-200 rounded animate-pulse" />
+              <div className="h-32 bg-gray-100 rounded animate-pulse" />
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
-      {/* Decorative Background Elements */}
-      <div className="absolute top-20 left-0 w-72 h-72 bg-[#ff4136]/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 right-0 w-72 h-72 bg-[#060771]/5 rounded-full blur-3xl"></div>
+      {/* Decorative Background - Hidden on mobile for performance */}
+      <div className="hidden md:block absolute top-20 left-0 w-72 h-72 bg-[#ff4136]/5 rounded-full blur-3xl" />
+      <div className="hidden md:block absolute bottom-20 right-0 w-72 h-72 bg-[#060771]/5 rounded-full blur-3xl" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 xl:gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
           {/* Left Image */}
           <div className="order-2 lg:order-1">
-            <div className="relative group">
-              {/* Decorative Elements */}
-              <div className="absolute -top-6 -left-6 w-24 h-24 md:w-32 md:h-32 bg-[#ff4136]/20 rounded-tl-[60px] -z-10"></div>
-              <div className="absolute -bottom-6 -right-6 w-24 h-24 md:w-32 md:h-32 bg-[#060771]/20 rounded-br-[60px] -z-10"></div>
-
-              {/* Main Image Container */}
-              <div className="relative rounded-tl-[60px] sm:rounded-tl-[100px] md:rounded-tl-[155px] overflow-hidden shadow-2xl ring-4 ring-white">
+            <div className="relative">
+              <div className="relative rounded-tl-[60px] sm:rounded-tl-[100px] md:rounded-tl-[155px] overflow-hidden shadow-2xl">
                 <Image
                   src={imgImagePt3}
                   alt="Industrial Tanks - ESABOND Chemical Solutions"
-                  className="w-full h-[320px] sm:h-[380px] md:h-[420px] lg:h-[480px] xl:h-[520px] object-cover"
+                  width={520}
+                  height={480}
+                  className="w-full h-[320px] sm:h-[380px] md:h-[420px] lg:h-[480px] object-cover"
                   loading="lazy"
                   quality={75}
                 />
-
-                {/* Overlay Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#ff4136]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
                 {/* Stats Badge */}
-                <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl p-3 shadow-lg">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-[#ff4136]/10 rounded-lg flex items-center justify-center">
-                      <TrendingUp className="w-6 h-6 text-[#ff4136]" />
+                    <div className="w-10 h-10 bg-[#ff4136]/10 rounded-lg flex items-center justify-center">
+                      <TrendingUp className="w-5 h-5 text-[#ff4136]" />
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-[#060771]">
+                      <div className="text-xl font-bold text-[#060771]">
                         98%
                       </div>
                       <div className="text-xs text-gray-600">
@@ -66,8 +80,8 @@ export function LevelSection() {
                 </span>
               </div>
 
-              {/* Main Heading - Mobile First Typography */}
-              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] xl:text-[72px] leading-tight font-bold mb-6 md:mb-8">
+              {/* Main Heading */}
+              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] leading-tight font-bold mb-6 md:mb-8">
                 <span className="text-[#ff4136]">
                   {t("home.levelSection.title.line1")}
                 </span>
@@ -82,9 +96,7 @@ export function LevelSection() {
               </h2>
 
               {/* Decorative Divider */}
-              <div className="relative mb-6 md:mb-8">
-                <div className="h-1 w-full bg-gradient-to-r from-[#ff4136] via-[#ff4136]/50 to-transparent rounded-full"></div>
-              </div>
+              <div className="h-1 w-full bg-gradient-to-r from-[#ff4136] via-[#ff4136]/50 to-transparent rounded-full mb-6 md:mb-8" />
 
               {/* Description Card */}
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg mb-6 md:mb-8">
@@ -100,74 +112,36 @@ export function LevelSection() {
                 </p>
               </div>
 
-              {/* Features List */}
+              {/* Features List - Simplified */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 md:mb-8">
-                <div className="flex items-start gap-3 bg-white/60 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
-                  <div className="w-8 h-8 bg-[#ff4136]/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg
-                      className="w-5 h-5 text-[#ff4136]"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-800 text-sm md:text-base">
-                      {t("home.levelSection.features.performance.title")}
-                    </div>
-                    <div className="text-xs md:text-sm text-gray-600 mt-1">
-                      {t("home.levelSection.features.performance.subtitle")}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 bg-white/60 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
-                  <div className="w-8 h-8 bg-[#060771]/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg
-                      className="w-5 h-5 text-[#060771]"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-800 text-sm md:text-base">
-                      {t("home.levelSection.features.efficiency.title")}
-                    </div>
-                    <div className="text-xs md:text-sm text-gray-600 mt-1">
-                      {t("home.levelSection.features.efficiency.subtitle")}
-                    </div>
-                  </div>
-                </div>
+                <FeatureItem
+                  color="ff4136"
+                  title={t("home.levelSection.features.performance.title")}
+                  subtitle={t(
+                    "home.levelSection.features.performance.subtitle"
+                  )}
+                />
+                <FeatureItem
+                  color="060771"
+                  title={t("home.levelSection.features.efficiency.title")}
+                  subtitle={t("home.levelSection.features.efficiency.subtitle")}
+                />
               </div>
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
-                <Link href="/products">
-                  <button className="group bg-[#ff4136] hover:bg-[#ff4136]/90 text-white font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 uppercase tracking-wide text-sm md:text-base flex items-center justify-center gap-2">
-                    {t("home.levelSection.cta.primary")}
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                  </button>
+                <Link
+                  href="/product"
+                  className="group bg-[#ff4136] hover:bg-[#ff4136]/90 text-white font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 shadow-lg uppercase tracking-wide text-sm md:text-base flex items-center justify-center gap-2"
+                >
+                  {t("home.levelSection.cta.primary")}
+                  <ArrowRight className="w-5 h-5" />
                 </Link>
-
-                <Link href="/contact">
-                  <button className="bg-white hover:bg-gray-50 border-2 border-[#ff4136] text-[#ff4136] font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 uppercase tracking-wide text-sm md:text-base">
-                    {t("home.levelSection.cta.secondary")}
-                  </button>
+                <Link
+                  href="/contact"
+                  className="bg-white hover:bg-gray-50 border-2 border-[#ff4136] text-[#ff4136] font-semibold px-8 py-3.5 md:px-10 md:py-4 rounded-tl-[15px] rounded-br-[15px] transition-all duration-300 uppercase tracking-wide text-sm md:text-base text-center"
+                >
+                  {t("home.levelSection.cta.secondary")}
                 </Link>
               </div>
             </div>
@@ -176,4 +150,35 @@ export function LevelSection() {
       </div>
     </section>
   );
-}
+});
+
+// Memoized FeatureItem component
+const FeatureItem = memo(function FeatureItem({ color, title, subtitle }) {
+  return (
+    <div className="flex items-start gap-3 bg-white/60 rounded-xl p-4 shadow-sm">
+      <div
+        className={`w-8 h-8 bg-[#${color}]/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5`}
+      >
+        <svg
+          className={`w-5 h-5 text-[#${color}]`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M5 13l4 4L19 7"
+          />
+        </svg>
+      </div>
+      <div>
+        <div className="font-semibold text-gray-800 text-sm md:text-base">
+          {title}
+        </div>
+        <div className="text-xs md:text-sm text-gray-600 mt-1">{subtitle}</div>
+      </div>
+    </div>
+  );
+});

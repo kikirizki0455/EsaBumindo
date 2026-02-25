@@ -9,6 +9,11 @@
       "primary": "Hubungi Kami Sekarang",
       "secondary": "Lihat Produk"
     },
+    "badge": {
+      "years": "17+",
+      "label": "Tahun",
+      "sublabel": "Pengalaman"
+    },
     "carousel": [
       {
         "title": "Solusi Cepat",
@@ -36,44 +41,44 @@
     },
     "timeline": [
       {
-        "id": "2025-expansion",
-        "name": "Ekspansi Regional",
-        "year": "2025",
-        "description": "Target ekspansi ke Asia Tenggara dan implementasi teknologi produksi ramah lingkungan yang berkelanjutan.",
+        "id": "2026-certification",
+        "name": "Sertifikasi ISO 9001:2015",
+        "year": "2026",
+        "description": "Sebagai wujud komitmen dalam meningkatkan kualitas produk dan manajemen, PT. Esa Bumindo berhasil memperoleh sertifikasi ISO 9001:2015. Pencapaian ini menegaskan kesiapan perusahaan untuk bersaing di tingkat nasional maupun internasional melalui standar manajemen mutu yang unggul.",
         "badgeColor": "bg-gradient-to-r from-indigo-600 to-purple-600",
-        "image": "/api/placeholder/400/300"
+        "image": "/images/timeline/esabumindo-certified.webp"
       },
       {
-        "id": "2024-launch",
-        "name": "Eman Suratman",
-        "year": "2024",
-        "description": "Meluncurkan produk utama X-Plus dan mencapai 100% target pasar di wilayah Jakarta dengan pertumbuhan signifikan.",
+        "id": "2021-second-factory",
+        "name": "Ekspansi Pabrik Kedua",
+        "year": "2021",
+        "description": "Mendirikan pabrik kedua di Kawasan Industri Jalan Mekar Jaya, Kabupaten Tangerang, guna memperluas jangkauan produksi dan memenuhi permintaan pasar yang terus meningkat.",
         "badgeColor": "bg-gradient-to-r from-blue-800 to-blue-900",
-        "image": "/api/placeholder/400/300"
+        "image": "/images/timeline/esabumindo-pabrik-kedua.webp"
       },
       {
-        "id": "2023-certification",
-        "name": "Sarjana",
-        "year": "2023",
-        "description": "Memperoleh sertifikasi ISO 9001:2015 dan memperluas jaringan distribusi ke seluruh Jawa Barat.",
-        "badgeColor": "bg-gradient-to-r from-red-500 to-red-600",
-        "image": "/api/placeholder/400/300"
-      },
-      {
-        "id": "2017-innovation",
-        "name": "ESABOND Innovation",
+        "id": "2017-first-factory",
+        "name": "Pembangunan Pabrik Pertama",
         "year": "2017",
-        "description": "Berpartisipasi dalam pameran internasional pertama dan meraih penghargaan inovasi produk terbaik.",
+        "description": "Berhasil mendirikan pabrik pertama yang berlokasi di Kampung Gruduk, Kabupaten Tangerang, Banten, sebagai langkah strategis dalam meningkatkan kapasitas produksi.",
+        "badgeColor": "bg-gradient-to-r from-red-500 to-red-600",
+        "image": "/images/timeline/esabumindo-pabrik-pertama.webp"
+      },
+      {
+        "id": "2009-first-production",
+        "name": "Awal Produksi Mandiri",
+        "year": "2009",
+        "description": "Memulai kegiatan produksi secara mandiri dengan menyewa fasilitas pabrik di wilayah Tangerang sebagai lokasi operasional pertama.",
         "badgeColor": "bg-gradient-to-r from-purple-600 to-pink-600",
-        "image": "/api/placeholder/400/300"
+        "image": "/images/timeline/esabumindo-produksi-pertama.jpg"
       },
       {
         "id": "2008-foundation",
-        "name": "ESABOND Foundation",
+        "name": "Pendirian Perusahaan",
         "year": "2008",
-        "description": "Pendirian perusahaan dan awal produksi batch pertama dengan fokus pada pasar lokal B2B yang solid.",
+        "description": "PT. Esa Bumindo resmi didirikan sebagai perusahaan yang bergerak di bidang produksi dan pengembangan industri.",
         "badgeColor": "bg-gradient-to-r from-green-600 to-emerald-600",
-        "image": "/api/placeholder/400/300"
+        "image": "/images/timeline/berdirinya-esabumindo.jpg"
       }
     ]
   },
@@ -126,34 +131,6 @@
       "content": "Dengan menggabungkan keahlian teknis, pemahaman industri, serta inovasi berkelanjutan,",
       "highlight": "membawa perubahan baru bagi dunia adhesive di Indonesia —",
       "highlight2": "lebih cepat, lebih stabil, dan lebih siap menghadapi kebutuhan industri modern"
-    }
-  },
-  "founder": {
-    "badge": "Para Pendiri",
-    "title": {
-      "prefix": "Orang Di Balik",
-      "highlight": "ESABOND"
-    },
-    "description": "Dua pengusaha berpengalaman yang memiliki visi untuk mengubah industri adhesive Indonesia menjadi lebih cepat, lebih stabil, dan lebih berkualitas",
-    "list": [
-      {
-        "name": "Eman Suratman",
-        "role": "Co-Founder",
-        "quote": "ESABOND lahir dari pengalaman panjang kami di industri adhesive. Kami melihat bagaimana banyak bisnis terhambat oleh suplai yang lambat dan kualitas yang tidak konsisten. Dari situ, kami bertekad menciptakan solusi yang benar-benar responsif dan dapat diandalkan untuk mendukung pertumbuhan industri Indonesia.",
-        "imageSrc": null
-      },
-      {
-        "name": "Sarjana",
-        "role": "Co-Founder",
-        "quote": "Visi kami sederhana: memberikan produk adhesive berkualitas tinggi dengan waktu produksi yang cepat. Kami percaya bahwa setiap bisnis berhak mendapatkan partner yang tidak hanya menyediakan produk, tetapi juga memahami kebutuhan mereka secara menyeluruh. Itulah komitmen ESABOND untuk setiap klien kami.",
-        "imageSrc": null
-      }
-    ],
-    "cta": {
-      "title": "Siap Berkolaborasi dengan ESABOND?",
-      "description": "Mari wujudkan produksi yang lebih cepat, stabil, dan berkualitas bersama tim yang berpengalaman",
-      "contact": "Hubungi Kami Sekarang",
-      "learnMore": "Pelajari Lebih Lanjut"
     }
   }
 }

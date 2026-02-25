@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, Download, Share2, ShoppingCart } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
+import { useLocalizedProducts } from "@/hooks/use-localized-products";
 import MainLayout from "../layouts/main-layout";
-import { BEST_SELLER_PRODUCTS, NEW_PRODUCTS } from "@/data/products";
 
 // Lazy load components
 const ProductDetailSkeleton = dynamic(
@@ -36,31 +36,19 @@ export default function ProductDetailPage() {
   const { id } = router.query;
   const { t, isHydrated } = useTranslation();
 
-  const [product, setProduct] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // Use localized products hook for multi-language support
+  const { products, isLoading: isProductsLoading } = useLocalizedProducts();
+
   const [activeTab, setActiveTab] = useState("overview");
   const [isCopied, setIsCopied] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  // Get all products
-  const allProducts = useMemo(
-    () => [...BEST_SELLER_PRODUCTS, ...NEW_PRODUCTS],
-    []
-  );
-  
-  // Find product by ID
-  useEffect(() => {
-    // Don't do anything until we have both the router ID and hydration is complete
-    if (!id || !isHydrated) return;
-
-    const timer = setTimeout(() => {
-      const foundProduct = allProducts.find((p) => p.id === id);
-      setProduct(foundProduct || null);
-      setIsLoading(false);
-    }, 300); // Reduced delay for better UX
-
-    return () => clearTimeout(timer);
-  }, [id, isHydrated, allProducts]);
+  // Find product by ID with localized content - akan update otomatis saat bahasa berubah
+  const product = useMemo(() => {
+    if (!id || !isHydrated || isProductsLoading || !products.length)
+      return null;
+    return products.find((p) => p.id === id) || null;
+  }, [id, isHydrated, isProductsLoading, products]);
 
   // Handle share
   const handleShare = useCallback(async () => {
@@ -97,8 +85,11 @@ export default function ProductDetailPage() {
     setImageError(true);
   }, []);
 
+  // Loading state
+  const isLoading = !isHydrated || isProductsLoading;
+
   // Only render skeleton while loading OR if not hydrated
-  if (isLoading || !isHydrated) return <ProductDetailSkeleton />;
+  if (isLoading) return <ProductDetailSkeleton />;
 
   if (!product) {
     return (
@@ -290,15 +281,7 @@ export default function ProductDetailPage() {
                     {t("products.productDetail.description")}
                   </h3>
                   <p className="text-gray-700 leading-relaxed mb-6">
-                    {product.name} adalah solusi adhesive profesional dirancang
-                    khusus untuk {product.application.toLowerCase()}. Dengan
-                    teknologi terkini dan bahan berkualitas tinggi, produk ini
-                    menjamin hasil terbaik untuk kebutuhan industri Anda.
-                  </p>
-                  <p className="text-gray-700 leading-relaxed">
-                    Telah teruji dan terpercaya oleh ribuan industri di seluruh
-                    Indonesia, {product.name} memberikan performa optimal dengan
-                    harga yang kompetitif.
+                    {product.description}
                   </p>
                 </div>
 

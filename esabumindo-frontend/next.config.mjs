@@ -13,7 +13,16 @@ const nextConfig = {
 
   // ✅ Experimental features - Turbopack compatible
   experimental: {
-    optimizePackageImports: ["lucide-react", "@radix-ui/*"],
+    optimizePackageImports: [
+      "lucide-react",
+      "@radix-ui/*",
+      "html-react-parser",
+    ],
+  },
+
+  // ✅ Compiler options untuk smaller bundle
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
   },
 
   // ✅ Image optimization
@@ -43,6 +52,11 @@ const nextConfig = {
     // ✅ Disable static imports optimization untuk flexibility
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // ✅ Device sizes untuk responsive images
+    deviceSizes: [640, 750, 828, 1080, 1200],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
+    // ✅ Allowed quality values
+    qualities: [75, 80],
   },
 
   // ✅ i18n configuration untuk SEO multilingual
@@ -91,9 +105,28 @@ const nextConfig = {
           },
         ],
       },
+      // ✅ Static assets - long cache
+      {
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
       // ✅ Images cache
       {
         source: "/images/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/asset/:path*",
         headers: [
           {
             key: "Cache-Control",

@@ -1,13 +1,35 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // ✅ SECURITY: Helmet untuk HTTP security headers
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          imgSrc: ["'self'", 'data:', 'https:'],
+          scriptSrc: ["'self'"],
+          fontSrc: ["'self'", 'https:', 'data:'],
+        },
+      },
+      crossOriginEmbedderPolicy: false, // Untuk kompatibilitas dengan gambar
+      crossOriginResourcePolicy: { policy: 'cross-origin' }, // Untuk static assets
+    }),
+  );
+
   app.use(cookieParser());
+
+  // ✅ SECURITY: Trust proxy untuk mendapatkan IP asli (di belakang reverse proxy)
+  app.set('trust proxy', 1);
 
   app.enableCors({
     origin: [
@@ -19,7 +41,15 @@ async function bootstrap() {
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'X-Fingerprint',
+      'X-Form-Token',
+      'X-Form-Timestamp',
+      'X-Form-Start',
+      'X-Request-Signature',
+    ],
     maxAge: 3600,
   });
 

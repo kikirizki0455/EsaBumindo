@@ -2,16 +2,18 @@
 
 import { memo } from "react";
 
-const ApplicationsSection = memo(function ApplicationsSection({ applications }) {
+const ApplicationsSection = memo(function ApplicationsSection({
+  applications,
+}) {
   return (
-    <section className="relative py-16 md:py-24 bg-gradient-to-b from-white via-gray-50 to-white">
+    <section className="relative py-16 md:py-24 bg-gradient-to-b from-white via-gray-50 to-white overflow-hidden">
       {/* Background Decorations */}
       <div
-        className="absolute top-0 left-1/4 w-96 h-96 bg-[#0c439a] rounded-full mix-blend-multiply filter blur-3xl opacity-10 pointer-events-none"
+        className="absolute top-0 left-1/4 w-64 md:w-96 h-64 md:h-96 bg-[#0c439a] rounded-full mix-blend-multiply filter blur-3xl opacity-10 pointer-events-none"
         aria-hidden="true"
       />
       <div
-        className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#ca161e] rounded-full mix-blend-multiply filter blur-3xl opacity-10 pointer-events-none"
+        className="absolute bottom-0 right-1/4 w-64 md:w-96 h-64 md:h-96 bg-[#ca161e] rounded-full mix-blend-multiply filter blur-3xl opacity-10 pointer-events-none"
         aria-hidden="true"
       />
 
@@ -22,7 +24,8 @@ const ApplicationsSection = memo(function ApplicationsSection({ applications }) 
             Aplikasi Kami
           </h2>
           <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
-            Solusi adhesive dan sealant berkualitas tinggi untuk berbagai sektor industri
+            Solusi adhesive dan sealant berkualitas tinggi untuk berbagai sektor
+            industri
           </p>
           <div
             className="w-20 h-1 bg-gradient-to-r from-[#0c439a] to-[#ca161e] mx-auto mt-6 rounded-full"

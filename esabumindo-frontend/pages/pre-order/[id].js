@@ -13,12 +13,14 @@ import {
   AlertCircle,
   Package,
   Beaker,
+  Shield,
+  Clock,
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { useToast } from "@/components/ui/toast-context";
-import { checkRateLimit, recordSubmission } from "@/lib/rate-limiter";
+import { useAntiSpam } from "@/lib/use-anti-spam";
 import MainLayout from "../layouts/main-layout";
-import { BEST_SELLER_PRODUCTS, NEW_PRODUCTS } from "@/data/products";
+import { ALL_PRODUCTS } from "@/data/products";
 
 // Lazy load components
 const PreOrderFormSkeleton = dynamic(
@@ -37,25 +39,58 @@ export default function PreOrderPage() {
   const { t, isHydrated } = useTranslation();
   const toast = useToast();
 
+  // Anti-spam protection
+  const antiSpam = useAntiSpam({
+    enableDebug: process.env.NODE_ENV === "development",
+    onBotDetected: (result) => {
+      console.warn("[Security] Bot detected:", result);
+      // Silently fail for bots - don't give them feedback
+    },
+    onRateLimited: (result) => {
+      const error = result.errors.find((e) => e.type === "rate_limit");
+      toast.error(
+        `⏱️ ${
+          error?.message ||
+          "Terlalu banyak permintaan. Silakan coba lagi nanti."
+        }`
+      );
+    },
+    onValidationError: (result) => {
+      // Handle other validation errors
+      const firstError = result.errors[0];
+      if (firstError && firstError.type !== "honeypot") {
+        if (firstError.action === "refresh") {
+          toast.error("🔄 Sesi form expired. Silakan refresh halaman.");
+        } else if (firstError.action === "slow_down") {
+          toast.warning("⏳ Mohon isi form dengan lebih teliti.");
+        }
+      }
+    },
+  });
+
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [contactMethod, setContactMethod] = useState("email");
   const [imageError, setImageError] = useState(false);
-  const [rateLimitWarning, setRateLimitWarning] = useState(null);
+  const [securityWarning, setSecurityWarning] = useState(null);
 
-  // Form state
+  // Form state with honeypot fields
   const [formData, setFormData] = useState({
-    orderType: "direct", // 'direct' or 'sample'
+    orderType: "direct",
     fullName: "",
     email: "",
     phone: "",
     company: "",
     industri: "",
-    quantityKg: "1", // Quantity in kg
+    quantityKg: "1",
     packaging: "tong50kg",
     message: "",
+    // Honeypot fields (should remain empty)
+    website: "",
+    fax_number: "",
+    address2: "",
   });
 
   // Find product by ID
@@ -63,9 +98,7 @@ export default function PreOrderPage() {
     if (!id) return;
 
     const timer = setTimeout(() => {
-      const foundProduct = [...BEST_SELLER_PRODUCTS, ...NEW_PRODUCTS].find(
-        (p) => p.id === id
-      );
+      const foundProduct = ALL_PRODUCTS.find((p) => p.id === id);
       setProduct(foundProduct || null);
       setIsLoading(false);
     }, 600);
@@ -73,10 +106,13 @@ export default function PreOrderPage() {
     return () => clearTimeout(timer);
   }, [id]);
 
-  // Handle form input change
+  // Handle form input change with anti-spam tracking
   const handleInputChange = useCallback(
     (e) => {
       const { name, value } = e.target;
+
+      // Track interaction for anti-spam
+      antiSpam.trackInteraction();
 
       // Always update form first
       setFormData((prev) => ({
@@ -102,19 +138,12 @@ export default function PreOrderPage() {
         setSubmitStatus(null);
       }
 
-      // Check rate limit warning when email changes
-      if (name === "email" && value) {
-        const rateLimitStatus = checkRateLimit(value);
-        if (!rateLimitStatus.allowed) {
-          setRateLimitWarning(rateLimitStatus);
-        } else if (rateLimitStatus.remaining < 2) {
-          setRateLimitWarning(rateLimitStatus);
-        } else {
-          setRateLimitWarning(null);
-        }
+      // Clear security warning when user types
+      if (securityWarning) {
+        setSecurityWarning(null);
       }
     },
-    [formData.orderType]
+    [formData.orderType, antiSpam, securityWarning]
   );
 
   // Handle order type change
@@ -129,15 +158,107 @@ export default function PreOrderPage() {
     setSubmitStatus(null);
   }, []);
 
-  // Handle form submission
+  // Handle form submission with comprehensive anti-spam protection
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
       setIsSubmitting(true);
       setSubmitStatus(null);
+      setSecurityWarning(null);
 
       try {
-        // Validate form
+        // ===== ANTI-SPAM VALIDATION =====
+        const validationResult = antiSpam.validate(formData);
+
+        if (!validationResult.valid) {
+          // Check for bot detection (fail silently)
+          if (validationResult.metadata?.botDetected) {
+            // Pretend success for bots but don't actually submit
+            setSubmitStatus({
+              type: "success",
+              message: "Pesanan berhasil dikirim!",
+            });
+            setTimeout(() => router.push("/product"), 2000);
+            return;
+          }
+
+          // Handle timing issues
+          const timingError = validationResult.errors.find(
+            (e) => e.type === "timing"
+          );
+          if (timingError) {
+            if (timingError.action === "slow_down") {
+              setSecurityWarning({
+                type: "timing",
+                message:
+                  "⏳ Form disubmit terlalu cepat. Mohon isi form dengan lebih teliti.",
+              });
+              setIsSubmitting(false);
+              return;
+            }
+            if (timingError.action === "refresh") {
+              toast.error(
+                "🔄 Sesi form telah expired. Halaman akan di-refresh..."
+              );
+              setTimeout(() => window.location.reload(), 2000);
+              return;
+            }
+          }
+
+          // Handle rate limit
+          const rateLimitError = validationResult.errors.find(
+            (e) => e.type === "rate_limit"
+          );
+          if (rateLimitError) {
+            toast.error(`⏱️ ${rateLimitError.message}`);
+            setIsSubmitting(false);
+            return;
+          }
+
+          // Handle blocked users
+          const blockedError = validationResult.errors.find(
+            (e) => e.type === "blocked"
+          );
+          if (blockedError) {
+            toast.error(`🚫 ${blockedError.message}`);
+            setIsSubmitting(false);
+            return;
+          }
+
+          // Handle spam detection
+          const spamError = validationResult.errors.find(
+            (e) => e.type === "spam"
+          );
+          if (spamError) {
+            setSecurityWarning({
+              type: "spam",
+              message:
+                "⚠️ Konten terdeteksi mencurigakan. Mohon periksa kembali data Anda.",
+            });
+            antiSpam.onFailure(formData.email, "medium");
+            setIsSubmitting(false);
+            return;
+          }
+
+          // Handle validation errors
+          const fieldErrors = validationResult.errors.filter((e) => e.field);
+          if (fieldErrors.length > 0) {
+            const errorMessages = fieldErrors.map((e) => e.message).join(", ");
+            toast.error(`❌ ${errorMessages}`);
+            setIsSubmitting(false);
+            return;
+          }
+        }
+
+        // Check for warnings (flagged for review but allowed)
+        if (validationResult.warnings?.length > 0) {
+          console.log(
+            "[Security] Submission flagged for review:",
+            validationResult.warnings
+          );
+        }
+
+        // ===== BASIC FORM VALIDATION =====
         if (
           !formData.fullName ||
           !formData.email ||
@@ -145,14 +266,6 @@ export default function PreOrderPage() {
           !formData.company
         ) {
           toast.error(t("products.preOrder.requiredFields"));
-          setIsSubmitting(false);
-          return;
-        }
-
-        // Check rate limit
-        const rateLimitStatus = checkRateLimit(formData.email);
-        if (!rateLimitStatus.allowed) {
-          toast.error(rateLimitStatus.message);
           setIsSubmitting(false);
           return;
         }
@@ -179,27 +292,36 @@ export default function PreOrderPage() {
           "📤 Mengirim pesanan Anda, mohon tunggu..."
         );
 
-        // Send to API
+        // ===== SEND TO API WITH SANITIZED DATA =====
+        const sanitizedData = validationResult.sanitizedData || formData;
+
         const response = await fetch("/api/pre-order", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            orderType: formData.orderType,
+            orderType: sanitizedData.orderType,
             product: product?.name,
             productId: product?.id,
-            customerName: formData.fullName,
-            customerEmail: formData.email,
-            customerPhone: formData.phone,
-            company: formData.company,
-            industri: formData.industri,
-            quantityKg: parseFloat(formData.quantityKg),
-            packaging: formData.packaging,
-            message: formData.message,
+            customerName: sanitizedData.fullName,
+            customerEmail: sanitizedData.email,
+            customerPhone: sanitizedData.phone,
+            company: sanitizedData.company,
+            industri: sanitizedData.industri,
+            quantityKg: parseFloat(sanitizedData.quantityKg),
+            packaging: sanitizedData.packaging,
+            message: sanitizedData.message,
             contactMethod,
             timestamp: new Date().toISOString(),
-            rateLimitStatus,
+            // Security metadata
+            _meta: {
+              token: validationResult.metadata?.token,
+              fingerprint: validationResult.metadata?.fingerprint,
+              timing: validationResult.metadata?.timing?.elapsed,
+              interactions: validationResult.metadata?.timing?.interactions,
+              flagged: validationResult.warnings?.length > 0,
+            },
           }),
         });
 
@@ -238,8 +360,8 @@ export default function PreOrderPage() {
           return;
         }
 
-        // Record submission in localStorage
-        recordSubmission(formData.email);
+        // ===== SUCCESS - Record submission for rate limiting =====
+        antiSpam.onSuccess(formData.email);
 
         // Remove loading toast and show success
         toast.removeToast(loadingToastId);
@@ -267,6 +389,9 @@ export default function PreOrderPage() {
           quantityKg: "1",
           packaging: "tong50kg",
           message: "",
+          website: "",
+          fax_number: "",
+          address2: "",
         });
 
         // Redirect after 3 seconds
@@ -284,7 +409,7 @@ export default function PreOrderPage() {
         setIsSubmitting(false);
       }
     },
-    [formData, product, contactMethod, router, t, toast]
+    [formData, product, contactMethod, router, t, toast, antiSpam]
   );
 
   // Handle image error
@@ -346,6 +471,26 @@ export default function PreOrderPage() {
                 onSubmit={handleSubmit}
                 className="bg-white rounded-lg shadow-md p-8"
               >
+                {/* Security Badge */}
+                <div className="mb-6 flex items-center gap-2 text-sm text-gray-500">
+                  <Shield size={16} className="text-green-600" />
+                  <span>Form dilindungi dengan sistem keamanan anti-spam</span>
+                </div>
+
+                {/* Security Warning */}
+                {securityWarning && (
+                  <div className="mb-6 p-4 rounded-lg flex items-start gap-3 bg-orange-50 border border-orange-200">
+                    <AlertCircle
+                      size={20}
+                      className="text-orange-600 shrink-0 mt-0.5"
+                    />
+                    <div className="text-orange-800">
+                      <p className="font-semibold mb-1">Peringatan Keamanan</p>
+                      <p className="text-sm">{securityWarning.message}</p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Status Messages */}
                 {submitStatus && (
                   <div
@@ -381,19 +526,51 @@ export default function PreOrderPage() {
                   </div>
                 )}
 
-                {/* Rate Limit Warning */}
-                {rateLimitWarning && (
-                  <div className="mb-6 p-4 rounded-lg flex items-start gap-3 bg-yellow-50 border border-yellow-200">
-                    <AlertCircle
-                      size={20}
-                      className="text-yellow-600 shrink-0 mt-0.5"
-                    />
-                    <div className="text-yellow-800">
-                      <p className="font-semibold mb-1">⚠️ Pemberitahuan</p>
-                      <p className="text-sm">{rateLimitWarning.message}</p>
-                    </div>
-                  </div>
-                )}
+                {/* ===== HONEYPOT FIELDS (Hidden from users, trap for bots) ===== */}
+                <div
+                  aria-hidden="true"
+                  className="sr-only absolute -left-[9999px] opacity-0 pointer-events-none h-0 w-0 overflow-hidden"
+                  style={{
+                    position: "absolute",
+                    left: "-9999px",
+                    opacity: 0,
+                    pointerEvents: "none",
+                    height: 0,
+                    width: 0,
+                    overflow: "hidden",
+                  }}
+                >
+                  <label htmlFor="website">Website</label>
+                  <input
+                    type="text"
+                    id="website"
+                    name="website"
+                    value={formData.website}
+                    onChange={handleInputChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                  <label htmlFor="fax_number">Fax Number</label>
+                  <input
+                    type="tel"
+                    id="fax_number"
+                    name="fax_number"
+                    value={formData.fax_number}
+                    onChange={handleInputChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                  <label htmlFor="address2">Address Line 2</label>
+                  <input
+                    type="text"
+                    id="address2"
+                    name="address2"
+                    value={formData.address2}
+                    onChange={handleInputChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
 
                 {/* Form Section 0: Order Type Selection */}
                 <fieldset className="mb-8 pb-8 border-b border-gray-200">

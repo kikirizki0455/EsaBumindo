@@ -1,30 +1,92 @@
+import { useTranslation } from "@/hooks/use-translation";
+
 export default function ProductSpecifications({ product }) {
+  const { t } = useTranslation();
+
   const specifications = [
     {
-      category: "Performa",
+      category: t(
+        "products.productDetail.specificationsData.categories.performance"
+      ),
       items: [
-        { label: "Kekuatan Ikat", value: "Tinggi" },
-        { label: "Waktu Pengeringan", value: "5-10 menit" },
-        { label: "Suhu Tahan", value: "hingga 200°C" },
-        { label: "Daya Tahan", value: "Permanen" },
+        {
+          label: t(
+            "products.productDetail.specificationsData.items.bondStrength"
+          ),
+          value: t("products.productDetail.specificationsData.values.high"),
+        },
+        {
+          label: t(
+            "products.productDetail.specificationsData.items.dryingTime"
+          ),
+          value: t("products.productDetail.specificationsData.values.5to10min"),
+        },
+        {
+          label: t(
+            "products.productDetail.specificationsData.items.tempResistance"
+          ),
+          value: t("products.productDetail.specificationsData.values.upTo200C"),
+        },
+        {
+          label: t(
+            "products.productDetail.specificationsData.items.durability"
+          ),
+          value: t(
+            "products.productDetail.specificationsData.values.permanent"
+          ),
+        },
       ],
     },
     {
-      category: "Karakteristik Fisik",
+      category: t(
+        "products.productDetail.specificationsData.categories.physical"
+      ),
       items: [
-        { label: "Warna", value: "Bening" },
-        { label: "Viskositas", value: "Medium" },
-        { label: "Bau", value: "Minimal" },
-        { label: "Bentuk", value: "Cair" },
+        {
+          label: t("products.productDetail.specificationsData.items.color"),
+          value: t("products.productDetail.specificationsData.values.clear"),
+        },
+        {
+          label: t("products.productDetail.specificationsData.items.viscosity"),
+          value: t("products.productDetail.specificationsData.values.medium"),
+        },
+        {
+          label: t("products.productDetail.specificationsData.items.odor"),
+          value: t("products.productDetail.specificationsData.values.minimal"),
+        },
+        {
+          label: t("products.productDetail.specificationsData.items.form"),
+          value: t("products.productDetail.specificationsData.values.liquid"),
+        },
       ],
     },
     {
-      category: "Keamanan & Lingkungan",
+      category: t(
+        "products.productDetail.specificationsData.categories.safety"
+      ),
       items: [
-        { label: "Non-Toxic", value: "Ya" },
-        { label: "Eco-Friendly", value: "Ya" },
-        { label: "VOC Content", value: "Rendah" },
-        { label: "Hypoallergenic", value: "Ya" },
+        {
+          label: t("products.productDetail.specificationsData.items.nonToxic"),
+          value: t("products.productDetail.specificationsData.values.yes"),
+        },
+        {
+          label: t(
+            "products.productDetail.specificationsData.items.ecoFriendly"
+          ),
+          value: t("products.productDetail.specificationsData.values.yes"),
+        },
+        {
+          label: t(
+            "products.productDetail.specificationsData.items.vocContent"
+          ),
+          value: t("products.productDetail.specificationsData.values.low"),
+        },
+        {
+          label: t(
+            "products.productDetail.specificationsData.items.hypoallergenic"
+          ),
+          value: t("products.productDetail.specificationsData.values.yes"),
+        },
       ],
     },
   ];
@@ -65,10 +127,10 @@ export default function ProductSpecifications({ product }) {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M12 16v-4m0 0V8m0 4H8m0 0v4m0-4H4m0 0h4m0 4h4m0 0h4m0-4v4m0 0h4"
+              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
             />
           </svg>
-          Download Spesifikasi Lengkap (PDF)
+          {t("products.productDetail.specificationsData.downloadFull")}
         </button>
       </div>
     </div>

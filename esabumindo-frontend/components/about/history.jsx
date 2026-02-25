@@ -1,58 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "@/hooks/use-translation";
 // ============================================================================
-// DATA LAYER
-// ============================================================================
-
-const TIMELINE_DATA = [
-  {
-    id: "2025-expansion",
-    name: "Ekspansi Regional",
-    year: "2025",
-    description:
-      "Target ekspansi ke Asia Tenggara dan implementasi teknologi produksi ramah lingkungan yang berkelanjutan.",
-    badgeColor: "bg-gradient-to-r from-indigo-600 to-purple-600",
-    image: "/api/placeholder/400/300",
-  },
-  {
-    id: "2024-launch",
-    name: "Eman Suratman",
-    year: "2024",
-    description:
-      "Meluncurkan produk utama X-Plus dan mencapai 100% target pasar di wilayah Jakarta dengan pertumbuhan signifikan.",
-    badgeColor: "bg-gradient-to-r from-blue-800 to-blue-900",
-    image: "/api/placeholder/400/300",
-  },
-  {
-    id: "2023-certification",
-    name: "Sarjana",
-    year: "2023",
-    description:
-      "Memperoleh sertifikasi ISO 9001:2015 dan memperluas jaringan distribusi ke seluruh Jawa Barat.",
-    badgeColor: "bg-gradient-to-r from-red-500 to-red-600",
-    image: "/api/placeholder/400/300",
-  },
-  {
-    id: "2017-innovation",
-    name: "ESABOND Innovation",
-    year: "2017",
-    description:
-      "Berpartisipasi dalam pameran internasional pertama dan meraih penghargaan inovasi produk terbaik.",
-    badgeColor: "bg-gradient-to-r from-purple-600 to-pink-600",
-    image: "/api/placeholder/400/300",
-  },
-  {
-    id: "2008-foundation",
-    name: "ESABOND Foundation",
-    year: "2008",
-    description:
-      "Pendirian perusahaan dan awal produksi batch pertama dengan fokus pada pasar lokal B2B yang solid.",
-    badgeColor: "bg-gradient-to-r from-green-600 to-emerald-600",
-    image: "/api/placeholder/400/300",
-  },
-];
-
-// ============================================================================
 // SKELETON COMPONENTS
 // ============================================================================
 

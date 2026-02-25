@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import AdminLayout from "@/components/layout/AdminLayout";
+import AdminLayout from "@/components/layout/admin-layout";
 import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,

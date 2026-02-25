@@ -11,15 +11,17 @@ const ProductHero = memo(function ProductHero() {
   if (!isHydrated) {
     return (
       <section className="relative min-h-[400px] md:min-h-[500px] bg-gradient-to-br from-[#0c439a]/5 via-white to-[#ca161e]/5 overflow-hidden pt-20 pb-12 md:pb-16">
-        <div className="animate-pulse">
-          <div className="h-12 bg-gray-200 rounded w-48 mb-6" />
-          <div className="space-y-3 mb-6">
-            <div className="h-16 bg-gray-200 rounded w-full" />
-            <div className="h-16 bg-gray-200 rounded w-5/6" />
-          </div>
-          <div className="flex gap-4">
-            <div className="h-12 bg-gray-300 rounded w-32" />
-            <div className="h-12 bg-gray-200 rounded w-32" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="animate-pulse max-w-3xl">
+            <div className="h-12 bg-gray-200 rounded w-48 mb-6" />
+            <div className="space-y-3 mb-6">
+              <div className="h-16 bg-gray-200 rounded w-full" />
+              <div className="h-16 bg-gray-200 rounded w-5/6" />
+            </div>
+            <div className="flex gap-4">
+              <div className="h-12 bg-gray-300 rounded w-32" />
+              <div className="h-12 bg-gray-200 rounded w-32" />
+            </div>
           </div>
         </div>
       </section>
@@ -30,11 +32,11 @@ const ProductHero = memo(function ProductHero() {
     <section className="relative min-h-[400px] md:min-h-[500px] bg-gradient-to-br from-[#0c439a]/5 via-white to-[#ca161e]/5 overflow-hidden pt-20 pb-12 md:pb-16">
       {/* Background Elements */}
       <div
-        className="absolute top-0 right-0 w-96 h-96 bg-[#0c439a] rounded-full mix-blend-multiply filter blur-3xl opacity-5 pointer-events-none"
+        className="absolute top-0 right-0 w-64 md:w-96 h-64 md:h-96 bg-[#0c439a] rounded-full mix-blend-multiply filter blur-3xl opacity-5 pointer-events-none"
         aria-hidden="true"
       />
       <div
-        className="absolute bottom-0 left-0 w-96 h-96 bg-[#ca161e] rounded-full mix-blend-multiply filter blur-3xl opacity-5 pointer-events-none"
+        className="absolute bottom-0 left-0 w-64 md:w-96 h-64 md:h-96 bg-[#ca161e] rounded-full mix-blend-multiply filter blur-3xl opacity-5 pointer-events-none"
         aria-hidden="true"
       />
 

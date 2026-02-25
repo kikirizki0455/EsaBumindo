@@ -16,6 +16,7 @@
     "filterBy": "Filter by Category",
     "sortBy": "Sort by",
     "noResults": "No products found",
+    "moreFeatures": "more features",
     "searchPlaceholder": "Search products by name or type...",
     "filters": {
       "title": "Filters",
@@ -50,7 +51,6 @@
     "downloadSpec": "Specifications",
     "share": "Share",
     "copied": "Copied",
-    "specifications": "Specifications",
     "features": "Key Features",
     "applications": "Applications",
     "technicalData": "Technical Data",
@@ -71,7 +71,85 @@
     "mainAdvantages": "Main Advantages",
     "applicationInfo": "Application Info",
     "industry": "Industry",
-    "adhesiveType": "Adhesive Type"
+    "adhesiveType": "Adhesive Type",
+    "specificationsData": {
+      "title": "Product Specifications",
+      "downloadFull": "Download Full Specifications (PDF)",
+      "categories": {
+        "performance": "Performance",
+        "physical": "Physical Characteristics",
+        "safety": "Safety & Environment"
+      },
+      "items": {
+        "bondStrength": "Bond Strength",
+        "dryingTime": "Drying Time",
+        "tempResistance": "Temperature Resistance",
+        "durability": "Durability",
+        "color": "Color",
+        "viscosity": "Viscosity",
+        "odor": "Odor",
+        "form": "Form",
+        "nonToxic": "Non-Toxic",
+        "ecoFriendly": "Eco-Friendly",
+        "vocContent": "VOC Content",
+        "hypoallergenic": "Hypoallergenic"
+      },
+      "values": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low",
+        "minimal": "Minimal",
+        "permanent": "Permanent",
+        "clear": "Clear",
+        "liquid": "Liquid",
+        "yes": "Yes",
+        "upTo200C": "up to 200°C",
+        "5to10min": "5-10 minutes"
+      }
+    },
+    "technicalInfo": {
+      "title": "Technical Information",
+      "composition": {
+        "title": "Material Composition",
+        "content": "Special formulation with carefully selected premium materials to deliver maximum performance and long-term durability."
+      },
+      "application": {
+        "title": "Application Process",
+        "content": "Easy application with standard dispenser. Suitable for industrial automation or manual use. No special equipment required."
+      },
+      "storage": {
+        "title": "Storage",
+        "content": "Store at 15-25°C, away from direct sunlight. Shelf life up to 24 months when properly sealed."
+      },
+      "certification": {
+        "title": "Certifications & Standards",
+        "content": "Certified ISO 9001:2015, SNI, and meets international standards for product quality and safety."
+      },
+      "usageGuidelines": {
+        "title": "Usage Guidelines",
+        "items": [
+          "Ensure surface is clean and dry before application",
+          "Use in well-ventilated area",
+          "Wear gloves to protect skin",
+          "Avoid contact with eyes",
+          "Do not use on wet or oily surfaces"
+        ]
+      },
+      "safetyInfo": {
+        "title": "Safety Information",
+        "description": "This product is safe for industrial use. However, please follow these safety guidelines:",
+        "items": [
+          "Avoid prolonged inhalation of fumes",
+          "Use appropriate PPE (gloves, mask if necessary)",
+          "If contact with eyes occurs, rinse with clean water immediately",
+          "Keep out of reach of children"
+        ]
+      },
+      "contactSupport": {
+        "description": "Need more technical information or consultation?",
+        "button": "Contact Our Technical Team"
+      }
+    }
   },
   "preOrder": {
     "title": "Pre-Order Form",
@@ -152,5 +230,600 @@
   "testimonials": {
     "title": "What Our Customers Say",
     "description": "Trusted by leading manufacturers and businesses"
+  },
+  "productData": {
+    "types": {
+      "allAcrylic": "All Acrylic",
+      "dempul": "Putty",
+      "eva": "EVA",
+      "psa": "PSA",
+      "pvac": "PVAC",
+      "styrene": "Styrene",
+      "vinyl": "Vinyl",
+      "wip": "WIP"
+    },
+    "products": {
+      "acr-001": {
+        "name": "ESA Acrylic Bond 100",
+        "title": "ESA Acrylic Bond 100",
+        "category": "All Acrylic",
+        "application": "Construction & Building",
+        "performance": "High Strength, Weather Resistant",
+        "features": [
+          "Extreme weather resistant",
+          "High adhesion",
+          "Fast drying",
+          "UV resistant"
+        ],
+        "description": "Premium acrylic adhesive for construction applications with high weather resistance."
+      },
+      "acr-002": {
+        "name": "ESA Acrylic Pro 200",
+        "title": "ESA Acrylic Pro 200",
+        "category": "All Acrylic",
+        "application": "Automotive Industry",
+        "performance": "Industrial Grade, Vibration Resistant",
+        "features": [
+          "Vibration resistant",
+          "Flexible",
+          "Heat resistant",
+          "Non-toxic"
+        ],
+        "description": "Acrylic solution for automotive industry with superior vibration resistance."
+      },
+      "acr-003": {
+        "name": "ESA Acrylic Clear 300",
+        "title": "ESA Acrylic Clear 300",
+        "category": "All Acrylic",
+        "application": "Glass & Acrylic",
+        "performance": "Crystal Clear, Non-Yellowing",
+        "features": [
+          "Perfect transparency",
+          "Non-yellowing",
+          "Fast curing",
+          "Easy application"
+        ],
+        "description": "Clear acrylic adhesive for glass and transparent material applications."
+      },
+      "acr-004": {
+        "name": "ESA Acrylic Flex 400",
+        "title": "ESA Acrylic Flex 400",
+        "category": "All Acrylic",
+        "application": "Plastic & Composite",
+        "performance": "Flexible, Multi-Surface",
+        "features": [
+          "Super flexible",
+          "Multi-surface",
+          "Water resistant",
+          "Economical"
+        ],
+        "description": "Flexible acrylic adhesive for various plastic and composite surfaces."
+      },
+      "acr-005": {
+        "name": "ESA Acrylic Heavy 500",
+        "title": "ESA Acrylic Heavy 500",
+        "category": "All Acrylic",
+        "application": "Heavy Duty Industrial",
+        "performance": "Maximum Strength, Long Lasting",
+        "features": [
+          "Maximum strength",
+          "Long lasting",
+          "Chemical resistant",
+          "Industrial grade"
+        ],
+        "description": "Heavy duty acrylic adhesive for heavy industrial applications."
+      },
+      "dmp-001": {
+        "name": "ESA Wood Putty Premium",
+        "title": "ESA Wood Putty Premium",
+        "category": "Putty",
+        "application": "Furniture & Woodworking",
+        "performance": "Sandable, Stainable",
+        "features": [
+          "Sandable",
+          "Paintable",
+          "Perfect gap filling",
+          "Fast drying"
+        ],
+        "description": "Premium wood putty for high-quality furniture finishing."
+      },
+      "dmp-002": {
+        "name": "ESA Wall Putty Pro",
+        "title": "ESA Wall Putty Pro",
+        "category": "Putty",
+        "application": "Construction & Renovation",
+        "performance": "Crack Resistant, Easy Apply",
+        "features": [
+          "Crack resistant",
+          "Easy application",
+          "Smooth finish",
+          "Moisture resistant"
+        ],
+        "description": "Professional wall putty for perfect wall finishing results."
+      },
+      "dmp-003": {
+        "name": "ESA Automotive Putty",
+        "title": "ESA Automotive Putty",
+        "category": "Putty",
+        "application": "Automotive Body Repair",
+        "performance": "Quick Dry, High Fill",
+        "features": [
+          "Fast drying",
+          "High fill capacity",
+          "Easy sanding",
+          "Impact resistant"
+        ],
+        "description": "Specialized putty for vehicle body repair."
+      },
+      "dmp-004": {
+        "name": "ESA Waterproof Putty",
+        "title": "ESA Waterproof Putty",
+        "category": "Putty",
+        "application": "Wet Areas & Outdoor",
+        "performance": "100% Waterproof, Mold Resistant",
+        "features": [
+          "100% waterproof",
+          "Mold resistant",
+          "Weather resistant",
+          "Long lasting"
+        ],
+        "description": "Waterproof putty for wet areas and outdoor applications."
+      },
+      "dmp-005": {
+        "name": "ESA Multi Surface Putty",
+        "title": "ESA Multi Surface Putty",
+        "category": "Putty",
+        "application": "Multi Application",
+        "performance": "Versatile, All Surface",
+        "features": [
+          "Multi-surface",
+          "Versatile",
+          "Economical",
+          "Professional results"
+        ],
+        "description": "Versatile putty for various surface types."
+      },
+      "eva-001": {
+        "name": "ESA EVA Hot Melt 100",
+        "title": "ESA EVA Hot Melt 100",
+        "category": "EVA",
+        "application": "Packaging & Carton",
+        "performance": "Fast Setting, Strong Bond",
+        "features": [
+          "Fast setting",
+          "Strong adhesion",
+          "Suitable for carton",
+          "Economical"
+        ],
+        "description": "EVA hot melt adhesive for packaging and carton applications."
+      },
+      "eva-002": {
+        "name": "ESA EVA Bookbinding",
+        "title": "ESA EVA Bookbinding",
+        "category": "EVA",
+        "application": "Printing & Binding",
+        "performance": "Flexible, Page Turner Friendly",
+        "features": ["Flexible", "Paper safe", "Clean results", "Durable"],
+        "description": "EVA adhesive specifically for book binding and printing industry."
+      },
+      "eva-003": {
+        "name": "ESA EVA Foam Bond",
+        "title": "ESA EVA Foam Bond",
+        "category": "EVA",
+        "application": "Foam & Sponge",
+        "performance": "Foam Friendly, No Damage",
+        "features": [
+          "Foam safe",
+          "No material damage",
+          "Strong bond",
+          "Fast drying"
+        ],
+        "description": "EVA adhesive for foam and sponge material bonding."
+      },
+      "eva-004": {
+        "name": "ESA EVA Industrial",
+        "title": "ESA EVA Industrial",
+        "category": "EVA",
+        "application": "Manufacturing Industry",
+        "performance": "High Volume, Consistent Quality",
+        "features": [
+          "Mass production ready",
+          "Consistent quality",
+          "Efficient",
+          "Cost effective"
+        ],
+        "description": "Industrial EVA adhesive for large-scale manufacturing applications."
+      },
+      "eva-005": {
+        "name": "ESA EVA Premium Plus",
+        "title": "ESA EVA Premium Plus",
+        "category": "EVA",
+        "application": "Premium Application",
+        "performance": "Superior Quality, Premium Grade",
+        "features": [
+          "Premium quality",
+          "Superior performance",
+          "Multi-application",
+          "Professional results"
+        ],
+        "description": "Premium grade EVA adhesive for applications requiring the best quality."
+      },
+      "psa-001": {
+        "name": "ESA PSA Label Grade",
+        "title": "ESA PSA Label Grade",
+        "category": "PSA",
+        "application": "Label & Sticker",
+        "performance": "Permanent Tack, Clean Application",
+        "features": [
+          "Permanent adhesion",
+          "Clean application",
+          "Suitable for labels",
+          "Long lasting"
+        ],
+        "description": "PSA specifically for label and sticker industry."
+      },
+      "psa-002": {
+        "name": "ESA PSA Tape Bond",
+        "title": "ESA PSA Tape Bond",
+        "category": "PSA",
+        "application": "Tape Manufacturing",
+        "performance": "High Tack, Consistent Coating",
+        "features": [
+          "High tack",
+          "Consistent coating",
+          "For tape production",
+          "Stable quality"
+        ],
+        "description": "PSA for tape manufacturing with consistent coating quality."
+      },
+      "psa-003": {
+        "name": "ESA PSA Removable",
+        "title": "ESA PSA Removable",
+        "category": "PSA",
+        "application": "Removable Application",
+        "performance": "Easy Peel, No Residue",
+        "features": [
+          "Easy removal",
+          "No residue",
+          "Repositionable",
+          "Clean removal"
+        ],
+        "description": "Removable PSA for applications requiring easy removal."
+      },
+      "psa-004": {
+        "name": "ESA PSA Medical Grade",
+        "title": "ESA PSA Medical Grade",
+        "category": "PSA",
+        "application": "Medical & Healthcare",
+        "performance": "Skin Safe, Hypoallergenic",
+        "features": [
+          "Skin safe",
+          "Hypoallergenic",
+          "Medical grade",
+          "Breathable"
+        ],
+        "description": "Medical grade PSA for healthcare and bandage applications."
+      },
+      "psa-005": {
+        "name": "ESA PSA Heavy Duty",
+        "title": "ESA PSA Heavy Duty",
+        "category": "PSA",
+        "application": "Industrial Mounting",
+        "performance": "Extreme Tack, Weather Resistant",
+        "features": [
+          "Extreme tack",
+          "Weather resistant",
+          "Heavy duty",
+          "Permanent bond"
+        ],
+        "description": "Heavy duty PSA for industrial and outdoor mounting."
+      },
+      "pvac-001": {
+        "name": "ESA PVAC Wood Pro",
+        "title": "ESA PVAC Wood Pro",
+        "category": "PVAC",
+        "application": "Woodworking & Furniture",
+        "performance": "Strong Wood Bond, Sandable",
+        "features": [
+          "Strong wood bond",
+          "Sandable",
+          "Fast drying",
+          "Non-toxic"
+        ],
+        "description": "Premium PVAC adhesive for woodworking and furniture industry."
+      },
+      "pvac-002": {
+        "name": "ESA PVAC Paper Bond",
+        "title": "ESA PVAC Paper Bond",
+        "category": "PVAC",
+        "application": "Paper & Packaging",
+        "performance": "Paper Safe, Quick Dry",
+        "features": [
+          "Paper safe",
+          "Quick drying",
+          "No wrinkling",
+          "Economical"
+        ],
+        "description": "PVAC adhesive for paper and packaging applications."
+      },
+      "pvac-003": {
+        "name": "ESA PVAC D3 Waterproof",
+        "title": "ESA PVAC D3 Waterproof",
+        "category": "PVAC",
+        "application": "Outdoor Furniture",
+        "performance": "D3 Water Resistant, Durable",
+        "features": [
+          "D3 water resistant",
+          "For outdoor use",
+          "Weather resistant",
+          "Strong and durable"
+        ],
+        "description": "D3 waterproof PVAC adhesive for outdoor furniture."
+      },
+      "pvac-004": {
+        "name": "ESA PVAC School Safe",
+        "title": "ESA PVAC School Safe",
+        "category": "PVAC",
+        "application": "Education & Craft",
+        "performance": "Child Safe, Washable",
+        "features": ["Child safe", "Washable", "Non-toxic", "Easy to use"],
+        "description": "Child-safe PVAC adhesive for school and craft activities."
+      },
+      "pvac-005": {
+        "name": "ESA PVAC Industrial",
+        "title": "ESA PVAC Industrial",
+        "category": "PVAC",
+        "application": "Industrial Manufacturing",
+        "performance": "High Volume, Consistent",
+        "features": [
+          "Industrial use",
+          "High volume",
+          "Consistent quality",
+          "Cost effective"
+        ],
+        "description": "Industrial PVAC adhesive for large-scale production."
+      },
+      "sty-001": {
+        "name": "ESA Styrene Board Bond",
+        "title": "ESA Styrene Board Bond",
+        "category": "Styrene",
+        "application": "Styrofoam & Insulation",
+        "performance": "Foam Safe, Strong Bond",
+        "features": [
+          "Styrofoam safe",
+          "Strong bond",
+          "No foam damage",
+          "Fast drying"
+        ],
+        "description": "Styrene adhesive for styrofoam and insulation material bonding."
+      },
+      "sty-002": {
+        "name": "ESA Styrene Construction",
+        "title": "ESA Styrene Construction",
+        "category": "Styrene",
+        "application": "Construction & Building",
+        "performance": "Heavy Duty, Weather Proof",
+        "features": [
+          "Heavy duty",
+          "Weather proof",
+          "For construction",
+          "High adhesion"
+        ],
+        "description": "Styrene adhesive for construction and building applications."
+      },
+      "sty-003": {
+        "name": "ESA Styrene Packaging",
+        "title": "ESA Styrene Packaging",
+        "category": "Styrene",
+        "application": "Packaging Industry",
+        "performance": "Fast Setting, Cost Effective",
+        "features": [
+          "Fast setting",
+          "Cost effective",
+          "For packaging",
+          "Efficient"
+        ],
+        "description": "Styrene adhesive for packaging and box industry."
+      },
+      "sty-004": {
+        "name": "ESA Styrene Craft Pro",
+        "title": "ESA Styrene Craft Pro",
+        "category": "Styrene",
+        "application": "Craft & Model Making",
+        "performance": "Precision, Clean Work",
+        "features": [
+          "High precision",
+          "Clean results",
+          "For models",
+          "Easy to use"
+        ],
+        "description": "Styrene adhesive for crafts and model making."
+      },
+      "sty-005": {
+        "name": "ESA Styrene Industrial Plus",
+        "title": "ESA Styrene Industrial Plus",
+        "category": "Styrene",
+        "application": "Heavy Industrial",
+        "performance": "Maximum Strength, Industrial Grade",
+        "features": [
+          "Maximum strength",
+          "Industrial grade",
+          "Long lasting",
+          "High performance"
+        ],
+        "description": "Industrial styrene adhesive for heavy applications."
+      },
+      "vnl-001": {
+        "name": "ESA Vinyl Floor Bond",
+        "title": "ESA Vinyl Floor Bond",
+        "category": "Vinyl",
+        "application": "Flooring & Carpet",
+        "performance": "Permanent Bond, Flat Laying",
+        "features": [
+          "Permanent bond",
+          "Flat results",
+          "For vinyl flooring",
+          "Long lasting"
+        ],
+        "description": "Vinyl adhesive for vinyl flooring and carpet installation."
+      },
+      "vnl-002": {
+        "name": "ESA Vinyl Wall Cover",
+        "title": "ESA Vinyl Wall Cover",
+        "category": "Vinyl",
+        "application": "Wall Covering",
+        "performance": "Easy Apply, Repositionable",
+        "features": [
+          "Easy application",
+          "Repositionable",
+          "For wall covering",
+          "Professional results"
+        ],
+        "description": "Vinyl adhesive for wall covering and vinyl wallpaper installation."
+      },
+      "vnl-003": {
+        "name": "ESA Vinyl Automotive",
+        "title": "ESA Vinyl Automotive",
+        "category": "Vinyl",
+        "application": "Automotive Interior",
+        "performance": "Heat Resistant, Flexible",
+        "features": [
+          "Heat resistant",
+          "Flexible",
+          "For car interior",
+          "Odorless"
+        ],
+        "description": "Vinyl adhesive for automotive interior applications."
+      },
+      "vnl-004": {
+        "name": "ESA Vinyl Marine Grade",
+        "title": "ESA Vinyl Marine Grade",
+        "category": "Vinyl",
+        "application": "Marine & Boat",
+        "performance": "Waterproof, Salt Resistant",
+        "features": [
+          "100% waterproof",
+          "Salt water resistant",
+          "For boats",
+          "UV resistant"
+        ],
+        "description": "Marine grade vinyl adhesive for boat and marine applications."
+      },
+      "vnl-005": {
+        "name": "ESA Vinyl Multi Purpose",
+        "title": "ESA Vinyl Multi Purpose",
+        "category": "Vinyl",
+        "application": "General Purpose",
+        "performance": "Versatile, All Vinyl Types",
+        "features": [
+          "Versatile",
+          "All vinyl types",
+          "Economical",
+          "Easy to use"
+        ],
+        "description": "Multi-purpose vinyl adhesive for various vinyl applications."
+      },
+      "wip-001": {
+        "name": "ESA Bio Adhesive (Coming Soon)",
+        "title": "ESA Bio Adhesive (Coming Soon)",
+        "category": "WIP",
+        "application": "Eco-Friendly Application",
+        "performance": "Biodegradable, Green Formula",
+        "features": [
+          "Biodegradable",
+          "Eco-friendly",
+          "Green formula",
+          "Sustainable"
+        ],
+        "description": "Bio-based eco-friendly adhesive - Coming soon.",
+        "comingSoon": true
+      },
+      "wip-002": {
+        "name": "ESA Smart Bond (Coming Soon)",
+        "title": "ESA Smart Bond (Coming Soon)",
+        "category": "WIP",
+        "application": "Smart Application",
+        "performance": "Temperature Indicator, Smart Curing",
+        "features": [
+          "Temperature indicator",
+          "Smart curing",
+          "Latest technology",
+          "Innovative"
+        ],
+        "description": "Smart adhesive with curing indicator - Coming soon.",
+        "comingSoon": true
+      },
+      "wip-003": {
+        "name": "ESA Nano Tech (Coming Soon)",
+        "title": "ESA Nano Tech (Coming Soon)",
+        "category": "WIP",
+        "application": "High-Tech Application",
+        "performance": "Nano Particles, Superior Strength",
+        "features": [
+          "Nano technology",
+          "Superior strength",
+          "High precision",
+          "Next generation"
+        ],
+        "description": "Adhesive with nano technology - Coming soon.",
+        "comingSoon": true
+      },
+      "wip-004": {
+        "name": "ESA UV Cure Pro (Coming Soon)",
+        "title": "ESA UV Cure Pro (Coming Soon)",
+        "category": "WIP",
+        "application": "UV Curing Application",
+        "performance": "Instant UV Cure, Crystal Clear",
+        "features": [
+          "Instant UV curing",
+          "Crystal clear",
+          "Solvent free",
+          "Perfect results"
+        ],
+        "description": "UV curing adhesive for precision applications - Coming soon.",
+        "comingSoon": true
+      },
+      "wip-005": {
+        "name": "ESA Conductive Bond (Coming Soon)",
+        "title": "ESA Conductive Bond (Coming Soon)",
+        "category": "WIP",
+        "application": "Electronics & PCB",
+        "performance": "Electrically Conductive, ESD Safe",
+        "features": [
+          "Electrically conductive",
+          "ESD safe",
+          "For PCB",
+          "High precision"
+        ],
+        "description": "Conductive adhesive for electronics - Coming soon.",
+        "comingSoon": true
+      }
+    },
+    "applications": {
+      "app-1": {
+        "name": "Coal Mining",
+        "description": "Adhesive solutions for mining and processing industry"
+      },
+      "app-2": {
+        "name": "Paper & Pulp",
+        "description": "Specialized formulas for paper and cellulose industry"
+      },
+      "app-3": {
+        "name": "Automotive",
+        "description": "High-quality adhesives for automotive manufacturing"
+      },
+      "app-4": {
+        "name": "Electronics",
+        "description": "Precision adhesive technology for electronics industry"
+      },
+      "app-5": {
+        "name": "Construction",
+        "description": "Bonding materials for large-scale construction projects"
+      },
+      "app-6": {
+        "name": "Furniture",
+        "description": "Eco-friendly adhesives for furniture industry"
+      }
+    }
   }
 }
