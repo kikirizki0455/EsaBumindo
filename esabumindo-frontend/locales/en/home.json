@@ -12,7 +12,7 @@
     "ctaSecondary": "Learn More",
     "stats": {
       "experience": "Years Experience",
-      "projects": "Projects Done",
+      "projects": "Best Products",
       "satisfaction": "Client Satisfied"
     }
   },
@@ -35,7 +35,8 @@
       "secondary": "Contact Us"
     },
     "categories": {
-      "title": "Our Product Categories"
+      "title": "Product Categories",
+      "viewAll": "View All Products"
     },
     "overlay": {
       "title": "ESABOND Professional",

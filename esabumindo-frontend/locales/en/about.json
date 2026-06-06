@@ -1,16 +1,16 @@
 {
   "heroSection": {
     "headline": {
-      "prefix": "#ORDER TODAY",
-      "highlight": "READY TOMORROW."
+      "prefix": "#Bonding Connections",
+      "highlight": "Strengthening Industries"
     },
-    "description": "Industries are often constrained by slow production and uncertain supply. Speed and consistency are key. ESABOND addresses this challenge with ultra-fast production processes  order today, produced tomorrow helping your business move more efficiently and stay competitive.",
+    "description": "Bonding quality and trust across industries. ESABOND provides high-performance water-based adhesive solutions with consistent quality, rapid production, and dependable distribution to support sustainable industrial growth.",
     "cta": {
       "primary": "Contact Us Now",
       "secondary": "View Products"
     },
     "badge": {
-      "years": "17+",
+      "years": "20+",
       "label": "Years",
       "sublabel": "Experience"
     },
@@ -49,6 +49,22 @@
         "image": "/images/timeline/esabumindo-certified.webp"
       },
       {
+        "id": "2024-warehouse-jatim",
+        "name": "East Java Warehouse Development",
+        "year": "2012",
+        "description": "Continuing its distribution expansion strategy, PT. Esa Bumindo established a warehouse facility in East Java to strengthen its logistics network and ensure faster, more efficient product delivery across the eastern region of Java Island.",
+        "badgeColor": "bg-gradient-to-r from-orange-500 to-amber-500",
+        "image": "/images/timeline/gudang-jatim.webp"
+      },
+      {
+        "id": "2023-warehouse-jateng",
+        "name": "Central Java Warehouse Development",
+        "year": "2011",
+        "description": "As part of its distribution expansion strategy across Java Island, PT. Esa Bumindo developed a warehouse facility in Central Java. This facility serves as a strategic distribution hub that supports smooth and efficient product delivery to various regions in central Java.",
+        "badgeColor": "bg-gradient-to-r from-teal-500 to-cyan-600",
+        "image": "/images/timeline/gudang-jateng.webp"
+      },
+      {
         "id": "2021-second-factory",
         "name": "Second Factory Expansion",
         "year": "2021",
@@ -62,8 +78,9 @@
         "year": "2017",
         "description": "Successfully built the first factory located in Kampung Gruduk, Tangerang Regency, Banten, as a strategic step to increase production capacity.",
         "badgeColor": "bg-gradient-to-r from-red-500 to-red-600",
-        "image": "/images/timeline/esabumindo-pabrik-pertama.webp"
+        "image": "/images/timeline/pabrik-pertama.webp"
       },
+
       {
         "id": "2009-first-production",
         "name": "Beginning of Independent Production",
@@ -78,7 +95,7 @@
         "year": "2008",
         "description": "PT. Esa Bumindo was officially established as a company engaged in production and industrial development.",
         "badgeColor": "bg-gradient-to-r from-green-600 to-emerald-600",
-        "image": "/images/timeline/berdirinya-esabumindo.webp"
+        "image": "/images/timeline/esabumindo-pertama.webp"
       }
     ]
   },

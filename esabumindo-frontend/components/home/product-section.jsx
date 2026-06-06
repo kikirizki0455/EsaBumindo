@@ -6,7 +6,56 @@ import { memo } from "react";
 // Lazy load image - hanya import path, bukan static import
 const imgImagePt4 = "/asset/image/esabumindo-founder.webp";
 const AdhesiveIcon = "/asset/icon/polymere.svg";
-
+const PRODUCT_CATEGORIES = [
+  {
+    key: "allAcrylic",
+    label: { id: "All Acrylic", en: "All Acrylic" },
+    color: "bg-blue-50 border-blue-200 text-blue-700",
+    dot: "bg-blue-500",
+    desc: { id: "Laminasi & Sablon", en: "Lamination & Printing" },
+    count: 3,
+  },
+  {
+    key: "pvac",
+    label: { id: "PVAC", en: "PVAC" },
+    color: "bg-amber-50 border-amber-200 text-amber-700",
+    dot: "bg-amber-500",
+    desc: { id: "Aplikasi Kayu & Kertas", en: "Wood & Paper Applications" },
+    count: 12,
+  },
+  {
+    key: "eva",
+    label: { id: "EVA", en: "EVA" },
+    color: "bg-green-50 border-green-200 text-green-700",
+    dot: "bg-green-500",
+    desc: { id: "Laminasi & Penjilidan", en: "Lamination & Binding" },
+    count: 4,
+  },
+  {
+    key: "styrene",
+    label: { id: "Styrene", en: "Styrene" },
+    color: "bg-purple-50 border-purple-200 text-purple-700",
+    dot: "bg-purple-500",
+    desc: { id: "Tinta, Coating & Busa", en: "Ink, Coating & Foam" },
+    count: 8,
+  },
+  {
+    key: "psa",
+    label: { id: "PSA", en: "PSA" },
+    color: "bg-red-50 border-red-200 text-red-700",
+    dot: "bg-red-500",
+    desc: { id: "Label & Joint Flap", en: "Label & Joint Flap" },
+    count: 2,
+  },
+  {
+    key: "vinyl",
+    label: { id: "Vinyl", en: "Vinyl" },
+    color: "bg-slate-50 border-slate-200 text-slate-700",
+    dot: "bg-slate-500",
+    desc: { id: "Coating & Cat", en: "Coating & Paint" },
+    count: 2,
+  },
+];
 export const ProductSection = memo(function ProductSection() {
   const { t, isHydrated } = useTranslation();
 
@@ -109,25 +158,55 @@ export const ProductSection = memo(function ProductSection() {
               <h4 className="text-lg md:text-xl font-semibold text-gray-800 mb-4 md:mb-6">
                 {t("home.productSection.categories.title")}
               </h4>
-              <div className="grid grid-cols-3 gap-4">
-                {[0, 1, 2].map((i) => (
-                  <div
-                    key={i}
-                    className="bg-white rounded-2xl p-4 md:p-6 shadow-lg flex items-center justify-center min-h-[80px]"
-                  >
-                    {i === 1 && (
-                      <Image
-                        src={AdhesiveIcon}
-                        width={60}
-                        height={60}
-                        alt="Adhesive"
-                        loading="lazy"
-                        style={{ width: "auto", height: "auto" }}
+
+              <div className="grid grid-cols-2 gap-3">
+                {PRODUCT_CATEGORIES.map((cat) => {
+                  // Tentukan locale dari hook router, atau fallback ke "id"
+                  const { locale } = useTranslation();
+                  const currentLocale = locale ?? "id";
+                  return (
+                    <Link
+                      key={cat.key}
+                      href="/product"
+                      className={`flex items-center gap-3 p-3 rounded-xl border ${cat.color} transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 group`}
+                    >
+                      <span
+                        className={`w-2.5 h-2.5 rounded-full ${cat.dot} shrink-0`}
                       />
-                    )}
-                  </div>
-                ))}
+                      <div className="min-w-0">
+                        <p className="font-semibold text-sm leading-tight">
+                          {cat.label[currentLocale] ?? cat.label.id}
+                        </p>
+                        <p className="text-xs opacity-70 truncate leading-tight mt-0.5">
+                          {cat.desc[currentLocale] ?? cat.desc.id}
+                        </p>
+                      </div>
+                      <span className="ml-auto text-xs font-medium opacity-60 shrink-0">
+                        {cat.count}
+                      </span>
+                    </Link>
+                  );
+                })}
               </div>
+              <Link
+                href="/product"
+                className="mt-4 flex items-center justify-center gap-2 text-sm font-semibold text-[#060771] hover:text-[#060771]/80 transition-colors"
+              >
+                {t("home.productSection.categories.viewAll")}
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </Link>
             </div>
           </div>
 

@@ -1,5 +1,151 @@
 {
   "articles": {
+    "waterbased-adhesive": {
+      "id": "196ee4a5-19a0-4b8e-9ff3-703ae7429bcc",
+      "slug": "waterbased-adhesive",
+      "title": "WATERBASED ADHESIVE",
+      "excerpt": "Perekat berbasis air merupakan solusi perekat ramah lingkungan yang menggunakan air sebagai pelarut utama untuk polimer seperti PVA, akrilik, dan EVA, yang mengeras melalui proses penguapan membentuk lapisan fleksibel dengan daya rekat tinggi. Dengan emisi VOC yang rendah, keamanan penanganan yang lebih baik, serta kemampuan green tack untuk daya lekat awal yang optimal, perekat ini banyak digunakan pada industri kayu, kemasan, konstruksi, kertas–label, dan tekstil. PT. Esa Bumindo berkomitmen menghadirkan produk perekat berbasis air berkualitas tinggi yang mendukung efisiensi operasional sekaligus keberlanjutan di berbagai sektor industri.",
+      "author": "Manager QA PT ESABUMINDO",
+      "coverImage": "/uploads/articles/article-1769758640301-316020006.jpg",
+      "publishedAt": "2026-01-30T07:46:05.750Z",
+      "status": "published",
+      "contentBlocks": [
+        {
+          "id": "block-1769758643796",
+          "type": "heading",
+          "level": 2,
+          "content": "1. Pengertian dan Karakteristik Waterbased Adhesive"
+        },
+        {
+          "id": "block-1769758704380",
+          "type": "paragraph",
+          "content": "Perekat berbasis air merupakan  polimer yang mneggunakan air  sebagai pelarut atau pembawa utama untuk polimer dan komponen aktif lainnya. Berbeda dengan alternatif berbasis pelarut organik, perekat ini menyebarkan polimer sintetis atau alami seperti polivinil asetat (PVA), akrilik, atau etilen vinil asetat (EVA) dalam emulsi berair, membentuk cairan yang mengeras saat air menguap selama pengeringan."
+        },
+        {
+          "id": "block-1769758731781",
+          "type": "image",
+          "images": [
+            {
+              "alt": "Tes Aplikasi Daya Perekat",
+              "url": "http://localhost:3001/uploads/articles/article-1769758817386-723311161.jpg",
+              "width": "full",
+              "caption": "Testing Pengeringan"
+            },
+            {
+              "alt": "reaktor pengering perekat",
+              "url": "http://localhost:3001/uploads/articles/article-1769758845751-570950327.jpg",
+              "width": "half",
+              "caption": "Tangki Pengeringan "
+            }
+          ],
+          "layout": "double"
+        },
+        {
+          "id": "block-1769758702644",
+          "type": "heading",
+          "level": 2,
+          "content": "2. Mekanisme Pengeringan dan Daya Rekat"
+        },
+        {
+          "id": "block-1769758788987",
+          "type": "paragraph",
+          "content": "Proses pengeringan yang bergantung pada penguapan air menghasilkan lapisan polimer yang lentur dan kuat. Lapisan ini memberikan daya lekat yang kokoh pada permukaan material melalui kaitan fisik dan gaya tarik-menarik antar molekul seperti van der Waals. Polimer berperan sebagai pengikat utama yang memberikan kekuatan dasar, plastisizer membuatnya lebih elastis dan tidak kaku, sedangkan pengisi tambahan meningkatkan ketahanan terhadap kondisi lingkungan seperti air atau panas."
+        },
+        {
+          "id": "block-1769758878924",
+          "type": "image",
+          "images": [
+            {
+              "alt": "kelebihan lem water based",
+              "url": "http://localhost:3001/uploads/articles/article-1769758922362-923279497.jpg",
+              "width": "full",
+              "caption": "keunggulan water based"
+            }
+          ],
+          "layout": "single"
+        },
+        {
+          "id": "block-1769759010155",
+          "type": "heading",
+          "level": 2,
+          "content": "KELEBIHAN PRODUK PEREKAT BERBASIS AIR"
+        },
+        {
+          "id": "block-1769759030235",
+          "type": "paragraph",
+          "content": "Salah satu keunggulan utama terletak pada profil lingkungannya yang bebas pelarut organik, perekat ini tidak memancarkan senyawa organik volatil (VOC). Hal tersebut menjadikannya sesuai dengan regulasi ketat di industri yang memprioritaskan keberlanjutan. Sifat rendah toksisitasnya juga memastikan penanganan yang lebih aman bagi pekerja, membutuhkan ventilasi dan perlengkapan pelindung lebih sedikit dibandingkan perekat berbasis pelarut organik ( Solvent )."
+        },
+        {
+          "id": "block-1769759039908",
+          "type": "heading",
+          "level": 3,
+          "content": "UNTUK INDUSTRI KAYU DAN KERTAS"
+        },
+        {
+          "id": "block-1769759038379",
+          "type": "paragraph",
+          "content": "Dalam aplikasi pertukangan kayu, seperti perakitan furnitur atau konstruksi panel, perekat berbasis air yang menggunakan PVA unggul karena kekuatan geser tinggi dan kemampuan membentuk ikatan pengisi celah pada kayu berpori. Misalnya, digunakan secara luas dalam produksi plywood, laminasi, dan lemari, di mana film kering yang jernih dan tidak meninggalkan noda mempertahankan kualitas estetika. Industri kemasan juga bergantung pada perekat ini untuk operasi berkecepatan tinggi seperti penutupan karton, produksi kantong, dan sambungan samping paperboard, memanfaatkan green tack.  Green tack adalah kemampuan perekat berbasis air untuk memberikan daya lekat awal (initial adhesion) yang kuat meskipun masih basah atau setengah kering. Istilah \"green\" berarti kondisi perekat yang belum sepenuhnya kering/hardening. "
+        },
+        {
+          "id": "block-1769759053347",
+          "type": "heading",
+          "level": 3,
+          "content": "UNTUK KONTRUKSI"
+        },
+        {
+          "id": "block-1769759052363",
+          "type": "paragraph",
+          "content": "Untuk proyek konstruksi, perekat berbasis air mengikat bahan seperti panel drywall, ubin plafon, dan underlayment lantai, menawarkan aplikasi mudah melalui rol atau semprot tanpa penumpukan residu. Kompatibilitasnya dengan aditif berbasis bio semakin mendukung sertifikasi bangunan hijau. Di industri kertas dan label, jenis perekat pressure-sensitive (PSA) digunakan untuk melapisi stiker dan lakban. Perekat ini bisa dilepas kembali atau melekat permanen pada permukaan seperti kaca atau plastik."
+        },
+        {
+          "id": "block-1769759069740",
+          "type": "heading",
+          "level": 2,
+          "content": "UNTUK INDUSTRI TEKSTIL"
+        },
+        {
+          "id": "block-1769759070819",
+          "type": "paragraph",
+          "content": "Aplikasi tekstil dan nonwoven menggunakan perekat ini untuk laminasi kain, produk higiene seperti popok, atau interior otomotif, di mana fleksibilitas mencegah retak saat ditekuk. Salah satunya adalah emulsi akrilik yang memberikan ketahanan cuci dan panas, krusial untuk sambungan tahan lama pada pakaian."
+        },
+        {
+          "id": "block-1769759084731",
+          "type": "image",
+          "images": [
+            {
+              "alt": "esabumindo",
+              "url": "http://localhost:3001/uploads/articles/article-1769759097110-416933189.jpg",
+              "width": "full",
+              "caption": "PT ESABUMINDO"
+            },
+            {
+              "alt": "gudang-esabumindo",
+              "url": "http://localhost:3001/uploads/articles/article-1769759099760-972457825.jpg",
+              "width": "half",
+              "caption": "Gudang PT ESABUMINDO"
+            },
+            {
+              "alt": "pengering esabumindo",
+              "url": "http://localhost:3001/uploads/articles/article-1769759101937-202086882.jpg",
+              "width": "half",
+              "caption": "Reaktor PT ESABUMINDO"
+            }
+          ],
+          "layout": "grid"
+        },
+        {
+          "id": "block-1769759139884",
+          "type": "heading",
+          "level": 2,
+          "content": "Komitmen PT. Esa Bumindo terhadap Kualitas dan Keberlanjutan"
+        },
+        {
+          "id": "block-1769759141611",
+          "type": "paragraph",
+          "content": "PT. Esa Bumindo menempatkan dirinya sebagai produsen perekat berbasis air  yang mengedepankan kualitas yang baik dan keberlanjutan dengan terus mengembangkan produk produk ramah lingkungan untuk segala bidang industri. "
+        }
+      ]
+    },
     "keunggulan-adhesive-berkualitas": {
       "id": "2ab0bf8b-982c-4179-8a2b-7cae3cc51168",
       "slug": "keunggulan-adhesive-berkualitas",
@@ -81,5 +227,5 @@
       ]
     }
   },
-  "lastUpdated": "2026-01-30T07:46:01.959Z"
+  "lastUpdated": "2026-02-26T07:12:23.534Z"
 }

@@ -98,17 +98,17 @@ export const HomeSection = memo(function HomeSection() {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 pt-6 md:pt-8 border-t border-gray-200">
               <StatItem
-                value="15+"
+                value="20+"
                 label={t("home.homeSection.stats.experience")}
                 color="060771"
               />
               <StatItem
-                value="500+"
+                value="100+"
                 label={t("home.homeSection.stats.projects")}
                 color="ff4136"
               />
               <StatItem
-                value="100%"
+                value="2000+"
                 label={t("home.homeSection.stats.satisfaction")}
                 color="060771"
               />
@@ -127,10 +127,10 @@ export const HomeSection = memo(function HomeSection() {
                   src={imgImagePt2}
                   alt="Industrial Worker - Professional Manufacturing"
                   width={550}
-                  height={500}
+                  height={550}
                   className="w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] object-cover"
                   loading="lazy"
-                  quality={75}
+                  quality={100}
                 />
               </div>
             </div>

@@ -292,9 +292,9 @@ export default function ProductPage() {
                             <th className="text-left py-4 px-4 font-semibold text-gray-900 w-1/4">
                               {t("products.productDetail.applicationInfo")}
                             </th>
-                            <th className="text-left py-4 px-4 font-semibold text-gray-900 w-1/3">
+                            {/* <th className="text-left py-4 px-4 font-semibold text-gray-900 w-1/3">
                               {t("products.productCard.features")}
-                            </th>
+                            </th> */}
                             <th className="text-center py-4 px-4 font-semibold text-gray-900 w-1/6">
                               {t("products.productCard.viewDetails")}
                             </th>
@@ -336,7 +336,7 @@ export default function ProductPage() {
                               </td>
 
                               {/* Features */}
-                              <td className="py-6 px-4">
+                              {/* <td className="py-6 px-4">
                                 <ul className="space-y-1">
                                   {product.features
                                     ?.slice(0, 3)
@@ -356,7 +356,7 @@ export default function ProductPage() {
                                     </li>
                                   )}
                                 </ul>
-                              </td>
+                              </td> */}
 
                               {/* Actions */}
                               <td className="py-6 px-4">
@@ -368,7 +368,7 @@ export default function ProductPage() {
                                     {t("products.productCard.viewDetails")}
                                   </button>
                                   <button
-                                    onClick={() => handleRequest(product.id)}
+                                    onClick={() => handleContact()}
                                     className="bg-[#1f4faa] hover:bg-[#173d85] text-white rounded-sm text-sm px-4 py-2 transition-colors"
                                   >
                                     {t("products.productCard.addToCart")}
@@ -422,7 +422,7 @@ export default function ProductPage() {
                                 {t("products.productCard.viewDetails")}
                               </button>
                               <button
-                                onClick={() => handleRequest(product.id)}
+                                onClick={() => handleContact()}
                                 className="flex-1 bg-[#1f4faa] hover:bg-[#173d85] text-white rounded-sm py-2 transition-colors"
                               >
                                 {t("products.productCard.addToCart")}

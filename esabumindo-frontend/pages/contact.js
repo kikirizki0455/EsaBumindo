@@ -238,7 +238,7 @@ export default function ContactUsPage() {
               fill
               className="object-cover"
               priority
-              onLoadingComplete={() => setIsImageLoaded(true)}
+              onLoad={() => setIsImageLoaded(true)}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
             />
             <div className="relative z-20 container mx-auto px-4 h-full flex items-center justify-center">
@@ -348,6 +348,7 @@ export default function ContactUsPage() {
                               "contact.contactForm.fields.phone.placeholder"
                             )}
                             value={formData.phone}
+                            required
                             onChange={handleChange}
                             className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                           />

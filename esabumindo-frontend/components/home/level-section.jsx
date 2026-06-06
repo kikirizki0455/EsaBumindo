@@ -5,7 +5,7 @@ import { useTranslation } from "@/hooks/use-translation";
 import { memo } from "react";
 
 // Use string path instead of static import for better code splitting
-const imgImagePt3 = "/asset/image/factory.webp";
+const imgImagePt3 = "/asset/image/esabumindo-factory 1.webp";
 
 export const LevelSection = memo(function LevelSection() {
   const { t, isHydrated } = useTranslation();

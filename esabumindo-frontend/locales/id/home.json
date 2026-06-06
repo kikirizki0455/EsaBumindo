@@ -12,8 +12,8 @@
     "ctaSecondary": "Pelajari Lebih Lanjut",
     "stats": {
       "experience": "Tahun Pengalaman",
-      "projects": "Proyek Selesai",
-      "satisfaction": "Kepuasan Klien"
+      "projects": "Produk Terbaik",
+      "satisfaction": "Klien terpuaskan"
     }
   },
   "productSection": {
@@ -35,7 +35,8 @@
       "secondary": "Hubungi Kami"
     },
     "categories": {
-      "title": "Kategori Produk Kami"
+      "title": "Kategori Produk",
+      "viewAll": "Lihat Semua Produk"
     },
     "overlay": {
       "title": "ESABOND Professional",

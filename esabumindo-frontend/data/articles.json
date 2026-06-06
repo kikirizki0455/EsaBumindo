@@ -1,6 +1,16 @@
 {
   "articles": [
     {
+      "id": "196ee4a5-19a0-4b8e-9ff3-703ae7429bcc",
+      "slug": "waterbased-adhesive",
+      "title": "WATERBASED ADHESIVE",
+      "excerpt": "Perekat berbasis air merupakan solusi perekat ramah lingkungan yang menggunakan air sebagai pelarut utama untuk polimer seperti PVA, akrilik, dan EVA, yang mengeras melalui proses penguapan membentuk lapisan fleksibel dengan daya rekat tinggi. Dengan emisi VOC yang rendah, keamanan penanganan yang lebih baik, serta kemampuan green tack untuk daya lekat awal yang optimal, perekat ini banyak digunakan pada industri kayu, kemasan, konstruksi, kertas–label, dan tekstil. PT. Esa Bumindo berkomitmen menghadirkan produk perekat berbasis air berkualitas tinggi yang mendukung efisiensi operasional sekaligus keberlanjutan di berbagai sektor industri.",
+      "author": "Manager QA PT ESABUMINDO",
+      "coverImage": "/uploads/articles/article-1769758640301-316020006.jpg",
+      "publishedAt": "2026-01-30T07:46:05.750Z",
+      "status": "published"
+    },
+    {
       "id": "2ab0bf8b-982c-4179-8a2b-7cae3cc51168",
       "slug": "keunggulan-adhesive-berkualitas",
       "title": "Keunggulan Adhesive Berkualitas untuk Aplikasi Industri",
@@ -11,5 +21,5 @@
       "status": "published"
     }
   ],
-  "lastUpdated": "2026-01-30T07:46:01.959Z"
+  "lastUpdated": "2026-02-26T07:12:23.533Z"
 }

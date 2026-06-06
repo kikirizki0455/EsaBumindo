@@ -1,16 +1,16 @@
 {
   "heroSection": {
     "headline": {
-      "prefix": "#HARI INI PO",
-      "highlight": "LANGSUNG JADI."
+      "prefix": "#Merekatkan Hubungan",
+      "highlight": "Menguatkan Industri"
     },
-    "description": "Industri sering terhambat oleh produksi yang lambat dan suplai yang tidak pasti. Karena itu, kecepatan dan konsistensi menjadi kunci. ESABOND menjawab kebutuhan tersebut dengan proses produksi super cepat pemesanan hari ini, besok langsung kami buat membantu bisnis Anda bergerak lebih efisien dan siap bersaing.",
+    "description": "Merekatkan kualitas dan kepercayaan untuk setiap industri. ESABOND menghadirkan solusi adhesive water-based dengan kualitas konsisten, proses produksi cepat, dan distribusi terpercaya guna mendukung produktivitas bisnis secara berkelanjutan.",
     "cta": {
       "primary": "Hubungi Kami Sekarang",
       "secondary": "Lihat Produk"
     },
     "badge": {
-      "years": "17+",
+      "years": "20+",
       "label": "Tahun",
       "sublabel": "Pengalaman"
     },
@@ -48,6 +48,23 @@
         "badgeColor": "bg-gradient-to-r from-indigo-600 to-purple-600",
         "image": "/images/timeline/esabumindo-certified.webp"
       },
+
+      {
+        "id": "2024-warehouse-jatim",
+        "name": "Pembangunan Gudang Jawa Timur",
+        "year": "2024",
+        "description": "Melanjutkan strategi ekspansi distribusi, PT. Esa Bumindo membangun gudang di wilayah Jawa Timur untuk memperkuat jaringan logistik dan memastikan produk dapat menjangkau pasar di kawasan timur Pulau Jawa dengan lebih cepat dan efisien.",
+        "badgeColor": "bg-gradient-to-r from-orange-500 to-amber-500",
+        "image": "/images/timeline/gudang-jatim.webp"
+      },
+      {
+        "id": "2023-warehouse-jateng",
+        "name": "Pembangunan Gudang Jawa Tengah",
+        "year": "2023",
+        "description": "Sebagai bagian dari strategi perluasan distribusi ke seluruh Pulau Jawa, PT. Esa Bumindo membangun gudang di wilayah Jawa Tengah. Fasilitas ini menjadi titik distribusi strategis yang mendukung kelancaran pengiriman produk ke berbagai daerah di kawasan tengah Jawa.",
+        "badgeColor": "bg-gradient-to-r from-teal-500 to-cyan-600",
+        "image": "/images/timeline/gudang-jateng.webp"
+      },
       {
         "id": "2021-second-factory",
         "name": "Ekspansi Pabrik Kedua",
@@ -62,8 +79,9 @@
         "year": "2017",
         "description": "Berhasil mendirikan pabrik pertama yang berlokasi di Kampung Gruduk, Kabupaten Tangerang, Banten, sebagai langkah strategis dalam meningkatkan kapasitas produksi.",
         "badgeColor": "bg-gradient-to-r from-red-500 to-red-600",
-        "image": "/images/timeline/esabumindo-pabrik-pertama.webp"
+        "image": "/images/timeline/pabrik-pertama.webp"
       },
+
       {
         "id": "2009-first-production",
         "name": "Awal Produksi Mandiri",
@@ -78,7 +96,7 @@
         "year": "2008",
         "description": "PT. Esa Bumindo resmi didirikan sebagai perusahaan yang bergerak di bidang produksi dan pengembangan industri.",
         "badgeColor": "bg-gradient-to-r from-green-600 to-emerald-600",
-        "image": "/images/timeline/berdirinya-esabumindo.jpg"
+        "image": "/images/timeline/esabumindo-pertama.webp"
       }
     ]
   },

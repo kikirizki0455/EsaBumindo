@@ -17,13 +17,7 @@ export default function Document() {
         <link rel="dns-prefetch" href="https://maps.googleapis.com" />
 
         {/* Preload critical assets */}
-        <link
-          rel="preload"
-          href="/asset/image/esabumindo.svg"
-          as="image"
-          type="image/svg+xml"
-        />
-
+    
         {/* Meta for mobile optimization */}
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />

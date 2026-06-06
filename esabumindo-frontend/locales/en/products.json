@@ -48,7 +48,6 @@
     "addToCart": "Pre Order",
     "requestQuote": "Request Quote",
     "preOrder": "Pre-Order Now",
-    "downloadSpec": "Specifications",
     "share": "Share",
     "copied": "Copied",
     "features": "Key Features",
@@ -234,596 +233,395 @@
   "productData": {
     "types": {
       "allAcrylic": "All Acrylic",
-      "dempul": "Putty",
+      "pvac": "PVAC",
+      "styrena": "Styrena",
       "eva": "EVA",
       "psa": "PSA",
-      "pvac": "PVAC",
-      "styrene": "Styrene",
-      "vinyl": "Vinyl",
-      "wip": "WIP"
+      "vinyl": "Vinyl"
     },
     "products": {
       "acr-001": {
-        "name": "ESA Acrylic Bond 100",
-        "title": "ESA Acrylic Bond 100",
+        "id": "acr-001",
+        "name": "EB 3038",
+        "title": "EB 3038",
         "category": "All Acrylic",
-        "application": "Construction & Building",
-        "performance": "High Strength, Weather Resistant",
-        "features": [
-          "Extreme weather resistant",
-          "High adhesion",
-          "Fast drying",
-          "UV resistant"
-        ],
-        "description": "Premium acrylic adhesive for construction applications with high weather resistance."
+        "application": "Dry Lamination",
+        "solid": "43 ± 1 %",
+        "viskositas": "150 - 400 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "Milky White",
+        "description": "Acrylic Adhesive 3038 is designed as a reliable solution for dry lamination applications, offering a milky white appearance, high bonding strength, and excellent weather resistance. It ensures consistent performance, supporting efficient production and durable lamination results."
       },
       "acr-002": {
-        "name": "ESA Acrylic Pro 200",
-        "title": "ESA Acrylic Pro 200",
+        "id": "acr-002",
+        "name": "EB 5037 MA",
+        "title": "EB 5037 MA",
         "category": "All Acrylic",
-        "application": "Automotive Industry",
-        "performance": "Industrial Grade, Vibration Resistant",
-        "features": [
-          "Vibration resistant",
-          "Flexible",
-          "Heat resistant",
-          "Non-toxic"
-        ],
-        "description": "Acrylic solution for automotive industry with superior vibration resistance."
+        "application": "Sablon",
+        "solid": "40 ± 1 %",
+        "viskositas": "1.000 - 2.500 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "White Yellowish",
+        "description": "All acrylic emulsion especially designed for textile applications, mainly used as printing binder."
       },
       "acr-003": {
-        "name": "ESA Acrylic Clear 300",
-        "title": "ESA Acrylic Clear 300",
+        "id": "acr-003",
+        "name": "EB 727",
+        "title": "EB 727",
         "category": "All Acrylic",
-        "application": "Glass & Acrylic",
-        "performance": "Crystal Clear, Non-Yellowing",
-        "features": [
-          "Perfect transparency",
-          "Non-yellowing",
-          "Fast curing",
-          "Easy application"
-        ],
-        "description": "Clear acrylic adhesive for glass and transparent material applications."
-      },
-      "acr-004": {
-        "name": "ESA Acrylic Flex 400",
-        "title": "ESA Acrylic Flex 400",
-        "category": "All Acrylic",
-        "application": "Plastic & Composite",
-        "performance": "Flexible, Multi-Surface",
-        "features": [
-          "Super flexible",
-          "Multi-surface",
-          "Water resistant",
-          "Economical"
-        ],
-        "description": "Flexible acrylic adhesive for various plastic and composite surfaces."
-      },
-      "acr-005": {
-        "name": "ESA Acrylic Heavy 500",
-        "title": "ESA Acrylic Heavy 500",
-        "category": "All Acrylic",
-        "application": "Heavy Duty Industrial",
-        "performance": "Maximum Strength, Long Lasting",
-        "features": [
-          "Maximum strength",
-          "Long lasting",
-          "Chemical resistant",
-          "Industrial grade"
-        ],
-        "description": "Heavy duty acrylic adhesive for heavy industrial applications."
-      },
-      "dmp-001": {
-        "name": "ESA Wood Putty Premium",
-        "title": "ESA Wood Putty Premium",
-        "category": "Putty",
-        "application": "Furniture & Woodworking",
-        "performance": "Sandable, Stainable",
-        "features": [
-          "Sandable",
-          "Paintable",
-          "Perfect gap filling",
-          "Fast drying"
-        ],
-        "description": "Premium wood putty for high-quality furniture finishing."
-      },
-      "dmp-002": {
-        "name": "ESA Wall Putty Pro",
-        "title": "ESA Wall Putty Pro",
-        "category": "Putty",
-        "application": "Construction & Renovation",
-        "performance": "Crack Resistant, Easy Apply",
-        "features": [
-          "Crack resistant",
-          "Easy application",
-          "Smooth finish",
-          "Moisture resistant"
-        ],
-        "description": "Professional wall putty for perfect wall finishing results."
-      },
-      "dmp-003": {
-        "name": "ESA Automotive Putty",
-        "title": "ESA Automotive Putty",
-        "category": "Putty",
-        "application": "Automotive Body Repair",
-        "performance": "Quick Dry, High Fill",
-        "features": [
-          "Fast drying",
-          "High fill capacity",
-          "Easy sanding",
-          "Impact resistant"
-        ],
-        "description": "Specialized putty for vehicle body repair."
-      },
-      "dmp-004": {
-        "name": "ESA Waterproof Putty",
-        "title": "ESA Waterproof Putty",
-        "category": "Putty",
-        "application": "Wet Areas & Outdoor",
-        "performance": "100% Waterproof, Mold Resistant",
-        "features": [
-          "100% waterproof",
-          "Mold resistant",
-          "Weather resistant",
-          "Long lasting"
-        ],
-        "description": "Waterproof putty for wet areas and outdoor applications."
-      },
-      "dmp-005": {
-        "name": "ESA Multi Surface Putty",
-        "title": "ESA Multi Surface Putty",
-        "category": "Putty",
-        "application": "Multi Application",
-        "performance": "Versatile, All Surface",
-        "features": [
-          "Multi-surface",
-          "Versatile",
-          "Economical",
-          "Professional results"
-        ],
-        "description": "Versatile putty for various surface types."
-      },
-      "eva-001": {
-        "name": "ESA EVA Hot Melt 100",
-        "title": "ESA EVA Hot Melt 100",
-        "category": "EVA",
-        "application": "Packaging & Carton",
-        "performance": "Fast Setting, Strong Bond",
-        "features": [
-          "Fast setting",
-          "Strong adhesion",
-          "Suitable for carton",
-          "Economical"
-        ],
-        "description": "EVA hot melt adhesive for packaging and carton applications."
-      },
-      "eva-002": {
-        "name": "ESA EVA Bookbinding",
-        "title": "ESA EVA Bookbinding",
-        "category": "EVA",
-        "application": "Printing & Binding",
-        "performance": "Flexible, Page Turner Friendly",
-        "features": ["Flexible", "Paper safe", "Clean results", "Durable"],
-        "description": "EVA adhesive specifically for book binding and printing industry."
-      },
-      "eva-003": {
-        "name": "ESA EVA Foam Bond",
-        "title": "ESA EVA Foam Bond",
-        "category": "EVA",
-        "application": "Foam & Sponge",
-        "performance": "Foam Friendly, No Damage",
-        "features": [
-          "Foam safe",
-          "No material damage",
-          "Strong bond",
-          "Fast drying"
-        ],
-        "description": "EVA adhesive for foam and sponge material bonding."
-      },
-      "eva-004": {
-        "name": "ESA EVA Industrial",
-        "title": "ESA EVA Industrial",
-        "category": "EVA",
-        "application": "Manufacturing Industry",
-        "performance": "High Volume, Consistent Quality",
-        "features": [
-          "Mass production ready",
-          "Consistent quality",
-          "Efficient",
-          "Cost effective"
-        ],
-        "description": "Industrial EVA adhesive for large-scale manufacturing applications."
-      },
-      "eva-005": {
-        "name": "ESA EVA Premium Plus",
-        "title": "ESA EVA Premium Plus",
-        "category": "EVA",
-        "application": "Premium Application",
-        "performance": "Superior Quality, Premium Grade",
-        "features": [
-          "Premium quality",
-          "Superior performance",
-          "Multi-application",
-          "Professional results"
-        ],
-        "description": "Premium grade EVA adhesive for applications requiring the best quality."
-      },
-      "psa-001": {
-        "name": "ESA PSA Label Grade",
-        "title": "ESA PSA Label Grade",
-        "category": "PSA",
-        "application": "Label & Sticker",
-        "performance": "Permanent Tack, Clean Application",
-        "features": [
-          "Permanent adhesion",
-          "Clean application",
-          "Suitable for labels",
-          "Long lasting"
-        ],
-        "description": "PSA specifically for label and sticker industry."
-      },
-      "psa-002": {
-        "name": "ESA PSA Tape Bond",
-        "title": "ESA PSA Tape Bond",
-        "category": "PSA",
-        "application": "Tape Manufacturing",
-        "performance": "High Tack, Consistent Coating",
-        "features": [
-          "High tack",
-          "Consistent coating",
-          "For tape production",
-          "Stable quality"
-        ],
-        "description": "PSA for tape manufacturing with consistent coating quality."
-      },
-      "psa-003": {
-        "name": "ESA PSA Removable",
-        "title": "ESA PSA Removable",
-        "category": "PSA",
-        "application": "Removable Application",
-        "performance": "Easy Peel, No Residue",
-        "features": [
-          "Easy removal",
-          "No residue",
-          "Repositionable",
-          "Clean removal"
-        ],
-        "description": "Removable PSA for applications requiring easy removal."
-      },
-      "psa-004": {
-        "name": "ESA PSA Medical Grade",
-        "title": "ESA PSA Medical Grade",
-        "category": "PSA",
-        "application": "Medical & Healthcare",
-        "performance": "Skin Safe, Hypoallergenic",
-        "features": [
-          "Skin safe",
-          "Hypoallergenic",
-          "Medical grade",
-          "Breathable"
-        ],
-        "description": "Medical grade PSA for healthcare and bandage applications."
-      },
-      "psa-005": {
-        "name": "ESA PSA Heavy Duty",
-        "title": "ESA PSA Heavy Duty",
-        "category": "PSA",
-        "application": "Industrial Mounting",
-        "performance": "Extreme Tack, Weather Resistant",
-        "features": [
-          "Extreme tack",
-          "Weather resistant",
-          "Heavy duty",
-          "Permanent bond"
-        ],
-        "description": "Heavy duty PSA for industrial and outdoor mounting."
+        "application": "Waterproofing",
+        "solid": "50 ± 1 %",
+        "viskositas": "500 - 2.000 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "Blueish to Transparent",
+        "description": "Provides excellent rubbing fastness, high gloss and good water resistant."
       },
       "pvac-001": {
-        "name": "ESA PVAC Wood Pro",
-        "title": "ESA PVAC Wood Pro",
+        "id": "pvac-001",
+        "name": "EB 140",
+        "title": "EB 140",
         "category": "PVAC",
-        "application": "Woodworking & Furniture",
-        "performance": "Strong Wood Bond, Sandable",
-        "features": [
-          "Strong wood bond",
-          "Sandable",
-          "Fast drying",
-          "Non-toxic"
-        ],
-        "description": "Premium PVAC adhesive for woodworking and furniture industry."
+        "application": "Middle to Hard Wood",
+        "solid": "40 ± 1 %",
+        "viskositas": "50.000 - 60.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Most suitable for bonding all types of wood. It is good for joinery adhesive, bonding Formica sheets and for bonding laminated timber or bare-core construction with high efficiency."
       },
       "pvac-002": {
-        "name": "ESA PVAC Paper Bond",
-        "title": "ESA PVAC Paper Bond",
+        "id": "pvac-002",
+        "name": "EB 140 E",
+        "title": "EB 140 E",
         "category": "PVAC",
-        "application": "Paper & Packaging",
-        "performance": "Paper Safe, Quick Dry",
-        "features": [
-          "Paper safe",
-          "Quick drying",
-          "No wrinkling",
-          "Economical"
-        ],
-        "description": "PVAC adhesive for paper and packaging applications."
+        "application": "Middle to Hard Wood",
+        "solid": "37 ± 1 %",
+        "viskositas": "17.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Highly suitable for bonding a wide range of wood types. It performs well in joinery applications. It has a low viscosity, making it easy to apply."
       },
       "pvac-003": {
-        "name": "ESA PVAC D3 Waterproof",
-        "title": "ESA PVAC D3 Waterproof",
+        "id": "pvac-003",
+        "name": "EB 230 PP",
+        "title": "EB 230 PP",
         "category": "PVAC",
-        "application": "Outdoor Furniture",
-        "performance": "D3 Water Resistant, Durable",
-        "features": [
-          "D3 water resistant",
-          "For outdoor use",
-          "Weather resistant",
-          "Strong and durable"
-        ],
-        "description": "D3 waterproof PVAC adhesive for outdoor furniture."
+        "application": "Soft to Middle Wood",
+        "solid": "30 ± 1 %",
+        "viskositas": "800.000 - 900.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "A PVAc product commonly used in the wood industry for furniture applications."
       },
       "pvac-004": {
-        "name": "ESA PVAC School Safe",
-        "title": "ESA PVAC School Safe",
+        "id": "pvac-004",
+        "name": "EB 435 E",
+        "title": "EB 435 E",
         "category": "PVAC",
-        "application": "Education & Craft",
-        "performance": "Child Safe, Washable",
-        "features": ["Child safe", "Washable", "Non-toxic", "Easy to use"],
-        "description": "Child-safe PVAC adhesive for school and craft activities."
+        "application": "Soft to Middle Wood",
+        "solid": "35 ± 1 %",
+        "viskositas": "20.000 - 25.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Milky white emulsion of Polyvinyl acetate Homopolymer for wood application such as fingerjoint, lumber core or barecore. EB 435 E has good flexibility."
       },
       "pvac-005": {
-        "name": "ESA PVAC Industrial",
-        "title": "ESA PVAC Industrial",
+        "id": "pvac-005",
+        "name": "EB 460",
+        "title": "EB 460",
         "category": "PVAC",
-        "application": "Industrial Manufacturing",
-        "performance": "High Volume, Consistent",
-        "features": [
-          "Industrial use",
-          "High volume",
-          "Consistent quality",
-          "Cost effective"
-        ],
-        "description": "Industrial PVAC adhesive for large-scale production."
+        "application": "Middle to Hard Wood",
+        "solid": "59 ± 1 %",
+        "viskositas": "45.000 - 60.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "PVAc with high solid content and a relatively fast drying speed, suitable for applications on medium to hard wood."
+      },
+      "pvac-006": {
+        "id": "pvac-006",
+        "name": "EB 8429 E",
+        "title": "EB 8429 E",
+        "category": "PVAC",
+        "application": "Paper Core",
+        "solid": "30 ± 1 %",
+        "viskositas": "4.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Cream",
+        "description": "Synthetic emulsion of Modified Polyvinyl Acetate homopolymer for making paper core, paper lamination. This product has good initial tack and fast setting. This type is also easy to apply because it has low viscosity."
+      },
+      "pvac-007": {
+        "id": "pvac-007",
+        "name": "EB 8435 AK",
+        "title": "EB 8435 AK",
+        "category": "PVAC",
+        "application": "Paper Core",
+        "solid": "34 ± 1 %",
+        "viskositas": "10.000 - 18.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Cream",
+        "description": "Synthetic emulsion of Modified Polyvinyl Acetate homopolymer for making paper core, paper lamination. This product has good initial tack and fast setting."
+      },
+      "pvac-008": {
+        "id": "pvac-008",
+        "name": "EB 9503",
+        "title": "EB 9503",
+        "category": "PVAC",
+        "application": "Paper Overlay",
+        "solid": "28 ± 1 %",
+        "viskositas": "55.000 - 65.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Milky white emulsion of Polyvinyl acetate Homopolymer that has good flexibility. Designed for general purposes in industry, especially foam to fabric, furniture, paper lamination etc."
+      },
+      "pvac-009": {
+        "id": "pvac-009",
+        "name": "EB 9110 A",
+        "title": "EB 9110 A",
+        "category": "PVAC",
+        "application": "Furniture",
+        "solid": "25 ± 1 %",
+        "viskositas": "900.000 - 1.500.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "A synthetic glue made from polyvinyl acetate homopolymer. This glue is designed for various purposes in industry, especially attaching foam to fabric, furniture, etc."
+      },
+      "pvac-010": {
+        "id": "pvac-010",
+        "name": "EB 833 KL",
+        "title": "EB 833 KL",
+        "category": "PVAC",
+        "application": "Paper Corrugated",
+        "solid": "22 ± 1 %",
+        "viskositas": "10.000 - 12.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Cream",
+        "description": "Emulsion of Polyvinyl acetate homopolymer. This product suitable for paper / carton lamination, Paper tube, and etc."
+      },
+      "pvac-011": {
+        "id": "pvac-011",
+        "name": "EB 832 ET",
+        "title": "EB 832 ET",
+        "category": "PVAC",
+        "application": "Efflute",
+        "solid": "34 ± 1 %",
+        "viskositas": "2.000 - 2.500 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Cream",
+        "description": "Milky white synthetic emulsion of Polyvinyl acetate homopolymer for paper applications such as cardbox, paper pallet, honeycomb paper, and elbow paper etc."
+      },
+      "pvac-012": {
+        "id": "pvac-012",
+        "name": "EB 9504 E",
+        "title": "EB 9504 E",
+        "category": "PVAC",
+        "application": "Joint Flap Paper - Paper",
+        "solid": "37 ± 1 %",
+        "viskositas": "10.000 - 15.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Milky White Synthetic Emulsion of Polyvinyl Acetate Homopolymer. This product designed for various industrial purposes, adhesive, and paper lamination."
       },
       "sty-001": {
-        "name": "ESA Styrene Board Bond",
-        "title": "ESA Styrene Board Bond",
-        "category": "Styrene",
-        "application": "Styrofoam & Insulation",
-        "performance": "Foam Safe, Strong Bond",
-        "features": [
-          "Styrofoam safe",
-          "Strong bond",
-          "No foam damage",
-          "Fast drying"
-        ],
-        "description": "Styrene adhesive for styrofoam and insulation material bonding."
+        "id": "sty-001",
+        "name": "EB 2250",
+        "title": "EB 2250",
+        "category": "Styrena",
+        "application": "Flexo Ink",
+        "solid": "50 ± 1 %",
+        "viskositas": "300 - 1.000 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "Milky White",
+        "description": "High-performance styrene acrylic emulsion designed as a diluent in water-based flexographic inks, particularly for paper and paperboard substrates."
       },
       "sty-002": {
-        "name": "ESA Styrene Construction",
-        "title": "ESA Styrene Construction",
-        "category": "Styrene",
-        "application": "Construction & Building",
-        "performance": "Heavy Duty, Weather Proof",
-        "features": [
-          "Heavy duty",
-          "Weather proof",
-          "For construction",
-          "High adhesion"
-        ],
-        "description": "Styrene adhesive for construction and building applications."
+        "id": "sty-002",
+        "name": "EB 2251",
+        "title": "EB 2251",
+        "category": "Styrena",
+        "application": "Flexo Ink",
+        "solid": "50 ± 1 %",
+        "viskositas": "300 - 1.000 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "Milky White",
+        "description": "A high-performance styrene-acrylic emulsion designed as a diluent in water-based flexographic inks, particularly for paper and paperboard substrates, with a high Tg and a clear appearance."
       },
       "sty-003": {
-        "name": "ESA Styrene Packaging",
-        "title": "ESA Styrene Packaging",
-        "category": "Styrene",
-        "application": "Packaging Industry",
-        "performance": "Fast Setting, Cost Effective",
-        "features": [
-          "Fast setting",
-          "Cost effective",
-          "For packaging",
-          "Efficient"
-        ],
-        "description": "Styrene adhesive for packaging and box industry."
+        "id": "sty-003",
+        "name": "EB 3042 TP",
+        "title": "EB 3042 TP",
+        "category": "Styrena",
+        "application": "Sablon",
+        "solid": "41 ± 1 %",
+        "viskositas": "1.200 - 1.500 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "Milky White",
+        "description": "Styrene acrylic emulsion especially designed for textile applications, mainly used as printing binder. EB-3042 TP formulation provides excellent rubbing fastness, high gloss and good water resistant."
       },
       "sty-004": {
-        "name": "ESA Styrene Craft Pro",
-        "title": "ESA Styrene Craft Pro",
-        "category": "Styrene",
-        "application": "Craft & Model Making",
-        "performance": "Precision, Clean Work",
-        "features": [
-          "High precision",
-          "Clean results",
-          "For models",
-          "Easy to use"
-        ],
-        "description": "Styrene adhesive for crafts and model making."
+        "id": "sty-004",
+        "name": "EB 5506 B",
+        "title": "EB 5506 B",
+        "category": "Styrena",
+        "application": "Metal Roof",
+        "solid": "35 ± 1 %",
+        "viskositas": "40.000 - 45.000 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "White Blueish",
+        "description": "A styrene-acrylic product with good brushability, a clear film, and strong adhesion, suitable for metal roof tile applications."
       },
       "sty-005": {
-        "name": "ESA Styrene Industrial Plus",
-        "title": "ESA Styrene Industrial Plus",
-        "category": "Styrene",
-        "application": "Heavy Industrial",
-        "performance": "Maximum Strength, Industrial Grade",
-        "features": [
-          "Maximum strength",
-          "Industrial grade",
-          "Long lasting",
-          "High performance"
-        ],
-        "description": "Industrial styrene adhesive for heavy applications."
+        "id": "sty-005",
+        "name": "EB 5502",
+        "title": "EB 5502",
+        "category": "Styrena",
+        "application": "Foam Laminated",
+        "solid": "40 ± 1 %",
+        "viskositas": "30.000 - 40.000 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "White Bluish",
+        "description": "A styrene-acrylic product with excellent film flexibility and strong adhesion, suitable for applications in the foam lamination industry."
+      },
+      "sty-006": {
+        "id": "sty-006",
+        "name": "EB 5508",
+        "title": "EB 5508",
+        "category": "Styrena",
+        "application": "Metal Roof",
+        "solid": "38 ± 1 %",
+        "viskositas": "45.000 - 50.000 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "Clear Transparent",
+        "description": "Styrene Acrylic Emulsion especially designed for coating formulations, mainly used in industrial and construction application such as metal roofing."
+      },
+      "sty-007": {
+        "id": "sty-007",
+        "name": "EB 5512 TI",
+        "title": "EB 5512 TI",
+        "category": "Styrena",
+        "application": "Coating",
+        "solid": "50 ± 1 %",
+        "viskositas": "15.000 - 25.000 Cps",
+        "pH": "7 ~ 10",
+        "appearance": "White Blueish",
+        "description": "Styrene Acrylic Emulsion especially designed for coating formulations, mainly used as a coating binder."
+      },
+      "sty-008": {
+        "id": "sty-008",
+        "name": "EB 765",
+        "title": "EB 765",
+        "category": "Styrena",
+        "application": "Waterproofing",
+        "solid": "50 ± 1 %",
+        "viskositas": "30.000 - 40.000 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "Milky White",
+        "description": "Styrena Acrylic product that has excellent compatibility with pigments and extenders, and it has very high binding power for pigments and excellent scrub resistance."
+      },
+      "eva-001": {
+        "id": "eva-001",
+        "name": "EB 8102",
+        "title": "EB 8102",
+        "category": "EVA",
+        "application": "Wet Lamination",
+        "solid": "49 ± 1 %",
+        "viskositas": "6.000 - 8.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Ethylene vinyl acetate copolymer emulsion, mainly developed for base emulsion of adhesives. This product gives good adhesion for packaging, bookbinding, and bonding for layers of plastic or paper."
+      },
+      "eva-002": {
+        "id": "eva-002",
+        "name": "EB 956",
+        "title": "EB 956",
+        "category": "EVA",
+        "application": "Joint Flap",
+        "solid": "54 ± 1 %",
+        "viskositas": "16.000 - 20.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "EB 956 is an EVA product with strong adhesion and is commonly used for joint flap applications on laminated or coated paper."
+      },
+      "eva-003": {
+        "id": "eva-003",
+        "name": "EB 957",
+        "title": "EB 957",
+        "category": "EVA",
+        "application": "Joint Flap",
+        "solid": "55 ± 1 %",
+        "viskositas": "200 - 230 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "EB 957 is an EVA product with strong adhesion and is easy to apply through a nozzle for bonding paper to smooth-surface materials."
+      },
+      "eva-004": {
+        "id": "eva-004",
+        "name": "EB 8104",
+        "title": "EB 8104",
+        "category": "EVA",
+        "application": "Paper - Aluminium Lamination",
+        "solid": "42 ± 1 %",
+        "viskositas": "15.000 - 20.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Vinyl ethylene copolymer emulsion, mainly developed for base emulsion of adhesives. This product gives good adhesion for lamination, papers, woods, PVC sheets."
+      },
+      "psa-001": {
+        "id": "psa-001",
+        "name": "EB 660",
+        "title": "EB 660",
+        "category": "PSA",
+        "application": "Label",
+        "solid": "62 ± 1 %",
+        "viskositas": "23.000 - 40.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "EB-660 forms a film with high immediate tack and high peel strength, and can be used in general applications such as labels and bonding paper to smooth-surface materials."
+      },
+      "psa-002": {
+        "id": "psa-002",
+        "name": "EB 9334",
+        "title": "EB 9334",
+        "category": "PSA",
+        "application": "Joint Flap Paper - Plastic",
+        "solid": "62 ± 1 %",
+        "viskositas": "10.000 - 15.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "EB-9334 forms a film with high immediate tack, high peel strength, and good cohesion. This product is also easy to apply in adhesive coating processes using a roll."
       },
       "vnl-001": {
-        "name": "ESA Vinyl Floor Bond",
-        "title": "ESA Vinyl Floor Bond",
+        "id": "vnl-001",
+        "name": "EB 1101 VA",
+        "title": "EB 1101 VA",
         "category": "Vinyl",
-        "application": "Flooring & Carpet",
-        "performance": "Permanent Bond, Flat Laying",
-        "features": [
-          "Permanent bond",
-          "Flat results",
-          "For vinyl flooring",
-          "Long lasting"
-        ],
-        "description": "Vinyl adhesive for vinyl flooring and carpet installation."
+        "application": "Coating",
+        "solid": "57 ± 1 %",
+        "viskositas": "7.000 - 8.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Polymer vinyl-acrylic emulsion which has good adhesion and water resistance. This product has high solid content and good color acceptance for paint industry."
       },
       "vnl-002": {
-        "name": "ESA Vinyl Wall Cover",
-        "title": "ESA Vinyl Wall Cover",
+        "id": "vnl-002",
+        "name": "EB 1103 VA",
+        "title": "EB 1103 VA",
         "category": "Vinyl",
-        "application": "Wall Covering",
-        "performance": "Easy Apply, Repositionable",
-        "features": [
-          "Easy application",
-          "Repositionable",
-          "For wall covering",
-          "Professional results"
-        ],
-        "description": "Vinyl adhesive for wall covering and vinyl wallpaper installation."
-      },
-      "vnl-003": {
-        "name": "ESA Vinyl Automotive",
-        "title": "ESA Vinyl Automotive",
-        "category": "Vinyl",
-        "application": "Automotive Interior",
-        "performance": "Heat Resistant, Flexible",
-        "features": [
-          "Heat resistant",
-          "Flexible",
-          "For car interior",
-          "Odorless"
-        ],
-        "description": "Vinyl adhesive for automotive interior applications."
-      },
-      "vnl-004": {
-        "name": "ESA Vinyl Marine Grade",
-        "title": "ESA Vinyl Marine Grade",
-        "category": "Vinyl",
-        "application": "Marine & Boat",
-        "performance": "Waterproof, Salt Resistant",
-        "features": [
-          "100% waterproof",
-          "Salt water resistant",
-          "For boats",
-          "UV resistant"
-        ],
-        "description": "Marine grade vinyl adhesive for boat and marine applications."
-      },
-      "vnl-005": {
-        "name": "ESA Vinyl Multi Purpose",
-        "title": "ESA Vinyl Multi Purpose",
-        "category": "Vinyl",
-        "application": "General Purpose",
-        "performance": "Versatile, All Vinyl Types",
-        "features": [
-          "Versatile",
-          "All vinyl types",
-          "Economical",
-          "Easy to use"
-        ],
-        "description": "Multi-purpose vinyl adhesive for various vinyl applications."
-      },
-      "wip-001": {
-        "name": "ESA Bio Adhesive (Coming Soon)",
-        "title": "ESA Bio Adhesive (Coming Soon)",
-        "category": "WIP",
-        "application": "Eco-Friendly Application",
-        "performance": "Biodegradable, Green Formula",
-        "features": [
-          "Biodegradable",
-          "Eco-friendly",
-          "Green formula",
-          "Sustainable"
-        ],
-        "description": "Bio-based eco-friendly adhesive - Coming soon.",
-        "comingSoon": true
-      },
-      "wip-002": {
-        "name": "ESA Smart Bond (Coming Soon)",
-        "title": "ESA Smart Bond (Coming Soon)",
-        "category": "WIP",
-        "application": "Smart Application",
-        "performance": "Temperature Indicator, Smart Curing",
-        "features": [
-          "Temperature indicator",
-          "Smart curing",
-          "Latest technology",
-          "Innovative"
-        ],
-        "description": "Smart adhesive with curing indicator - Coming soon.",
-        "comingSoon": true
-      },
-      "wip-003": {
-        "name": "ESA Nano Tech (Coming Soon)",
-        "title": "ESA Nano Tech (Coming Soon)",
-        "category": "WIP",
-        "application": "High-Tech Application",
-        "performance": "Nano Particles, Superior Strength",
-        "features": [
-          "Nano technology",
-          "Superior strength",
-          "High precision",
-          "Next generation"
-        ],
-        "description": "Adhesive with nano technology - Coming soon.",
-        "comingSoon": true
-      },
-      "wip-004": {
-        "name": "ESA UV Cure Pro (Coming Soon)",
-        "title": "ESA UV Cure Pro (Coming Soon)",
-        "category": "WIP",
-        "application": "UV Curing Application",
-        "performance": "Instant UV Cure, Crystal Clear",
-        "features": [
-          "Instant UV curing",
-          "Crystal clear",
-          "Solvent free",
-          "Perfect results"
-        ],
-        "description": "UV curing adhesive for precision applications - Coming soon.",
-        "comingSoon": true
-      },
-      "wip-005": {
-        "name": "ESA Conductive Bond (Coming Soon)",
-        "title": "ESA Conductive Bond (Coming Soon)",
-        "category": "WIP",
-        "application": "Electronics & PCB",
-        "performance": "Electrically Conductive, ESD Safe",
-        "features": [
-          "Electrically conductive",
-          "ESD safe",
-          "For PCB",
-          "High precision"
-        ],
-        "description": "Conductive adhesive for electronics - Coming soon.",
-        "comingSoon": true
+        "application": "Coating",
+        "solid": "55 ± 1 %",
+        "viskositas": "15.000 - 20.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Polymer vinyl-acrylic emulsion which has good adhesion and water resistance. This product has good elasticity, and good color acceptance for paint industry."
       }
-    },
-    "applications": {
-      "app-1": {
-        "name": "Coal Mining",
-        "description": "Adhesive solutions for mining and processing industry"
-      },
-      "app-2": {
-        "name": "Paper & Pulp",
-        "description": "Specialized formulas for paper and cellulose industry"
-      },
-      "app-3": {
-        "name": "Automotive",
-        "description": "High-quality adhesives for automotive manufacturing"
-      },
-      "app-4": {
-        "name": "Electronics",
-        "description": "Precision adhesive technology for electronics industry"
-      },
-      "app-5": {
-        "name": "Construction",
-        "description": "Bonding materials for large-scale construction projects"
-      },
-      "app-6": {
-        "name": "Furniture",
-        "description": "Eco-friendly adhesives for furniture industry"
-      }
+    }
+  },
+  "applicationsSection": {
+    "title": "Our Applications",
+    "subtitle": "Solution adhesive...",
+    "stats": {
+      "industries": "Industries",
+      "products": "Products",
+      "clients": "Clients",
+      "experience": "Years of Experience"
     }
   }
 }

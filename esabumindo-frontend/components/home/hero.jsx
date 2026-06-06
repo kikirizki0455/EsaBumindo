@@ -1,5 +1,5 @@
 import Image from "next/image";
-import HeroBg from "@/public/asset/image/esabumindo.webp";
+import HeroBg from "@/public/asset/image/carrousel.webp";
 import { useTranslation } from "@/hooks/use-translation";
 
 export default function Hero() {

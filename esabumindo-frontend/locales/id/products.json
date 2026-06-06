@@ -47,7 +47,7 @@
     "shareButton": "Bagikan Produk",
     "addToCart": "Pesan Sekarang",
     "requestQuote": "Minta Penawaran",
-    "preOrder": "Pre-Order Sekarang",
+    "preOrder": "Order Sekarang",
     "downloadSpec": "Spesifikasi",
     "share": "Bagikan",
     "copied": "Tersalin",
@@ -234,601 +234,396 @@
   "productData": {
     "types": {
       "allAcrylic": "All Acrylic",
-      "dempul": "Dempul",
+      "pvac": "PVAC",
+      "styrena": "Styrena",
       "eva": "EVA",
       "psa": "PSA",
-      "pvac": "PVAC",
-      "styrene": "Styrene",
-      "vinyl": "Vinyl",
-      "wip": "WIP"
+      "vinyl": "Vinyl"
     },
     "products": {
       "acr-001": {
-        "name": "ESA Acrylic Bond 100",
-        "title": "ESA Acrylic Bond 100",
+        "id": "acr-001",
+        "name": "EB 3038",
+        "title": "EB 3038",
         "category": "All Acrylic",
-        "application": "Konstruksi & Bangunan",
-        "performance": "Kekuatan Tinggi, Tahan Cuaca",
-        "features": [
-          "Tahan cuaca ekstrem",
-          "Daya rekat tinggi",
-          "Cepat kering",
-          "Tahan UV"
-        ],
-        "description": "Lem akrilik premium untuk aplikasi konstruksi dengan daya tahan tinggi terhadap cuaca."
+        "application": "Dry Lamination",
+        "solid": "43 ± 1 %",
+        "viskositas": "150 - 400 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "Milky White",
+        "description": "Acrylic adhesive 3038 merupakan solusi optimal untuk proses dry lamination, dengan karakteristik milky white appearance, high bonding strength, dan excellent weather resistance. Dirancang untuk mendukung efisiensi produksi serta menghasilkan laminasi yang stabil dan tahan lama."
       },
       "acr-002": {
-        "name": "ESA Acrylic Pro 200",
-        "title": "ESA Acrylic Pro 200",
+        "id": "acr-002",
+        "name": "EB 5037 MA",
+        "title": "EB 5037 MA",
         "category": "All Acrylic",
-        "application": "Industri Otomotif",
-        "performance": "Grade Industri, Tahan Getaran",
-        "features": ["Tahan getaran", "Fleksibel", "Tahan panas", "Non-toxic"],
-        "description": "Solusi akrilik untuk industri otomotif dengan ketahanan getaran superior."
+        "application": "Sablon",
+        "solid": "40 ± 1 %",
+        "viskositas": "1.000 - 2.500 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "White Yellowish",
+        "description": "All acrylic emulsion especially designed for textile applications, mainly used as printing binder."
       },
       "acr-003": {
-        "name": "ESA Acrylic Clear 300",
-        "title": "ESA Acrylic Clear 300",
+        "id": "acr-003",
+        "name": "EB 727",
+        "title": "EB 727",
         "category": "All Acrylic",
-        "application": "Kaca & Akrilik",
-        "performance": "Jernih Sempurna, Tidak Menguning",
-        "features": [
-          "Transparan sempurna",
-          "Tidak menguning",
-          "Curing cepat",
-          "Mudah diaplikasi"
-        ],
-        "description": "Lem akrilik bening untuk aplikasi kaca dan material transparan."
-      },
-      "acr-004": {
-        "name": "ESA Acrylic Flex 400",
-        "title": "ESA Acrylic Flex 400",
-        "category": "All Acrylic",
-        "application": "Plastik & Komposit",
-        "performance": "Fleksibel, Multi-Permukaan",
-        "features": [
-          "Super fleksibel",
-          "Multi-permukaan",
-          "Tahan air",
-          "Ekonomis"
-        ],
-        "description": "Lem akrilik fleksibel untuk berbagai jenis permukaan plastik dan komposit."
-      },
-      "acr-005": {
-        "name": "ESA Acrylic Heavy 500",
-        "title": "ESA Acrylic Heavy 500",
-        "category": "All Acrylic",
-        "application": "Industri Berat",
-        "performance": "Kekuatan Maksimal, Tahan Lama",
-        "features": [
-          "Kekuatan maksimal",
-          "Tahan lama",
-          "Tahan kimia",
-          "Grade industri"
-        ],
-        "description": "Lem akrilik heavy duty untuk aplikasi industri berat."
-      },
-      "dmp-001": {
-        "name": "ESA Dempul Kayu Premium",
-        "title": "ESA Dempul Kayu Premium",
-        "category": "Dempul",
-        "application": "Furniture & Woodworking",
-        "performance": "Bisa Diamplas, Bisa Diwarnai",
-        "features": [
-          "Bisa diamplas",
-          "Bisa dicat",
-          "Mengisi celah sempurna",
-          "Cepat kering"
-        ],
-        "description": "Dempul kayu premium untuk finishing furniture berkualitas tinggi."
-      },
-      "dmp-002": {
-        "name": "ESA Dempul Tembok Pro",
-        "title": "ESA Dempul Tembok Pro",
-        "category": "Dempul",
-        "application": "Konstruksi & Renovasi",
-        "performance": "Anti Retak, Mudah Diaplikasi",
-        "features": [
-          "Anti retak",
-          "Mudah diaplikasi",
-          "Hasil halus",
-          "Tahan lembab"
-        ],
-        "description": "Dempul tembok profesional untuk hasil finishing dinding sempurna."
-      },
-      "dmp-003": {
-        "name": "ESA Dempul Otomotif",
-        "title": "ESA Dempul Otomotif",
-        "category": "Dempul",
-        "application": "Perbaikan Body Otomotif",
-        "performance": "Cepat Kering, Daya Isi Tinggi",
-        "features": [
-          "Cepat kering",
-          "Daya isi tinggi",
-          "Mudah diamplas",
-          "Tahan benturan"
-        ],
-        "description": "Dempul khusus untuk perbaikan body kendaraan."
-      },
-      "dmp-004": {
-        "name": "ESA Dempul Waterproof",
-        "title": "ESA Dempul Waterproof",
-        "category": "Dempul",
-        "application": "Area Basah & Outdoor",
-        "performance": "100% Tahan Air, Anti Jamur",
-        "features": [
-          "100% tahan air",
-          "Anti jamur",
-          "Tahan cuaca",
-          "Tahan lama"
-        ],
-        "description": "Dempul waterproof untuk area basah dan aplikasi outdoor."
-      },
-      "dmp-005": {
-        "name": "ESA Dempul Multi Surface",
-        "title": "ESA Dempul Multi Surface",
-        "category": "Dempul",
-        "application": "Multi Aplikasi",
-        "performance": "Serbaguna, Semua Permukaan",
-        "features": [
-          "Multi permukaan",
-          "Serbaguna",
-          "Ekonomis",
-          "Hasil profesional"
-        ],
-        "description": "Dempul serbaguna untuk berbagai jenis permukaan."
-      },
-      "eva-001": {
-        "name": "ESA EVA Hot Melt 100",
-        "title": "ESA EVA Hot Melt 100",
-        "category": "EVA",
-        "application": "Packaging & Karton",
-        "performance": "Setting Cepat, Rekat Kuat",
-        "features": [
-          "Setting cepat",
-          "Daya rekat kuat",
-          "Cocok untuk karton",
-          "Ekonomis"
-        ],
-        "description": "Lem EVA hot melt untuk aplikasi packaging dan karton."
-      },
-      "eva-002": {
-        "name": "ESA EVA Bookbinding",
-        "title": "ESA EVA Bookbinding",
-        "category": "EVA",
-        "application": "Percetakan & Binding",
-        "performance": "Fleksibel, Ramah Kertas",
-        "features": [
-          "Fleksibel",
-          "Tidak merusak kertas",
-          "Hasil rapi",
-          "Tahan lama"
-        ],
-        "description": "Lem EVA khusus untuk jilid buku dan industri percetakan."
-      },
-      "eva-003": {
-        "name": "ESA EVA Foam Bond",
-        "title": "ESA EVA Foam Bond",
-        "category": "EVA",
-        "application": "Foam & Sponge",
-        "performance": "Aman untuk Foam, Tanpa Kerusakan",
-        "features": [
-          "Aman untuk foam",
-          "Tidak merusak material",
-          "Rekat kuat",
-          "Cepat kering"
-        ],
-        "description": "Lem EVA untuk bonding foam dan material sponge."
-      },
-      "eva-004": {
-        "name": "ESA EVA Industrial",
-        "title": "ESA EVA Industrial",
-        "category": "EVA",
-        "application": "Industri Manufaktur",
-        "performance": "Volume Tinggi, Kualitas Konsisten",
-        "features": [
-          "Untuk produksi massal",
-          "Kualitas konsisten",
-          "Efisien",
-          "Hemat biaya"
-        ],
-        "description": "Lem EVA industrial untuk aplikasi manufaktur skala besar."
-      },
-      "eva-005": {
-        "name": "ESA EVA Premium Plus",
-        "title": "ESA EVA Premium Plus",
-        "category": "EVA",
-        "application": "Aplikasi Premium",
-        "performance": "Kualitas Superior, Grade Premium",
-        "features": [
-          "Kualitas premium",
-          "Performa superior",
-          "Multi aplikasi",
-          "Hasil profesional"
-        ],
-        "description": "Lem EVA grade premium untuk aplikasi yang membutuhkan kualitas terbaik."
-      },
-      "psa-001": {
-        "name": "ESA PSA Label Grade",
-        "title": "ESA PSA Label Grade",
-        "category": "PSA",
-        "application": "Label & Sticker",
-        "performance": "Tack Permanen, Aplikasi Bersih",
-        "features": [
-          "Daya rekat permanen",
-          "Aplikasi bersih",
-          "Cocok untuk label",
-          "Tahan lama"
-        ],
-        "description": "PSA khusus untuk industri label dan sticker."
-      },
-      "psa-002": {
-        "name": "ESA PSA Tape Bond",
-        "title": "ESA PSA Tape Bond",
-        "category": "PSA",
-        "application": "Manufaktur Tape",
-        "performance": "Tack Tinggi, Coating Konsisten",
-        "features": [
-          "Tack tinggi",
-          "Coating konsisten",
-          "Untuk produksi tape",
-          "Kualitas stabil"
-        ],
-        "description": "PSA untuk manufaktur tape dengan kualitas coating konsisten."
-      },
-      "psa-003": {
-        "name": "ESA PSA Removable",
-        "title": "ESA PSA Removable",
-        "category": "PSA",
-        "application": "Aplikasi Removable",
-        "performance": "Mudah Dilepas, Tanpa Residu",
-        "features": [
-          "Mudah dilepas",
-          "Tanpa residu",
-          "Bisa direposisi",
-          "Pelepasan bersih"
-        ],
-        "description": "PSA removable untuk aplikasi yang membutuhkan kemudahan pelepasan."
-      },
-      "psa-004": {
-        "name": "ESA PSA Medical Grade",
-        "title": "ESA PSA Medical Grade",
-        "category": "PSA",
-        "application": "Medis & Healthcare",
-        "performance": "Aman untuk Kulit, Hypoallergenic",
-        "features": [
-          "Aman untuk kulit",
-          "Hypoallergenic",
-          "Grade medis",
-          "Breathable"
-        ],
-        "description": "PSA grade medis untuk aplikasi healthcare dan plester."
-      },
-      "psa-005": {
-        "name": "ESA PSA Heavy Duty",
-        "title": "ESA PSA Heavy Duty",
-        "category": "PSA",
-        "application": "Mounting Industrial",
-        "performance": "Tack Ekstrem, Tahan Cuaca",
-        "features": [
-          "Tack ekstrem",
-          "Tahan cuaca",
-          "Heavy duty",
-          "Rekat permanen"
-        ],
-        "description": "PSA heavy duty untuk mounting industrial dan outdoor."
+        "application": "Waterproofing",
+        "solid": "50 ± 1 %",
+        "viskositas": "500 - 2.000 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "Blueish to Transparent",
+        "description": "Provides excellent rubbing fastness, high gloss and good water resistant."
       },
       "pvac-001": {
-        "name": "ESA PVAC Wood Pro",
-        "title": "ESA PVAC Wood Pro",
+        "id": "pvac-001",
+        "name": "EB 140",
+        "title": "EB 140",
         "category": "PVAC",
-        "application": "Woodworking & Furniture",
-        "performance": "Rekat Kayu Kuat, Bisa Diamplas",
-        "features": [
-          "Rekat kayu kuat",
-          "Bisa diamplas",
-          "Cepat kering",
-          "Non-toxic"
-        ],
-        "description": "Lem PVAC premium untuk industri woodworking dan furniture."
+        "application": "Middle to Hard Wood",
+        "solid": "40 ± 1 %",
+        "viskositas": "50.000 - 60.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Most suitable for bonding all types of wood. It is good for joinery adhesive, bonding Formica sheets and for bonding laminated timber or bare-core construction with high efficiency."
       },
       "pvac-002": {
-        "name": "ESA PVAC Paper Bond",
-        "title": "ESA PVAC Paper Bond",
+        "id": "pvac-002",
+        "name": "EB 140 E",
+        "title": "EB 140 E",
         "category": "PVAC",
-        "application": "Kertas & Packaging",
-        "performance": "Aman untuk Kertas, Cepat Kering",
-        "features": [
-          "Aman untuk kertas",
-          "Cepat kering",
-          "Tidak berkerut",
-          "Ekonomis"
-        ],
-        "description": "Lem PVAC untuk aplikasi kertas dan packaging."
+        "application": "Middle to Hard Wood",
+        "solid": "37 ± 1 %",
+        "viskositas": "17.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Highly suitable for bonding a wide range of wood types. It performs well in joinery applications. It has a low viscosity, making it easy to apply."
       },
       "pvac-003": {
-        "name": "ESA PVAC D3 Waterproof",
-        "title": "ESA PVAC D3 Waterproof",
+        "id": "pvac-003",
+        "name": "EB 230 PP",
+        "title": "EB 230 PP",
         "category": "PVAC",
-        "application": "Furniture Outdoor",
-        "performance": "Tahan Air D3, Tahan Lama",
-        "features": [
-          "Tahan air D3",
-          "Untuk outdoor",
-          "Tahan cuaca",
-          "Kuat dan tahan lama"
-        ],
-        "description": "Lem PVAC D3 waterproof untuk furniture outdoor."
+        "application": "Soft to Middle Wood",
+        "solid": "30 ± 1 %",
+        "viskositas": "800.000 - 900.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "A PVAc product commonly used in the wood industry for furniture applications."
       },
       "pvac-004": {
-        "name": "ESA PVAC School Safe",
-        "title": "ESA PVAC School Safe",
+        "id": "pvac-004",
+        "name": "EB 435 E",
+        "title": "EB 435 E",
         "category": "PVAC",
-        "application": "Pendidikan & Kerajinan",
-        "performance": "Aman untuk Anak, Bisa Dicuci",
-        "features": [
-          "Aman untuk anak",
-          "Bisa dicuci",
-          "Non-toxic",
-          "Mudah digunakan"
-        ],
-        "description": "Lem PVAC aman untuk sekolah dan kerajinan anak."
+        "application": "Soft to Middle Wood",
+        "solid": "35 ± 1 %",
+        "viskositas": "20.000 - 25.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Milky white emulsion of Polyvinyl acetate Homopolymer for wood application such as fingerjoint, lumber core or barecore. EB 435 E has good flexibility."
       },
       "pvac-005": {
-        "name": "ESA PVAC Industrial",
-        "title": "ESA PVAC Industrial",
+        "id": "pvac-005",
+        "name": "EB 460",
+        "title": "EB 460",
         "category": "PVAC",
-        "application": "Manufaktur Industri",
-        "performance": "Volume Tinggi, Konsisten",
-        "features": [
-          "Untuk industri",
-          "Volume besar",
-          "Kualitas konsisten",
-          "Hemat biaya"
-        ],
-        "description": "Lem PVAC industrial untuk produksi skala besar."
+        "application": "Middle to Hard Wood",
+        "solid": "59 ± 1 %",
+        "viskositas": "45.000 - 60.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "PVAc with high solid content and a relatively fast drying speed, suitable for applications on medium to hard wood."
+      },
+      "pvac-006": {
+        "id": "pvac-006",
+        "name": "EB 8429 E",
+        "title": "EB 8429 E",
+        "category": "PVAC",
+        "application": "Paper Core",
+        "solid": "30 ± 1 %",
+        "viskositas": "4.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Cream",
+        "description": "Synthetic emulsion of Modified Polyvinyl Acetate homopolymer for making paper core, paper lamination. This product has good initial tack and fast setting. This type is also easy to apply because it has low viscosity."
+      },
+      "pvac-007": {
+        "id": "pvac-007",
+        "name": "EB 8435 AK",
+        "title": "EB 8435 AK",
+        "category": "PVAC",
+        "application": "Paper Core",
+        "solid": "34 ± 1 %",
+        "viskositas": "10.000 - 18.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Cream",
+        "description": "Synthetic emulsion of Modified Polyvinyl Acetate homopolymer for making paper core, paper lamination. This product has good initial tack and fast setting."
+      },
+      "pvac-008": {
+        "id": "pvac-008",
+        "name": "EB 9503",
+        "title": "EB 9503",
+        "category": "PVAC",
+        "application": "Paper Overlay",
+        "solid": "28 ± 1 %",
+        "viskositas": "55.000 - 65.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Milky white emulsion of Polyvinyl acetate Homopolymer that has good flexibility. Designed for general purposes in industry, especially foam to fabric, furniture, paper lamination etc."
+      },
+      "pvac-009": {
+        "id": "pvac-009",
+        "name": "EB 9110 A",
+        "title": "EB 9110 A",
+        "category": "PVAC",
+        "application": "Furniture",
+        "solid": "25 ± 1 %",
+        "viskositas": "900.000 - 1.500.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "A synthetic glue made from polyvinyl acetate homopolymer. This glue is designed for various purposes in industry, especially attaching foam to fabric, furniture, etc."
+      },
+      "pvac-010": {
+        "id": "pvac-010",
+        "name": "EB 833 KL",
+        "title": "EB 833 KL",
+        "category": "PVAC",
+        "application": "Paper Corrugated",
+        "solid": "22 ± 1 %",
+        "viskositas": "10.000 - 12.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Cream",
+        "description": "Emulsion of Polyvinyl acetate homopolymer. This product suitable for paper / carton lamination, Paper tube, and etc."
+      },
+      "pvac-011": {
+        "id": "pvac-011",
+        "name": "EB 832 ET",
+        "title": "EB 832 ET",
+        "category": "PVAC",
+        "application": "Efflute",
+        "solid": "34 ± 1 %",
+        "viskositas": "2.000 - 2.500 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Cream",
+        "description": "Milky white synthetic emulsion of Polyvinyl acetate homopolymer for paper applications such as cardbox, paper pallet, honeycomb paper, and elbow paper etc."
+      },
+      "pvac-012": {
+        "id": "pvac-012",
+        "name": "EB 9504 E",
+        "title": "EB 9504 E",
+        "category": "PVAC",
+        "application": "Joint Flap Paper - Paper",
+        "solid": "37 ± 1 %",
+        "viskositas": "10.000 - 15.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Milky White Synthetic Emulsion of Polyvinyl Acetate Homopolymer. This product designed for various industrial purposes, adhesive, and paper lamination."
       },
       "sty-001": {
-        "name": "ESA Styrene Board Bond",
-        "title": "ESA Styrene Board Bond",
-        "category": "Styrene",
-        "application": "Styrofoam & Insulasi",
-        "performance": "Aman untuk Foam, Rekat Kuat",
-        "features": [
-          "Aman untuk styrofoam",
-          "Rekat kuat",
-          "Tidak merusak foam",
-          "Cepat kering"
-        ],
-        "description": "Lem styrene untuk bonding styrofoam dan material insulation."
+        "id": "sty-001",
+        "name": "EB 2250",
+        "title": "EB 2250",
+        "category": "Styrena",
+        "application": "Flexo Ink",
+        "solid": "50 ± 1 %",
+        "viskositas": "300 - 1.000 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "Milky White",
+        "description": "High-performance styrene acrylic emulsion designed as a diluent in water-based flexographic inks, particularly for paper and paperboard substrates."
       },
       "sty-002": {
-        "name": "ESA Styrene Construction",
-        "title": "ESA Styrene Construction",
-        "category": "Styrene",
-        "application": "Konstruksi & Bangunan",
-        "performance": "Heavy Duty, Tahan Cuaca",
-        "features": [
-          "Heavy duty",
-          "Tahan cuaca",
-          "Untuk konstruksi",
-          "Daya rekat tinggi"
-        ],
-        "description": "Lem styrene untuk aplikasi konstruksi dan bangunan."
+        "id": "sty-002",
+        "name": "EB 2251",
+        "title": "EB 2251",
+        "category": "Styrena",
+        "application": "Flexo Ink",
+        "solid": "50 ± 1 %",
+        "viskositas": "300 - 1.000 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "Milky White",
+        "description": "A high-performance styrene-acrylic emulsion designed as a diluent in water-based flexographic inks, particularly for paper and paperboard substrates, with a high Tg and a clear appearance."
       },
       "sty-003": {
-        "name": "ESA Styrene Packaging",
-        "title": "ESA Styrene Packaging",
-        "category": "Styrene",
-        "application": "Industri Packaging",
-        "performance": "Setting Cepat, Hemat Biaya",
-        "features": [
-          "Setting cepat",
-          "Hemat biaya",
-          "Untuk packaging",
-          "Efisien"
-        ],
-        "description": "Lem styrene untuk industri packaging dan box."
+        "id": "sty-003",
+        "name": "EB 3042 TP",
+        "title": "EB 3042 TP",
+        "category": "Styrena",
+        "application": "Sablon",
+        "solid": "41 ± 1 %",
+        "viskositas": "1.200 - 1.500 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "Milky White",
+        "description": "Styrene acrylic emulsion especially designed for textile applications, mainly used as printing binder. EB-3042 TP formulation provides excellent rubbing fastness, high gloss and good water resistant."
       },
       "sty-004": {
-        "name": "ESA Styrene Craft Pro",
-        "title": "ESA Styrene Craft Pro",
-        "category": "Styrene",
-        "application": "Kerajinan & Pembuatan Model",
-        "performance": "Presisi, Hasil Bersih",
-        "features": [
-          "Presisi tinggi",
-          "Hasil bersih",
-          "Untuk model",
-          "Mudah digunakan"
-        ],
-        "description": "Lem styrene untuk kerajinan dan pembuatan model."
+        "id": "sty-004",
+        "name": "EB 5506 B",
+        "title": "EB 5506 B",
+        "category": "Styrena",
+        "application": "Metal Roof",
+        "solid": "35 ± 1 %",
+        "viskositas": "40.000 - 45.000 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "White Blueish",
+        "description": "A styrene-acrylic product with good brushability, a clear film, and strong adhesion, suitable for metal roof tile applications."
       },
       "sty-005": {
-        "name": "ESA Styrene Industrial Plus",
-        "title": "ESA Styrene Industrial Plus",
-        "category": "Styrene",
-        "application": "Industri Berat",
-        "performance": "Kekuatan Maksimal, Grade Industri",
-        "features": [
-          "Kekuatan maksimal",
-          "Grade industri",
-          "Tahan lama",
-          "Performa tinggi"
-        ],
-        "description": "Lem styrene industrial untuk aplikasi berat."
+        "id": "sty-005",
+        "name": "EB 5502",
+        "title": "EB 5502",
+        "category": "Styrena",
+        "application": "Foam Laminated",
+        "solid": "40 ± 1 %",
+        "viskositas": "30.000 - 40.000 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "White Bluish",
+        "description": "A styrene-acrylic product with excellent film flexibility and strong adhesion, suitable for applications in the foam lamination industry."
+      },
+      "sty-006": {
+        "id": "sty-006",
+        "name": "EB 5508",
+        "title": "EB 5508",
+        "category": "Styrena",
+        "application": "Metal Roof",
+        "solid": "38 ± 1 %",
+        "viskositas": "45.000 - 50.000 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "Clear Transparent",
+        "description": "Styrene Acrylic Emulsion especially designed for coating formulations, mainly used in industrial and construction application such as metal roofing."
+      },
+      "sty-007": {
+        "id": "sty-007",
+        "name": "EB 5512 TI",
+        "title": "EB 5512 TI",
+        "category": "Styrena",
+        "application": "Coating",
+        "solid": "50 ± 1 %",
+        "viskositas": "15.000 - 25.000 Cps",
+        "pH": "7 ~ 10",
+        "appearance": "White Blueish",
+        "description": "Styrene Acrylic Emulsion especially designed for coating formulations, mainly used as a coating binder."
+      },
+      "sty-008": {
+        "id": "sty-008",
+        "name": "EB 765",
+        "title": "EB 765",
+        "category": "Styrena",
+        "application": "Waterproofing",
+        "solid": "50 ± 1 %",
+        "viskositas": "30.000 - 40.000 Cps",
+        "pH": "7 ~ 9",
+        "appearance": "Milky White",
+        "description": "Styrena Acrylic product that has excellent compatibility with pigments and extenders, and it has very high binding power for pigments and excellent scrub resistance."
+      },
+      "eva-001": {
+        "id": "eva-001",
+        "name": "EB 8102",
+        "title": "EB 8102",
+        "category": "EVA",
+        "application": "Wet Lamination",
+        "solid": "49 ± 1 %",
+        "viskositas": "6.000 - 8.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Ethylene vinyl acetate copolymer emulsion, mainly developed for base emulsion of adhesives. This product gives good adhesion for packaging, bookbinding, and bonding for layers of plastic or paper."
+      },
+      "eva-002": {
+        "id": "eva-002",
+        "name": "EB 956",
+        "title": "EB 956",
+        "category": "EVA",
+        "application": "Joint Flap",
+        "solid": "54 ± 1 %",
+        "viskositas": "16.000 - 20.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "EB 956 is an EVA product with strong adhesion and is commonly used for joint flap applications on laminated or coated paper."
+      },
+      "eva-003": {
+        "id": "eva-003",
+        "name": "EB 957",
+        "title": "EB 957",
+        "category": "EVA",
+        "application": "Joint Flap",
+        "solid": "55 ± 1 %",
+        "viskositas": "200 - 230 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "EB 957 is an EVA product with strong adhesion and is easy to apply through a nozzle for bonding paper to smooth-surface materials."
+      },
+      "eva-004": {
+        "id": "eva-004",
+        "name": "EB 8104",
+        "title": "EB 8104",
+        "category": "EVA",
+        "application": "Paper - Aluminium Lamination",
+        "solid": "42 ± 1 %",
+        "viskositas": "15.000 - 20.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Vinyl ethylene copolymer emulsion, mainly developed for base emulsion of adhesives. This product gives good adhesion for lamination, papers, woods, PVC sheets."
+      },
+      "psa-001": {
+        "id": "psa-001",
+        "name": "EB 660",
+        "title": "EB 660",
+        "category": "PSA",
+        "application": "Label",
+        "solid": "62 ± 1 %",
+        "viskositas": "23.000 - 40.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "EB-660 forms a film with high immediate tack and high peel strength, and can be used in general applications such as labels and bonding paper to smooth-surface materials."
+      },
+      "psa-002": {
+        "id": "psa-002",
+        "name": "EB 9334",
+        "title": "EB 9334",
+        "category": "PSA",
+        "application": "Joint Flap Paper - Plastic",
+        "solid": "62 ± 1 %",
+        "viskositas": "10.000 - 15.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "EB-9334 forms a film with high immediate tack, high peel strength, and good cohesion. This product is also easy to apply in adhesive coating processes using a roll."
       },
       "vnl-001": {
-        "name": "ESA Vinyl Floor Bond",
-        "title": "ESA Vinyl Floor Bond",
+        "id": "vnl-001",
+        "name": "EB 1101 VA",
+        "title": "EB 1101 VA",
         "category": "Vinyl",
-        "application": "Lantai & Karpet",
-        "performance": "Rekat Permanen, Hasil Rata",
-        "features": [
-          "Rekat permanen",
-          "Hasil rata",
-          "Untuk lantai vinyl",
-          "Tahan lama"
-        ],
-        "description": "Lem vinyl untuk pemasangan lantai vinyl dan karpet."
+        "application": "Coating",
+        "solid": "57 ± 1 %",
+        "viskositas": "7.000 - 8.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Polymer vinyl-acrylic emulsion which has good adhesion and water resistance. This product has high solid content and good color acceptance for paint industry."
       },
       "vnl-002": {
-        "name": "ESA Vinyl Wall Cover",
-        "title": "ESA Vinyl Wall Cover",
+        "id": "vnl-002",
+        "name": "EB 1103 VA",
+        "title": "EB 1103 VA",
         "category": "Vinyl",
-        "application": "Penutup Dinding",
-        "performance": "Mudah Diaplikasi, Bisa Direposisi",
-        "features": [
-          "Mudah diaplikasi",
-          "Bisa direposisi",
-          "Untuk wall covering",
-          "Hasil profesional"
-        ],
-        "description": "Lem vinyl untuk pemasangan wall covering dan wallpaper vinyl."
-      },
-      "vnl-003": {
-        "name": "ESA Vinyl Automotive",
-        "title": "ESA Vinyl Automotive",
-        "category": "Vinyl",
-        "application": "Interior Otomotif",
-        "performance": "Tahan Panas, Fleksibel",
-        "features": [
-          "Tahan panas",
-          "Fleksibel",
-          "Untuk interior mobil",
-          "Tidak berbau"
-        ],
-        "description": "Lem vinyl untuk aplikasi interior otomotif."
-      },
-      "vnl-004": {
-        "name": "ESA Vinyl Marine Grade",
-        "title": "ESA Vinyl Marine Grade",
-        "category": "Vinyl",
-        "application": "Kelautan & Kapal",
-        "performance": "Tahan Air, Tahan Air Laut",
-        "features": [
-          "100% waterproof",
-          "Tahan air laut",
-          "Untuk kapal",
-          "Tahan UV"
-        ],
-        "description": "Lem vinyl marine grade untuk aplikasi kapal dan laut."
-      },
-      "vnl-005": {
-        "name": "ESA Vinyl Multi Purpose",
-        "title": "ESA Vinyl Multi Purpose",
-        "category": "Vinyl",
-        "application": "Serba Guna",
-        "performance": "Serbaguna, Semua Jenis Vinyl",
-        "features": [
-          "Serbaguna",
-          "Semua jenis vinyl",
-          "Ekonomis",
-          "Mudah digunakan"
-        ],
-        "description": "Lem vinyl serbaguna untuk berbagai aplikasi vinyl."
-      },
-      "wip-001": {
-        "name": "ESA Bio Adhesive (Segera Hadir)",
-        "title": "ESA Bio Adhesive (Segera Hadir)",
-        "category": "WIP",
-        "application": "Aplikasi Ramah Lingkungan",
-        "performance": "Biodegradable, Formula Hijau",
-        "features": [
-          "Biodegradable",
-          "Ramah lingkungan",
-          "Formula hijau",
-          "Sustainable"
-        ],
-        "description": "Lem bio-based ramah lingkungan - Segera hadir.",
-        "comingSoon": true
-      },
-      "wip-002": {
-        "name": "ESA Smart Bond (Segera Hadir)",
-        "title": "ESA Smart Bond (Segera Hadir)",
-        "category": "WIP",
-        "application": "Aplikasi Pintar",
-        "performance": "Indikator Suhu, Smart Curing",
-        "features": [
-          "Indikator suhu",
-          "Smart curing",
-          "Teknologi terbaru",
-          "Inovatif"
-        ],
-        "description": "Lem pintar dengan indikator curing - Segera hadir.",
-        "comingSoon": true
-      },
-      "wip-003": {
-        "name": "ESA Nano Tech (Segera Hadir)",
-        "title": "ESA Nano Tech (Segera Hadir)",
-        "category": "WIP",
-        "application": "Aplikasi High-Tech",
-        "performance": "Partikel Nano, Kekuatan Superior",
-        "features": [
-          "Teknologi nano",
-          "Kekuatan superior",
-          "Presisi tinggi",
-          "Generasi terbaru"
-        ],
-        "description": "Lem dengan teknologi nano - Segera hadir.",
-        "comingSoon": true
-      },
-      "wip-004": {
-        "name": "ESA UV Cure Pro (Segera Hadir)",
-        "title": "ESA UV Cure Pro (Segera Hadir)",
-        "category": "WIP",
-        "application": "Aplikasi UV Curing",
-        "performance": "Curing UV Instan, Jernih Sempurna",
-        "features": [
-          "UV curing instan",
-          "Jernih sempurna",
-          "Tanpa solvent",
-          "Hasil sempurna"
-        ],
-        "description": "Lem UV curing untuk aplikasi presisi - Segera hadir.",
-        "comingSoon": true
-      },
-      "wip-005": {
-        "name": "ESA Conductive Bond (Segera Hadir)",
-        "title": "ESA Conductive Bond (Segera Hadir)",
-        "category": "WIP",
-        "application": "Elektronik & PCB",
-        "performance": "Konduktif Listrik, Aman ESD",
-        "features": [
-          "Konduktif listrik",
-          "Aman ESD",
-          "Untuk PCB",
-          "Presisi tinggi"
-        ],
-        "description": "Lem konduktif untuk elektronik - Segera hadir.",
-        "comingSoon": true
+        "application": "Coating",
+        "solid": "55 ± 1 %",
+        "viskositas": "15.000 - 20.000 Cps",
+        "pH": "4 ~ 6",
+        "appearance": "Milky White",
+        "description": "Polymer vinyl-acrylic emulsion which has good adhesion and water resistance. This product has good elasticity, and good color acceptance for paint industry."
       }
-    },
-    "applications": {
-      "app-1": {
-        "name": "Batu Bara",
-        "description": "Solusi adhesive untuk industri pertambangan dan pengolahan"
-      },
-      "app-2": {
-        "name": "Paper & Pulp",
-        "description": "Formula khusus untuk industri kertas dan selulosa"
-      },
-      "app-3": {
-        "name": "Otomotif",
-        "description": "Adhesive berkualitas tinggi untuk manufaktur otomotif"
-      },
-      "app-4": {
-        "name": "Elektronik",
-        "description": "Teknologi adhesive presisi untuk industri elektronik"
-      },
-      "app-5": {
-        "name": "Konstruksi",
-        "description": "Material bonding untuk proyek konstruksi skala besar"
-      },
-      "app-6": {
-        "name": "Furniture",
-        "description": "Adhesive ramah lingkungan untuk industri furnitur"
-      }
+    }
+  },
+
+  "applicationsSection": {
+    "title": "Aplikasi Kami",
+    "subtitle": "Solusi adhesive...",
+    "stats": {
+      "industries": "Industri",
+      "products": "Produk",
+      "clients": "Klien",
+      "experience": "Tahun Pengalaman"
     }
   }
 }

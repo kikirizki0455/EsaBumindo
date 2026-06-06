@@ -9,6 +9,7 @@ import { ChevronLeft, Download, Share2, ShoppingCart } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { useLocalizedProducts } from "@/hooks/use-localized-products";
 import MainLayout from "../layouts/main-layout";
+import { getProductFeatures } from "@/lib/product-features-map";
 
 // Lazy load components
 const ProductDetailSkeleton = dynamic(
@@ -36,21 +37,24 @@ export default function ProductDetailPage() {
   const { id } = router.query;
   const { t, isHydrated } = useTranslation();
 
-  // Use localized products hook for multi-language support
   const { products, isLoading: isProductsLoading } = useLocalizedProducts();
 
   const [activeTab, setActiveTab] = useState("overview");
   const [isCopied, setIsCopied] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  // Find product by ID with localized content - akan update otomatis saat bahasa berubah
   const product = useMemo(() => {
     if (!id || !isHydrated || isProductsLoading || !products.length)
       return null;
     return products.find((p) => p.id === id) || null;
   }, [id, isHydrated, isProductsLoading, products]);
 
-  // Handle share
+  // Dynamically generate feature points from category + application
+  const productFeatures = useMemo(() => {
+    if (!product) return [];
+    return getProductFeatures(product.category, product.application);
+  }, [product]);
+
   const handleShare = useCallback(async () => {
     try {
       if (navigator.share) {
@@ -69,26 +73,20 @@ export default function ProductDetailPage() {
     }
   }, [product]);
 
-  // Handle download spec
   const handleDownloadSpec = useCallback(() => {
     console.log("Download specification for:", product?.id);
-    // TODO: Implement download specification
   }, [product]);
 
-  // Handle pre-order
   const handlePreOrder = useCallback(() => {
-    router.push(`/pre-order/${product?.id}`);
+    router.push(`/contact`);
   }, [product, router]);
 
-  // Handle image error - gunakan placeholder SVG inline
   const handleImageError = useCallback(() => {
     setImageError(true);
   }, []);
 
-  // Loading state
   const isLoading = !isHydrated || isProductsLoading;
 
-  // Only render skeleton while loading OR if not hydrated
   if (isLoading) return <ProductDetailSkeleton />;
 
   if (!product) {
@@ -189,22 +187,55 @@ export default function ProductDetailPage() {
                   {product.performance}
                 </p>
 
-                {/* Features Quick List */}
+                {/* ── REVISED: Feature Quick List ── */}
                 <div className="mb-8">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     {t("products.productDetail.mainAdvantages")}
                   </h3>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {product.features?.map((feature, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-start gap-2 text-gray-700"
-                      >
-                        <span className="text-[#ca161e] font-bold mt-1">✓</span>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+
+                  {productFeatures.length > 0 ? (
+                    <div className="grid grid-cols-1 gap-3">
+                      {productFeatures.map((feature, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 border border-gray-100 hover:border-blue-200 hover:bg-blue-50/40 transition-colors group"
+                        >
+                          {/* Icon badge */}
+                          <div className="flex-shrink-0 w-9 h-9 rounded-md bg-white border border-gray-200 flex items-center justify-center text-lg shadow-sm group-hover:border-blue-300 transition-colors">
+                            {feature.icon}
+                          </div>
+
+                          {/* Text */}
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold text-gray-800 leading-tight">
+                              {feature.label}
+                            </p>
+                            <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                              {feature.desc}
+                            </p>
+                          </div>
+
+                          {/* Accent dot */}
+                          <div className="flex-shrink-0 w-2 h-2 rounded-full bg-[#ca161e] mt-1.5 opacity-70 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    /* Fallback: original simple list from product.features if available */
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {product.features?.map((feature, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-start gap-2 text-gray-700"
+                        >
+                          <span className="text-[#ca161e] font-bold mt-1">
+                            ✓
+                          </span>
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
 
@@ -218,17 +249,10 @@ export default function ProductDetailPage() {
                   {t("products.productDetail.preOrder")}
                 </button>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <button
-                    onClick={handleDownloadSpec}
-                    className="border-2 border-[#0c439a] text-[#0c439a] py-3 px-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
-                  >
-                    <Download size={18} />
-                    {t("products.productDetail.downloadSpec")}
-                  </button>
+                <div className="space-y-4">
                   <button
                     onClick={handleShare}
-                    className="border-2 border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+                    className="w-full border-2 border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
                   >
                     <Share2 size={18} />
                     {isCopied
