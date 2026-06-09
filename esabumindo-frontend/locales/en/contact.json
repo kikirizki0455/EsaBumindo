@@ -61,14 +61,14 @@
     },
     "address": {
       "title": "Address",
-      "line1": "Jl. Contoh No. 123, Kelurahan XYZ",
-      "line2": "Jakarta Selatan, DKI Jakarta 12345",
+      "line1": "Pasar Kemis Main Road",
+      "line2": "Pasar Kemis, Tangerang, Banten",
       "line3": "Indonesia"
     },
     "phone": {
       "title": "Phone",
-      "number1": "+62 21 1234 5678",
-      "number2": "+62 812 3456 7890"
+      "number1": "( 021 ) 593 02226",
+      "number2": "+62 812-9840-7741"
     },
     "email": {
       "title": "Email",
