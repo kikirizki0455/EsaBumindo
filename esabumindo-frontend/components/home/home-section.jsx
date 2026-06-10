@@ -130,7 +130,7 @@ export const HomeSection = memo(function HomeSection() {
                   height={550}
                   className="w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] object-cover"
                   loading="lazy"
-                  quality={100}
+                  quality={80}
                 />
               </div>
             </div>

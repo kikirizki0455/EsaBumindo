@@ -1,17 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  compress: true, // ✅ Enable gzip compression
-  poweredByHeader: false, // ✅ Remove X-Powered-By header untuk security
-  productionBrowserSourceMaps: false, // ✅ Disable source maps di production
+  compress: true,
+  poweredByHeader: false,
+  productionBrowserSourceMaps: false,
 
-  // ✅ Turbopack configuration (replace webpack)
-  turbopack: {
-    // ✅ Empty config tells Next.js to use Turbopack defaults
-    // This is the recommended approach for most apps
-  },
+  // ✅ HAPUS turbopack — tidak kompatibel dengan i18n Pages Router
+  // turbopack: { },  ← DELETE INI
 
-  // ✅ Experimental features - Turbopack compatible
   experimental: {
     optimizePackageImports: [
       "lucide-react",
@@ -20,12 +16,10 @@ const nextConfig = {
     ],
   },
 
-  // ✅ Compiler options untuk smaller bundle
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },
 
-  // ✅ Image optimization
   images: {
     remotePatterns: [
       {
@@ -47,26 +41,22 @@ const nextConfig = {
         hostname: "*.esabumindo.com",
       },
     ],
-    minimumCacheTTL: 31536000, // ✅ 1 tahun cache untuk static images
+    minimumCacheTTL: 31536000,
     formats: ["image/avif", "image/webp"],
-    // ✅ Disable static imports optimization untuk flexibility
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    // ✅ Device sizes untuk responsive images
     deviceSizes: [640, 750, 828, 1080, 1200],
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
-    // ✅ Allowed quality values
     qualities: [75, 80],
   },
 
-  // ✅ i18n configuration untuk SEO multilingual
+  // ✅ i18n tetap di sini, tidak perlu diubah
   i18n: {
     locales: ["id", "en"],
     defaultLocale: "id",
-    localeDetection: false, // ✅ Disable auto-detection untuk consistency
+    localeDetection: false,
   },
 
-  // ✅ Headers untuk SEO dan performa
   async headers() {
     return [
       {
@@ -77,25 +67,12 @@ const nextConfig = {
             value:
               "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
           },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
-          {
-            key: "X-XSS-Protection",
-            value: "1; mode=block",
-          },
-          {
-            key: "Referrer-Policy",
-            value: "strict-origin-when-cross-origin",
-          },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "X-XSS-Protection", value: "1; mode=block" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
         ],
       },
-      // ✅ Assets static cache
       {
         source: "/static/:path*",
         headers: [
@@ -105,7 +82,6 @@ const nextConfig = {
           },
         ],
       },
-      // ✅ Static assets - long cache
       {
         source: "/_next/static/:path*",
         headers: [
@@ -115,7 +91,6 @@ const nextConfig = {
           },
         ],
       },
-      // ✅ Images cache
       {
         source: "/images/:path*",
         headers: [
@@ -134,7 +109,6 @@ const nextConfig = {
           },
         ],
       },
-      // ✅ API cache
       {
         source: "/api/:path*",
         headers: [
@@ -147,44 +121,20 @@ const nextConfig = {
     ];
   },
 
-  // ✅ Redirects untuk SEO
   async redirects() {
     return [
-      {
-        source: "/products",
-        destination: "/product",
-        permanent: true, // 301 redirect untuk SEO
-      },
-      {
-        source: "/tentang-kami",
-        destination: "/about",
-        permanent: true,
-      },
-      {
-        source: "/hubungi-kami",
-        destination: "/contact",
-        permanent: true,
-      },
-      {
-        source: "/artikel",
-        destination: "/article",
-        permanent: true,
-      },
+      { source: "/products", destination: "/product", permanent: true },
+      { source: "/tentang-kami", destination: "/about", permanent: true },
+      { source: "/hubungi-kami", destination: "/contact", permanent: true },
+      { source: "/artikel", destination: "/article", permanent: true },
     ];
   },
 
-  // ✅ Rewrites untuk clean URLs
   async rewrites() {
     return {
       beforeFiles: [
-        {
-          source: "/sitemap.xml",
-          destination: "/api/sitemap",
-        },
-        {
-          source: "/robots.txt",
-          destination: "/api/robots",
-        },
+        { source: "/sitemap.xml", destination: "/api/sitemap" },
+        { source: "/robots.txt", destination: "/api/robots" },
       ],
     };
   },

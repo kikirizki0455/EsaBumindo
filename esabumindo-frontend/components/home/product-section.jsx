@@ -58,7 +58,7 @@ const PRODUCT_CATEGORIES = [
 ];
 export const ProductSection = memo(function ProductSection() {
   const { t, isHydrated } = useTranslation();
-
+  const { locale } = useTranslation();
   // Skeleton saat belum hydrated
   if (!isHydrated) {
     return (
@@ -162,7 +162,7 @@ export const ProductSection = memo(function ProductSection() {
               <div className="grid grid-cols-2 gap-3">
                 {PRODUCT_CATEGORIES.map((cat) => {
                   // Tentukan locale dari hook router, atau fallback ke "id"
-                  const { locale } = useTranslation();
+
                   const currentLocale = locale ?? "id";
                   return (
                     <Link

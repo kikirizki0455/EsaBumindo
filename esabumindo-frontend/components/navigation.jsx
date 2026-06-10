@@ -129,6 +129,7 @@ const Navigation = () => {
                     fill
                     className="object-contain"
                     sizes="(max-width: 640px) 112px, (max-width: 1024px) 128px, 160px"
+                    priority
                   />
                 </div>
               </Link>

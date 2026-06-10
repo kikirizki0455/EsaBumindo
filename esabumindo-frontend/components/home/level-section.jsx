@@ -4,13 +4,11 @@ import { ArrowRight, TrendingUp, Zap } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { memo } from "react";
 
-// Use string path instead of static import for better code splitting
 const imgImagePt3 = "/asset/image/esabumindo-factory 1.webp";
 
 export const LevelSection = memo(function LevelSection() {
   const { t, isHydrated } = useTranslation();
 
-  // Skeleton saat belum hydrated
   if (!isHydrated) {
     return (
       <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-gradient-to-b from-gray-50 to-white">
@@ -30,7 +28,6 @@ export const LevelSection = memo(function LevelSection() {
 
   return (
     <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
-      {/* Decorative Background - Hidden on mobile for performance */}
       <div className="hidden md:block absolute top-20 left-0 w-72 h-72 bg-[#ff4136]/5 rounded-full blur-3xl" />
       <div className="hidden md:block absolute bottom-20 right-0 w-72 h-72 bg-[#060771]/5 rounded-full blur-3xl" />
 
@@ -49,7 +46,6 @@ export const LevelSection = memo(function LevelSection() {
                   loading="lazy"
                   quality={75}
                 />
-                {/* Stats Badge */}
                 <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl p-3 shadow-lg">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-[#ff4136]/10 rounded-lg flex items-center justify-center">
@@ -72,7 +68,6 @@ export const LevelSection = memo(function LevelSection() {
           {/* Right Content */}
           <div className="order-1 lg:order-2 space-y-6 md:space-y-8">
             <div className="max-w-2xl">
-              {/* Section Label */}
               <div className="inline-block mb-4 md:mb-6">
                 <span className="text-[#ff4136] text-xs sm:text-sm font-semibold uppercase tracking-wider px-4 py-2 bg-[#ff4136]/10 rounded-full flex items-center gap-2">
                   <Zap className="w-4 h-4" />
@@ -80,7 +75,6 @@ export const LevelSection = memo(function LevelSection() {
                 </span>
               </div>
 
-              {/* Main Heading */}
               <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] leading-tight font-bold mb-6 md:mb-8">
                 <span className="text-[#ff4136]">
                   {t("home.levelSection.title.line1")}
@@ -95,10 +89,8 @@ export const LevelSection = memo(function LevelSection() {
                 </span>
               </h2>
 
-              {/* Decorative Divider */}
               <div className="h-1 w-full bg-gradient-to-r from-[#ff4136] via-[#ff4136]/50 to-transparent rounded-full mb-6 md:mb-8" />
 
-              {/* Description Card */}
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg mb-6 md:mb-8">
                 <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-700">
                   {t("home.levelSection.description.text1")}
@@ -112,23 +104,24 @@ export const LevelSection = memo(function LevelSection() {
                 </p>
               </div>
 
-              {/* Features List - Simplified */}
+              {/* ✅ FIX: Gunakan full class string, bukan template dinamis */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 md:mb-8">
                 <FeatureItem
-                  color="ff4136"
+                  bgClass="bg-[#ff4136]/10"
+                  textClass="text-[#ff4136]"
                   title={t("home.levelSection.features.performance.title")}
                   subtitle={t(
                     "home.levelSection.features.performance.subtitle"
                   )}
                 />
                 <FeatureItem
-                  color="060771"
+                  bgClass="bg-[#060771]/10"
+                  textClass="text-[#060771]"
                   title={t("home.levelSection.features.efficiency.title")}
                   subtitle={t("home.levelSection.features.efficiency.subtitle")}
                 />
               </div>
 
-              {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                 <Link
                   href="/product"
@@ -152,15 +145,20 @@ export const LevelSection = memo(function LevelSection() {
   );
 });
 
-// Memoized FeatureItem component
-const FeatureItem = memo(function FeatureItem({ color, title, subtitle }) {
+// ✅ FIX: Props berubah dari `color` ke `bgClass` dan `textClass`
+const FeatureItem = memo(function FeatureItem({
+  bgClass,
+  textClass,
+  title,
+  subtitle,
+}) {
   return (
     <div className="flex items-start gap-3 bg-white/60 rounded-xl p-4 shadow-sm">
       <div
-        className={`w-8 h-8 bg-[#${color}]/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5`}
+        className={`w-8 h-8 ${bgClass} rounded-lg flex items-center justify-center shrink-0 mt-0.5`}
       >
         <svg
-          className={`w-5 h-5 text-[#${color}]`}
+          className={`w-5 h-5 ${textClass}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

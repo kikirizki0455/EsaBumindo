@@ -17,7 +17,7 @@ export default function Document() {
         <link rel="dns-prefetch" href="https://maps.googleapis.com" />
 
         {/* Preload critical assets */}
-    
+
         {/* Meta for mobile optimization */}
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
@@ -25,7 +25,7 @@ export default function Document() {
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
         {/* Favicon */}
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/asset/image/esabumindo.svg" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </Head>
       <body className="antialiased">
