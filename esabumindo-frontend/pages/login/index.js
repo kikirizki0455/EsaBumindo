@@ -29,8 +29,13 @@ export default function Login() {
       const data = await res.json();
 
       if (res.ok) {
-        // ✅ FIX: Simpan auth data ke localStorage
         setAuthData(data.access_token, data.user);
+
+        // ✅ Tambahan: set cookie supaya middleware bisa baca
+        document.cookie = `access_token=${data.access_token}; path=/; max-age=${
+          60 * 60 * 24 * 7
+        }; SameSite=Lax`;
+
         router.push("/admin");
       } else {
         alert(data.message || "Login gagal, periksa email dan password");

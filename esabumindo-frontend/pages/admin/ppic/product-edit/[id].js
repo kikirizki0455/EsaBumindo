@@ -4,9 +4,6 @@ import { useRouter } from "next/router";
 import { apiFetch } from "@/lib/api";
 import styles from "@/styles/admin.module.css";
 
-/**
- * Toast Notification Component
- */
 const Toast = ({ message, type, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -36,6 +33,7 @@ const Toast = ({ message, type, onClose }) => {
         display: "flex",
         alignItems: "center",
         gap: "12px",
+        animation: "slideIn 0.3s ease-out",
       }}
     >
       <span style={{ fontSize: "20px" }}>{icon}</span>
@@ -51,17 +49,29 @@ const Toast = ({ message, type, onClose }) => {
           borderRadius: "50%",
           cursor: "pointer",
           fontSize: "16px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         ×
       </button>
+      <style jsx>{`
+        @keyframes slideIn {
+          from {
+            transform: translateX(400px);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+      `}</style>
     </div>
   );
 };
 
-/**
- * Page: Edit Product with BOM/Formula
- */
 export default function ProductEditPage() {
   const router = useRouter();
   const { id } = router.query;
@@ -81,9 +91,8 @@ export default function ProductEditPage() {
     "VINYL",
     "DEMPUL",
     "WIP",
+    "BLENDING",
   ];
-
-  const steps = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
   const [formData, setFormData] = useState({
     code: "",
@@ -105,11 +114,28 @@ export default function ProductEditPage() {
     setToast({ message, type });
   };
 
+  // ─── Helper: round ke 2 desimal ───────────────────────────────────────────
+  const round2 = (val) => Math.round((val || 0) * 100) / 100;
+
+  // ─── Helper: hitung percentage dari QtyKg (4 desimal presisi, tampil 2) ──
+  const calcPct = (qtyKg, baseQty) => {
+    if (!baseQty || baseQty <= 0) return 0;
+    return (qtyKg / baseQty) * 100;
+  };
+
+  // ─── uniqueSteps: JAGA URUTAN kemunculan pertama, jangan pakai Set ────────
+  const uniqueSteps = bomDetails.reduce((acc, b) => {
+    if (b.step && b.step.trim() && !acc.includes(b.step)) {
+      acc.push(b.step);
+    }
+    return acc;
+  }, []);
+
   const fetchData = async () => {
     try {
       setLoading(true);
 
-      // Fetch materials
+      // Load materials
       const materialsRes = await apiFetch("/production/master/materials");
       if (materialsRes.ok) {
         const data = await materialsRes.json();
@@ -117,48 +143,89 @@ export default function ProductEditPage() {
           ? data
           : data.data || data.materials || [];
         setMaterials(materialsArray);
-      } else {
-        setMaterials(getDummyMaterials());
       }
 
-      // Fetch product detail
+      // Load product + BOM
       const productRes = await apiFetch(`/production/bom/${id}`);
       if (productRes.ok) {
         const productData = await productRes.json();
         setProduct(productData);
 
-        // Populate form
+        const baseQty = productData.baseQty || 5400;
+
         setFormData({
           code: productData.code || "",
           name: productData.name || "",
           type: productData.type || "PVAC",
           description: productData.description || "",
-          baseQty: productData.baseQty || 5400,
+          baseQty: baseQty,
         });
 
-        // Populate BOM details if exists
+        console.log("📥 RAW BOM dari API:", productData.bom?.details);
+
         if (
           productData.bom &&
           productData.bom.details &&
           productData.bom.details.length > 0
         ) {
-          setBomDetails(
-            productData.bom.details.map((detail, idx) => ({
-              id: detail.id || `${idx}`,
+          const mapped = productData.bom.details.map((detail, idx) => {
+            // ────────────────────────────────────────────────────────────────
+            // PRIORITAS AMBIL QtyKg:
+            // 1. Ambil langsung dari field QtyKg / qtyKg / qty_kg di API response
+            // 2. Fallback: hitung dari percentage (tapi ini bisa rounding error)
+            // ────────────────────────────────────────────────────────────────
+            let QtyKg;
+
+            if (detail.QtyKg != null && detail.QtyKg > 0) {
+              // API mengembalikan QtyKg langsung → pakai langsung, round 2 desimal
+              QtyKg = round2(detail.QtyKg);
+            } else if (detail.qtyKg != null && detail.qtyKg > 0) {
+              QtyKg = round2(detail.qtyKg);
+            } else if (detail.qty_kg != null && detail.qty_kg > 0) {
+              QtyKg = round2(detail.qty_kg);
+            } else {
+              // Fallback: reverse dari percentage
+              // Ini yang menyebabkan 2799.9999... → kita round ke 2 desimal
+              const pct = parseFloat(detail.percentage) || 0;
+              QtyKg = round2((pct / 100) * baseQty);
+            }
+
+            // percentage untuk display & validasi — dihitung dari QtyKg yang sudah di-round
+            const percentage = calcPct(QtyKg, baseQty);
+
+            console.log(
+              `Detail[${idx}] step=${detail.step} | ` +
+                `API.percentage=${detail.percentage} | ` +
+                `API.QtyKg=${
+                  detail.QtyKg ?? detail.qtyKg ?? detail.qty_kg ?? "N/A"
+                } | ` +
+                `→ QtyKg=${QtyKg} | pct=${percentage.toFixed(4)}%`
+            );
+
+            return {
+              id: detail.id || `gen-${idx}`,
               step: detail.step || "A",
               materialId: detail.materialId || "",
-              percentage: parseFloat(detail.percentage) || 0,
+              percentage: percentage, // float, untuk kalkulasi total
+              QtyKg: QtyKg, // float, round 2 desimal — sumber kebenaran
               notes: detail.notes || "",
-            }))
+            };
+          });
+
+          const totalPct = mapped.reduce((s, d) => s + d.percentage, 0);
+          console.log(
+            `📊 Total percentage setelah mapping: ${totalPct.toFixed(4)}%`
           );
+
+          setBomDetails(mapped);
         } else {
-          // No BOM, start with empty
           setBomDetails([
             {
               id: "1",
               step: "A",
               materialId: "",
               percentage: 0,
+              QtyKg: 0,
               notes: "",
             },
           ]);
@@ -167,27 +234,6 @@ export default function ProductEditPage() {
         showToast("Data produk berhasil dimuat", "success");
       } else {
         showToast("Gagal memuat data produk", "error");
-        // Use dummy
-        const dummyProduct = {
-          id: id,
-          code: "EB - 5502",
-          name: "EB - 5502",
-          type: "PVAC",
-          description: "",
-          baseQty: 5400,
-          bom: null,
-        };
-        setProduct(dummyProduct);
-        setFormData({
-          code: dummyProduct.code,
-          name: dummyProduct.name,
-          type: dummyProduct.type,
-          description: dummyProduct.description || "",
-          baseQty: dummyProduct.baseQty || 5400,
-        });
-        setBomDetails([
-          { id: "1", step: "A", materialId: "", percentage: 0, notes: "" },
-        ]);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -197,44 +243,33 @@ export default function ProductEditPage() {
     }
   };
 
-  const getDummyMaterials = () => [
-    { id: "m1", code: "W 01", name: "Water", unit: "kg" },
-    { id: "m2", code: "A 05", name: "Additive A", unit: "kg" },
-    { id: "m3", code: "V 03 A", name: "Vinyl A", unit: "kg" },
-    { id: "m4", code: "V 01 A", name: "Vinyl Comp A", unit: "kg" },
-    { id: "m5", code: "V 04 A", name: "Vinyl Comp B", unit: "kg" },
-    { id: "m6", code: "S 11", name: "Styrene", unit: "kg" },
-    { id: "m7", code: "B 02", name: "Binder", unit: "kg" },
-    { id: "m8", code: "K 03", name: "Catalyzer", unit: "kg" },
-  ];
-
   const handleAddStep = () => {
-    const newId = Math.random().toString(36);
-    const usedSteps = bomDetails.map((b) => b.step);
-    const nextStep = steps.find((s) => !usedSteps.includes(s)) || "A";
+    const step = prompt("Masukkan nama Step (contoh: A, B, C)");
+    if (!step) return;
 
     setBomDetails([
       ...bomDetails,
       {
-        id: newId,
-        step: nextStep,
+        id: Math.random().toString(36),
+        step: step.toUpperCase(),
         materialId: "",
         percentage: 0,
+        QtyKg: 0,
         notes: "",
       },
     ]);
   };
 
   const handleAddMaterialToStep = (stepId) => {
-    const newId = Math.random().toString(36);
     const parentStep = bomDetails.find((b) => b.id === stepId);
     setBomDetails([
       ...bomDetails,
       {
-        id: newId,
+        id: Math.random().toString(36),
         step: parentStep?.step || "A",
         materialId: "",
         percentage: 0,
+        QtyKg: 0,
         notes: "",
       },
     ]);
@@ -246,23 +281,42 @@ export default function ProductEditPage() {
 
   const handleBomDetailChange = (id, field, value) => {
     setBomDetails(
-      bomDetails.map((b) => (b.id === id ? { ...b, [field]: value } : b))
+      bomDetails.map((b) => {
+        if (b.id !== id) return b;
+
+        const updated = { ...b, [field]: value };
+
+        if (field === "QtyKg") {
+          // QtyKg adalah sumber kebenaran → hitung percentage dari sini
+          updated.percentage = calcPct(value, formData.baseQty);
+        }
+
+        return updated;
+      })
     );
   };
 
+  // ─── Total percentage: sum dari semua QtyKg / baseQty * 100 ───────────────
+  // Hitung dari QtyKg (bukan percentage field) agar konsisten
   const calculateTotalPercentage = () => {
-    return bomDetails.reduce(
-      (sum, detail) => sum + parseFloat(detail.percentage || 0),
+    if (!formData.baseQty || formData.baseQty <= 0) return 0;
+    const totalKg = bomDetails.reduce(
+      (sum, item) => sum + (Number(item.QtyKg) || 0),
       0
     );
+    return (totalKg / formData.baseQty) * 100;
+  };
+
+  const calculateTotalKg = () => {
+    return bomDetails.reduce((sum, item) => sum + (Number(item.QtyKg) || 0), 0);
   };
 
   const calculateMaterialNeeds = () => {
     const needs = {};
     bomDetails.forEach((detail) => {
-      if (detail.materialId && detail.percentage > 0) {
-        const needed = (formData.baseQty * detail.percentage) / 100;
-        needs[detail.materialId] = (needs[detail.materialId] || 0) + needed;
+      if (detail.materialId && (Number(detail.QtyKg) || 0) > 0) {
+        needs[detail.materialId] =
+          (needs[detail.materialId] || 0) + (Number(detail.QtyKg) || 0);
       }
     });
     return needs;
@@ -276,12 +330,20 @@ export default function ProductEditPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation
+    if (!formData.code.trim()) {
+      showToast("Kode produk harus diisi", "error");
+      return;
+    }
+    if (!formData.name.trim()) {
+      showToast("Nama produk harus diisi", "error");
+      return;
+    }
+
     const validBomDetails = bomDetails.filter(
-      (b) => b.materialId && b.percentage > 0
+      (b) => b.materialId && (Number(b.QtyKg) || 0) > 0
     );
     if (validBomDetails.length === 0) {
-      showToast("Minimal harus ada 1 material dengan persentase > 0", "error");
+      showToast("Minimal harus ada 1 material dengan qty > 0", "error");
       return;
     }
 
@@ -301,6 +363,7 @@ export default function ProductEditPage() {
       showToast("Menyimpan perubahan...", "info");
 
       const updateData = {
+        code: formData.code,
         name: formData.name,
         type: formData.type,
         description: formData.description,
@@ -308,7 +371,13 @@ export default function ProductEditPage() {
         bomDetails: validBomDetails.map((d) => ({
           materialId: d.materialId,
           step: d.step,
-          percentage: parseFloat(d.percentage),
+          // Kirim percentage yang dihitung dari QtyKg (bukan yang di-store)
+          percentage: parseFloat(
+            calcPct(d.QtyKg, formData.baseQty).toFixed(10)
+          ),
+          // Kirim QtyKg juga agar backend bisa simpan langsung tanpa reverse-calculate
+          QtyKg: d.QtyKg,
+          qtyKg: d.QtyKg,
           notes: d.notes || "",
         })),
       };
@@ -321,8 +390,16 @@ export default function ProductEditPage() {
         body: JSON.stringify(updateData),
       });
 
-      if (updateRes.ok) {
-        const responseData = await updateRes.json();
+      console.log("📥 Response status:", updateRes.status);
+
+      if (updateRes.ok || updateRes.status === 201) {
+        let responseData;
+        try {
+          responseData = await updateRes.json();
+        } catch (e) {
+          responseData = { success: true };
+        }
+
         console.log("✅ Produk berhasil diupdate:", responseData);
         showToast("✅ Produk & BOM berhasil diupdate!", "success");
 
@@ -333,13 +410,20 @@ export default function ProductEditPage() {
         let errorMessage = "Gagal update produk";
         try {
           const errorData = await updateRes.json();
-          errorMessage = errorData.message || errorMessage;
-        } catch (e) {}
+          errorMessage =
+            errorData.message || errorData.error || `Error ${updateRes.status}`;
+          console.error("❌ Error details:", errorData);
+        } catch (e) {
+          errorMessage = `Error ${updateRes.status}: ${updateRes.statusText}`;
+        }
         showToast(errorMessage, "error");
       }
     } catch (error) {
       console.error("❌ Error updating product:", error);
-      showToast(error.message || "Gagal update produk", "error");
+      showToast(
+        error.message || "Gagal update produk. Silakan coba lagi.",
+        "error"
+      );
     } finally {
       setSubmitting(false);
     }
@@ -359,12 +443,12 @@ export default function ProductEditPage() {
 
   const materialNeeds = calculateMaterialNeeds();
   const totalPercentage = calculateTotalPercentage();
+  const totalKg = calculateTotalKg();
   const hasBOM =
     product?.bom && product.bom.details && product.bom.details.length > 0;
 
   return (
     <div className={styles.container}>
-      {/* Toast Notification */}
       {toast && (
         <Toast
           message={toast.message}
@@ -377,6 +461,7 @@ export default function ProductEditPage() {
         <button
           className={styles.btnSecondary}
           onClick={handleBack}
+          style={{ display: "flex", alignItems: "center", gap: "8px" }}
           disabled={submitting}
         >
           ← Kembali
@@ -394,7 +479,6 @@ export default function ProductEditPage() {
         </div>
       </div>
 
-      {/* Alert for product without BOM */}
       {!hasBOM && (
         <div
           style={{
@@ -462,8 +546,6 @@ export default function ProductEditPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, type: e.target.value })
                 }
-                required
-                disabled={submitting}
               >
                 {productTypes.map((type) => (
                   <option key={type} value={type}>
@@ -474,16 +556,21 @@ export default function ProductEditPage() {
             </div>
 
             <div className={styles.formGroup}>
-              <label>Base Qty (kg)</label>
+              <label>Base Qty (kg) - untuk perhitungan persentase</label>
               <input
                 type="number"
                 value={formData.baseQty}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    baseQty: parseFloat(e.target.value) || 0,
-                  })
-                }
+                onChange={(e) => {
+                  const newBaseQty = parseFloat(e.target.value) || 0;
+                  setFormData({ ...formData, baseQty: newBaseQty });
+                  // Recalculate percentage semua baris saat baseQty berubah
+                  setBomDetails((prev) =>
+                    prev.map((b) => ({
+                      ...b,
+                      percentage: calcPct(b.QtyKg, newBaseQty),
+                    }))
+                  );
+                }}
                 min="0.01"
                 step="0.01"
                 disabled={submitting}
@@ -492,13 +579,14 @@ export default function ProductEditPage() {
           </div>
 
           <div className={styles.formGroup}>
-            <label>Deskripsi</label>
+            <label>Deskripsi (Optional)</label>
             <textarea
               value={formData.description}
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
               }
               rows={2}
+              placeholder="Deskripsi produk"
               disabled={submitting}
             />
           </div>
@@ -532,13 +620,13 @@ export default function ProductEditPage() {
                   <th style={{ minWidth: "60px" }}>NO</th>
                   <th style={{ minWidth: "200px" }}>MATERIAL</th>
                   <th style={{ minWidth: "100px" }}>QTY (%)</th>
-                  <th style={{ minWidth: "120px" }}>KEBUTUHAN (kg)</th>
+                  <th style={{ minWidth: "150px" }}>KEBUTUHAN (kg)</th>
                   <th style={{ minWidth: "150px" }}>NOTES</th>
                   <th style={{ minWidth: "80px" }}>AKSI</th>
                 </tr>
               </thead>
               <tbody>
-                {steps.map((step) => {
+                {uniqueSteps.map((step) => {
                   const stepItems = bomDetails.filter((b) => b.step === step);
                   if (stepItems.length === 0) return null;
 
@@ -583,32 +671,47 @@ export default function ProductEditPage() {
                               ))}
                             </select>
                           </td>
+
+                          {/* QTY % — dihitung dari QtyKg / baseQty, tampil 2 desimal */}
+                          <td
+                            style={{
+                              textAlign: "center",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {formData.baseQty > 0
+                              ? calcPct(
+                                  Number(detail.QtyKg) || 0,
+                                  formData.baseQty
+                                ).toFixed(2)
+                              : "0.00"}
+                            %
+                          </td>
+
+                          {/* KEBUTUHAN (kg) — input utama, 2 desimal */}
                           <td>
                             <input
                               type="number"
                               min="0"
                               step="0.01"
-                              max="100"
-                              value={detail.percentage}
+                              value={
+                                detail.QtyKg === 0 ? "" : detail.QtyKg ?? ""
+                              }
                               onChange={(e) =>
                                 handleBomDetailChange(
                                   detail.id,
-                                  "percentage",
-                                  parseFloat(e.target.value) || 0
+                                  "QtyKg",
+                                  parseFloat(
+                                    parseFloat(e.target.value || 0).toFixed(2)
+                                  ) || 0
                                 )
                               }
                               style={{ width: "100%", textAlign: "right" }}
                               disabled={submitting}
+                              placeholder="0.00"
                             />
                           </td>
-                          <td style={{ textAlign: "right", fontWeight: 600 }}>
-                            {detail.materialId && detail.percentage > 0
-                              ? (
-                                  (formData.baseQty * detail.percentage) /
-                                  100
-                                ).toFixed(2)
-                              : "-"}
-                          </td>
+
                           <td>
                             <input
                               type="text"
@@ -620,6 +723,7 @@ export default function ProductEditPage() {
                                   e.target.value
                                 )
                               }
+                              placeholder="Catatan"
                               style={{ width: "100%", fontSize: "12px" }}
                               disabled={submitting}
                             />
@@ -628,13 +732,12 @@ export default function ProductEditPage() {
                             <button
                               type="button"
                               onClick={() => handleRemoveBomDetail(detail.id)}
+                              className={styles.btnAction}
                               style={{
                                 background: "#ffe6e6",
                                 color: "#cc0000",
-                                border: "none",
                                 padding: "4px 8px",
-                                borderRadius: "4px",
-                                cursor: "pointer",
+                                fontSize: "12px",
                               }}
                               disabled={submitting}
                             >
@@ -643,6 +746,8 @@ export default function ProductEditPage() {
                           </td>
                         </tr>
                       ))}
+
+                      {/* Baris tambah material */}
                       <tr key={`add-${step}`}>
                         <td
                           colSpan="6"
@@ -650,6 +755,7 @@ export default function ProductEditPage() {
                             textAlign: "center",
                             padding: "8px",
                             background: "#f0f8ff",
+                            borderTop: "1px solid #ddd",
                           }}
                         >
                           <button
@@ -671,6 +777,7 @@ export default function ProductEditPage() {
                             ➕ Tambah Material ke Step {step}
                           </button>
                         </td>
+                        <td></td>
                       </tr>
                     </React.Fragment>
                   );
@@ -687,7 +794,7 @@ export default function ProductEditPage() {
               style={{ fontSize: "13px", padding: "8px 12px" }}
               disabled={submitting}
             >
-              ➕ Tambah Step Baru
+              ➕ Tambah Step
             </button>
           </div>
 
@@ -695,11 +802,10 @@ export default function ProductEditPage() {
           <div
             style={{
               padding: "15px",
-              background:
-                Math.abs(totalPercentage - 100) < 0.01 ? "#f0fff4" : "#fffbeb",
+              background: "#f9f9f9",
               borderRadius: "6px",
               borderLeft: `4px solid ${
-                Math.abs(totalPercentage - 100) < 0.01 ? "#10b981" : "#f59e0b"
+                Math.abs(totalPercentage - 100) < 0.01 ? "#00aa00" : "#ff9900"
               }`,
             }}
           >
@@ -726,13 +832,26 @@ export default function ProductEditPage() {
                     fontWeight: 700,
                     color:
                       Math.abs(totalPercentage - 100) < 0.01
-                        ? "#10b981"
-                        : "#f59e0b",
+                        ? "#00aa00"
+                        : "#ff9900",
                   }}
                 >
                   {totalPercentage.toFixed(2)}%
                   {Math.abs(totalPercentage - 100) < 0.01 && " ✓"}
                 </div>
+                {Math.abs(totalPercentage - 100) >= 0.01 && (
+                  <div
+                    style={{
+                      fontSize: "12px",
+                      color: "#ff9900",
+                      marginTop: "4px",
+                    }}
+                  >
+                    Selisih: {(100 - totalPercentage).toFixed(2)}% (
+                    {round2(((100 - totalPercentage) / 100) * formData.baseQty)}{" "}
+                    kg)
+                  </div>
+                )}
               </div>
 
               <div>
@@ -743,7 +862,7 @@ export default function ProductEditPage() {
                     marginBottom: "5px",
                   }}
                 >
-                  Total Material
+                  Total Material Dibutuhkan
                 </div>
                 <div
                   style={{
@@ -752,17 +871,19 @@ export default function ProductEditPage() {
                     color: "#0066cc",
                   }}
                 >
-                  {Object.values(materialNeeds)
-                    .reduce((a, b) => a + b, 0)
-                    .toFixed(2)}{" "}
-                  kg
+                  {round2(totalKg).toFixed(2)} kg
+                </div>
+                <div
+                  style={{ fontSize: "12px", color: "#999", marginTop: "4px" }}
+                >
+                  Base Qty: {formData.baseQty.toLocaleString()} kg
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Material Breakdown */}
+        {/* Section 3: Material Breakdown */}
         {Object.keys(materialNeeds).length > 0 && (
           <div
             style={{
@@ -776,32 +897,61 @@ export default function ProductEditPage() {
               📊 Kebutuhan Material Total
             </h3>
 
-            <div style={{ overflowX: "auto" }}>
-              <table className={styles.table}>
+            <div
+              style={{
+                overflowX: "auto",
+                borderRadius: "6px",
+                border: "1px solid #e0e0e0",
+              }}
+            >
+              <table className={styles.table} style={{ marginBottom: 0 }}>
                 <thead>
                   <tr>
                     <th>Material</th>
                     <th style={{ textAlign: "right" }}>Qty (kg)</th>
+                    <th style={{ textAlign: "right" }}>%</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.entries(materialNeeds).map(([materialId, qty]) => (
-                    <tr key={materialId}>
-                      <td style={{ fontWeight: 600 }}>
-                        {getMaterialName(materialId)}
-                      </td>
-                      <td style={{ textAlign: "right", fontWeight: 600 }}>
-                        {qty.toFixed(2)} kg
-                      </td>
-                    </tr>
-                  ))}
-                  <tr style={{ background: "#f9f9f9", fontWeight: 700 }}>
+                  {Object.entries(materialNeeds)
+                    .sort(([a], [b]) => a.localeCompare(b))
+                    .map(([materialId, qty]) => (
+                      <tr key={materialId}>
+                        <td style={{ fontWeight: 600 }}>
+                          {getMaterialName(materialId)}
+                        </td>
+                        <td style={{ textAlign: "right", fontWeight: 600 }}>
+                          {round2(qty).toFixed(2)} kg
+                        </td>
+                        <td style={{ textAlign: "right", color: "#666" }}>
+                          {formData.baseQty > 0
+                            ? calcPct(qty, formData.baseQty).toFixed(2)
+                            : "0.00"}
+                          %
+                        </td>
+                      </tr>
+                    ))}
+                  <tr
+                    style={{
+                      background: "#f9f9f9",
+                      fontWeight: 700,
+                      borderTop: "2px solid #0066cc",
+                    }}
+                  >
                     <td>TOTAL</td>
                     <td style={{ textAlign: "right" }}>
-                      {Object.values(materialNeeds)
-                        .reduce((a, b) => a + b, 0)
-                        .toFixed(2)}{" "}
-                      kg
+                      {round2(totalKg).toFixed(2)} kg
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "right",
+                        color:
+                          Math.abs(totalPercentage - 100) < 0.01
+                            ? "#00aa00"
+                            : "#ff9900",
+                      }}
+                    >
+                      {totalPercentage.toFixed(2)}%
                     </td>
                   </tr>
                 </tbody>
@@ -832,10 +982,10 @@ export default function ProductEditPage() {
           <button
             type="submit"
             className={styles.btnPrimary}
-            disabled={submitting || Math.abs(totalPercentage - 100) > 0.01}
+            disabled={submitting}
             style={{
-              opacity:
-                submitting || Math.abs(totalPercentage - 100) > 0.01 ? 0.6 : 1,
+              opacity: submitting ? 0.6 : 1,
+              cursor: submitting ? "not-allowed" : "pointer",
             }}
           >
             {submitting ? "⏳ Menyimpan..." : "✅ Simpan Perubahan"}

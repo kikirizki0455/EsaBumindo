@@ -36,7 +36,7 @@ export default function MasterDataViewer() {
   const loadMasterData = async () => {
     try {
       setLoading(true);
-      setError("");
+      setError("active tab error");
 
       if (activeTab === "products") {
         const data = await fetchProducts();

@@ -3,6 +3,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { apiFetch } from "@/lib/api";
 import styles from "@/styles/admin.module.css";
+import { set } from "date-fns";
 
 /**
  * Toast Notification Component
@@ -94,9 +95,8 @@ export default function ProductCreatePage() {
     "VINYL",
     "DEMPUL",
     "WIP",
+    "BLENDING",
   ];
-
-  const steps = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
   const [formData, setFormData] = useState({
     code: "",
@@ -111,7 +111,7 @@ export default function ProductCreatePage() {
       id: "1",
       step: "A",
       materialId: "",
-      percentage: 0,
+      qtyKg: "",
       notes: "",
     },
   ]);
@@ -136,8 +136,7 @@ export default function ProductCreatePage() {
         setMaterials(materialsArray);
         showToast("Material berhasil dimuat", "success");
       } else {
-        setMaterials(getDummyMaterials());
-        showToast("Menggunakan data dummy material", "info");
+        throw new Error(`Data Material gagal dimuat (Status: ${res.status})`);
       }
     } catch (error) {
       console.error("Error fetching materials:", error);
@@ -148,40 +147,22 @@ export default function ProductCreatePage() {
     }
   };
 
-  const getDummyMaterials = () => [
-    { id: "m1", code: "W 01", name: "Water", unit: "kg" },
-    { id: "m2", code: "A 05", name: "Additive A", unit: "kg" },
-    { id: "m3", code: "V 03 A", name: "Vinyl A", unit: "kg" },
-    { id: "m4", code: "V 01 A", name: "Vinyl Comp A", unit: "kg" },
-    { id: "m5", code: "V 04 A", name: "Vinyl Comp B", unit: "kg" },
-    { id: "m6", code: "S 11", name: "Styrene", unit: "kg" },
-    { id: "m7", code: "B 02", name: "Binder", unit: "kg" },
-    { id: "m8", code: "K 03", name: "Catalyzer", unit: "kg" },
-    { id: "m9", code: "M 17", name: "Monomer", unit: "kg" },
-    { id: "m10", code: "T 03", name: "Thinner A", unit: "liter" },
-    { id: "m11", code: "T 01", name: "Thinner B", unit: "liter" },
-    { id: "m12", code: "BP 13", name: "Pigment", unit: "kg" },
-    { id: "m13", code: "A 15", name: "Additive B", unit: "kg" },
-    { id: "m14", code: "P 02", name: "Polymer", unit: "kg" },
+  const uniqueSteps = [
+    ...new Set(bomDetails.map((b) => b.step).filter((s) => s && s.trim())),
   ];
-
   const handleAddStep = () => {
-    const newId = Math.random().toString(36);
-    const nextStep =
-      steps[
-        Math.min(
-          steps.indexOf(bomDetails[bomDetails.length - 1].step) + 1,
-          steps.length - 1
-        )
-      ];
+    const step = prompt("Masukkan Step");
+
+    if (!step) return;
 
     setBomDetails([
       ...bomDetails,
       {
-        id: newId,
-        step: nextStep,
+        id: Math.random().toString(36),
+        step: step.toUpperCase(),
         materialId: "",
         percentage: 0,
+        qtyKg: 0,
         notes: "",
       },
     ]);
@@ -196,6 +177,8 @@ export default function ProductCreatePage() {
         step: bomDetails.find((b) => b.id === stepId).step,
         materialId: "",
         percentage: 0,
+        qtyKg: 0,
+
         notes: "",
         parentId: stepId,
       },
@@ -208,15 +191,33 @@ export default function ProductCreatePage() {
 
   const handleBomDetailChange = (id, field, value) => {
     setBomDetails(
-      bomDetails.map((b) => (b.id === id ? { ...b, [field]: value } : b))
+      bomDetails.map((b) => {
+        if (b.id !== id) return b;
+
+        const updated = {
+          ...b,
+          [field]: value,
+        };
+
+        if (field === "qtyKg") {
+          updated.percentage =
+            formData.baseQty > 0 ? (value / formData.baseQty) * 100 : 0;
+        }
+
+        return updated;
+      })
     );
   };
 
   const calculateTotalPercentage = () => {
-    return bomDetails.reduce(
-      (sum, detail) => sum + parseFloat(detail.percentage || 0),
-      0
-    );
+    return bomDetails.reduce((sum, item) => {
+      const percentage =
+        formData.baseQty > 0
+          ? ((Number(item.qtyKg) || 0) / formData.baseQty) * 100
+          : 0;
+
+      return sum + percentage;
+    }, 0);
   };
 
   const calculateMaterialNeeds = () => {
@@ -249,7 +250,7 @@ export default function ProductCreatePage() {
     }
 
     const validBomDetails = bomDetails.filter(
-      (b) => b.materialId && b.percentage > 0
+      (b) => b.materialId && b.qtyKg > 0
     );
     if (validBomDetails.length === 0) {
       showToast("Minimal harus ada 1 material dengan persentase > 0", "error");
@@ -281,7 +282,7 @@ export default function ProductCreatePage() {
         bomDetails: validBomDetails.map((d) => ({
           materialId: d.materialId,
           step: d.step,
-          percentage: parseFloat(d.percentage),
+          qtyKg: parseFloat(d.qtyKg),
           notes: d.notes || "",
         })),
       };
@@ -514,7 +515,7 @@ export default function ProductCreatePage() {
                 </tr>
               </thead>
               <tbody>
-                {steps.map((step) => {
+                {uniqueSteps.map((step) => {
                   const stepItems = bomDetails.filter((b) => b.step === step);
                   if (stepItems.length === 0) return null;
 
@@ -560,30 +561,31 @@ export default function ProductCreatePage() {
                             </select>
                           </td>
                           <td>
+                            {formData.baseQty > 0
+                              ? (
+                                  ((Number(detail.qtyKg) || 0) /
+                                    formData.baseQty) *
+                                  100
+                                ).toFixed(2)
+                              : "0"}
+                            % %
+                          </td>
+                          <td style={{ textAlign: "right", fontWeight: 600 }}>
                             <input
                               type="number"
                               min="0"
                               step="0.01"
-                              max="100"
-                              value={detail.percentage}
+                              value={detail.qtyKg ?? ""}
                               onChange={(e) =>
                                 handleBomDetailChange(
                                   detail.id,
-                                  "percentage",
+                                  "qtyKg",
                                   parseFloat(e.target.value) || 0
                                 )
                               }
                               style={{ width: "100%", textAlign: "right" }}
                               disabled={submitting}
                             />
-                          </td>
-                          <td style={{ textAlign: "right", fontWeight: 600 }}>
-                            {detail.materialId && detail.percentage > 0
-                              ? (
-                                  (formData.baseQty * detail.percentage) /
-                                  100
-                                ).toFixed(2)
-                              : "-"}
                           </td>
                           <td>
                             <input
@@ -706,7 +708,7 @@ export default function ProductCreatePage() {
                         : "#ff9900",
                   }}
                 >
-                  {totalPercentage.toFixed(2)}%
+                  Total Percentage : {totalPercentage.toFixed(2)} %
                 </div>
               </div>
 

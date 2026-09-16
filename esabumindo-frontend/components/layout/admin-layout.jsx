@@ -80,6 +80,12 @@ const productionMenuItems = [
     href: "/admin/ppic/materials",
     description: "Stok bahan baku",
   },
+  {
+    title: "Stock product",
+    icon: "BarChart3",
+    href: "/admin/warehouse-product/stock",
+    description: "Laporan stok produk",
+  },
 ];
 
 export default function AdminLayout({ children }) {
@@ -130,10 +136,13 @@ export default function AdminLayout({ children }) {
   const handleLogout = async () => {
     try {
       await api.post("/auth/logout", {}, { withCredentials: true });
-      localStorage.removeItem("token");
-      router.push("/login");
     } catch (error) {
       console.error("Logout gagal:", error);
+    } finally {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userData");
+      document.cookie = "access_token=; path=/; max-age=0";
+      router.push("/login");
     }
   };
 
