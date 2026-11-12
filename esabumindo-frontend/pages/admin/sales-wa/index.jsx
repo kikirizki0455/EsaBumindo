@@ -23,17 +23,17 @@ const STRATEGIES = [
   {
     value: "ROUND_ROBIN",
     label: "Round Robin (giliran)",
-    desc: "Bergiliran satu per satu. Sales yang paling lama tidak dapat klik, dapat duluan. Paling sederhana dan paling mudah diaudit. Direkomendasikan jika semua sales setara.",
+    desc: "Bergiliran satu per satu. Sales yang paling lama tidak dapat lead baru, dapat duluan. Paling sederhana dan paling mudah diaudit. Direkomendasikan jika semua sales setara.",
   },
   {
     value: "WEIGHTED_ROUND_ROBIN",
     label: "Weighted Round Robin (giliran berbobot)",
-    desc: "Sama seperti giliran, tapi porsi mengikuti bobot. Bobot 2 = dapat 2x lebih banyak dari bobot 1. Cocok jika ada sales senior / junior atau part-time.",
+    desc: "Seperti giliran, tapi porsi mengikuti bobot. Bobot 2 = dapat 2x lebih banyak dari bobot 1. Cocok jika ada sales senior / junior atau part-time.",
   },
   {
     value: "LEAST_ASSIGNED",
-    label: "Least Assigned (paling sedikit 30 hari)",
-    desc: "Selalu ke sales dengan klik paling sedikit dalam 30 hari terakhir. Otomatis menyeimbangkan jika ada sales yang sempat nonaktif / cuti.",
+    label: "Least Assigned (lead paling sedikit)",
+    desc: "Selalu ke sales dengan lead baru paling sedikit sejak hitungan dimulai (maksimal 30 hari ke belakang). Hitungan dimulai ulang saat sales ditambah, diaktifkan lagi, atau bobot diubah, jadi sales baru tidak dibanjiri.",
   },
   {
     value: "RANDOM",
@@ -69,29 +69,41 @@ export default function SalesWaPage() {
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
 
-  const load = useCallback(async () => {
-    try {
-      setLoading(true);
-      const [s, st, c] = await Promise.all([
-        api.get("/wa/stats", { params: { days } }),
-        api.get("/wa/settings"),
-        api.get("/wa/clicks", { params: { limit: 30 } }),
-      ]);
-      setStats(s.data);
-      setSetting(st.data);
-      setSettingDraft(st.data);
-      setClicks(c.data);
-    } catch (err) {
-      console.error(err);
-      addToast("Gagal memuat data sales WhatsApp", "error");
-    } finally {
-      setLoading(false);
-    }
-  }, [days, addToast]);
+  // Naikkan refreshKey untuk memuat ulang data.
+  const [refreshKey, setRefreshKey] = useState(0);
+  const refresh = useCallback(() => setRefreshKey((k) => k + 1), []);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    let ignore = false;
+    Promise.all([
+      api.get("/wa/stats", { params: { days } }),
+      api.get("/wa/settings"),
+      api.get("/wa/clicks", { params: { limit: 30 } }),
+    ])
+      .then(([s, st, c]) => {
+        if (ignore) return;
+        setStats(s.data);
+        setSetting(st.data);
+        setSettingDraft(st.data);
+        setClicks(c.data);
+      })
+      .catch((err) => {
+        if (ignore) return;
+        console.error(err);
+        addToast("Gagal memuat data sales WhatsApp", "error");
+      })
+      .finally(() => {
+        if (!ignore) setLoading(false);
+      });
+    return () => {
+      ignore = true;
+    };
+  }, [days, refreshKey, addToast]);
+
+  const reload = () => {
+    setLoading(true);
+    refresh();
+  };
 
   // ---------- agent CRUD ----------
   const openCreate = () => {
@@ -101,7 +113,12 @@ export default function SalesWaPage() {
   };
   const openEdit = (a) => {
     setEditing(a);
-    setForm({ name: a.name, phone: a.phone, weight: a.weight, isActive: a.isActive });
+    setForm({
+      name: a.name,
+      phone: a.phone,
+      weight: a.weight,
+      isActive: a.isActive,
+    });
     setModalOpen(true);
   };
 
@@ -127,10 +144,13 @@ export default function SalesWaPage() {
         addToast("Sales ditambahkan", "success");
       }
       setModalOpen(false);
-      load();
+      refresh();
     } catch (err) {
       const msg = err.response?.data?.message;
-      addToast(Array.isArray(msg) ? msg.join(", ") : msg || "Gagal menyimpan", "error");
+      addToast(
+        Array.isArray(msg) ? msg.join(", ") : msg || "Gagal menyimpan",
+        "error",
+      );
     } finally {
       setSaving(false);
     }
@@ -139,18 +159,23 @@ export default function SalesWaPage() {
   const toggleActive = async (a) => {
     try {
       await api.patch(`/wa/sales/${a.id}`, { isActive: !a.isActive });
-      load();
+      refresh();
     } catch {
       addToast("Gagal mengubah status", "error");
     }
   };
 
   const removeAgent = async (a) => {
-    if (!window.confirm(`Hapus sales "${a.name}"? Riwayat kliknya ikut terhapus.`)) return;
+    if (
+      !window.confirm(
+        `Hapus sales "${a.name}"? Riwayat kliknya ikut terhapus. Untuk menghentikan sementara, pakai status Nonaktif.`,
+      )
+    )
+      return;
     try {
       await api.delete(`/wa/sales/${a.id}`);
       addToast("Sales dihapus", "success");
-      load();
+      refresh();
     } catch {
       addToast("Gagal menghapus", "error");
     }
@@ -158,11 +183,21 @@ export default function SalesWaPage() {
 
   // ---------- settings ----------
   const saveSetting = async () => {
+    const stickyDays = Number(settingDraft.stickyDays);
+    if (
+      String(settingDraft.stickyDays).trim() === "" ||
+      !Number.isInteger(stickyDays) ||
+      stickyDays < 0 ||
+      stickyDays > 365
+    ) {
+      addToast("Isi jumlah hari dengan angka 0 sampai 365", "warning");
+      return;
+    }
     try {
       setSavingSetting(true);
       const res = await api.patch("/wa/settings", {
         strategy: settingDraft.strategy,
-        stickyDays: Number(settingDraft.stickyDays) || 0,
+        stickyDays,
         greeting: settingDraft.greeting || "",
         fallbackPhone: settingDraft.fallbackPhone || "",
       });
@@ -171,7 +206,10 @@ export default function SalesWaPage() {
       addToast("Pengaturan rotasi disimpan", "success");
     } catch (err) {
       const msg = err.response?.data?.message;
-      addToast(Array.isArray(msg) ? msg.join(", ") : msg || "Gagal menyimpan", "error");
+      addToast(
+        Array.isArray(msg) ? msg.join(", ") : msg || "Gagal menyimpan",
+        "error",
+      );
     } finally {
       setSavingSetting(false);
     }
@@ -185,7 +223,9 @@ export default function SalesWaPage() {
       (setting.greeting || "") !== (settingDraft.greeting || "") ||
       (setting.fallbackPhone || "") !== (settingDraft.fallbackPhone || ""));
 
-  const currentStrategy = STRATEGIES.find((s) => s.value === settingDraft?.strategy);
+  const currentStrategy = STRATEGIES.find(
+    (s) => s.value === settingDraft?.strategy,
+  );
   const agents = stats?.agents || [];
 
   return (
@@ -194,14 +234,19 @@ export default function SalesWaPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Sales WhatsApp</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+              Sales WhatsApp
+            </h1>
             <p className="text-sm text-gray-500 mt-1">
-              Daftar sales penerima chat dari tombol WhatsApp di website dan aturan rotasinya
+              Daftar sales penerima chat dari tombol WhatsApp di website dan
+              aturan rotasinya
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={load} disabled={loading}>
-              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
+            <Button variant="outline" onClick={reload} disabled={loading}>
+              <RefreshCw
+                className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
+              />
               Muat ulang
             </Button>
             <Button onClick={openCreate}>
@@ -213,20 +258,30 @@ export default function SalesWaPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard icon={Users} color="blue" label="Total Sales" value={stats?.totalAgents ?? "-"} />
-          <StatCard icon={UserCheck} color="green" label="Sales Aktif" value={stats?.activeAgents ?? "-"} />
+          <StatCard
+            icon={Users}
+            color="blue"
+            label="Total Sales"
+            value={stats?.totalAgents ?? "-"}
+          />
+          <StatCard
+            icon={UserCheck}
+            color="green"
+            label="Sales Aktif"
+            value={stats?.activeAgents ?? "-"}
+          />
           <StatCard
             icon={MousePointerClick}
             color="emerald"
-            label={`Klik ${days} hari`}
-            value={stats?.totalClicks ?? "-"}
+            label={`Lead baru ${days} hari`}
+            value={stats?.newClicks ?? "-"}
           />
           <StatCard
             icon={Repeat}
             color="violet"
             label="Pengunjung kembali"
             value={stats?.stickyClicks ?? "-"}
-            hint="klik yang diarahkan ke sales yang sama"
+            hint="klik ulang, diarahkan ke sales yang sama"
           />
         </div>
 
@@ -234,19 +289,36 @@ export default function SalesWaPage() {
         {settingDraft && (
           <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Aturan Rotasi</h2>
-              <Button onClick={saveSetting} disabled={!settingDirty || savingSetting} size="sm">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Aturan Rotasi
+              </h2>
+              <Button
+                onClick={saveSetting}
+                disabled={!settingDirty || savingSetting}
+                size="sm"
+              >
                 <Save className="h-4 w-4 mr-2" />
                 {savingSetting ? "Menyimpan..." : "Simpan"}
               </Button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-700">Metode pembagian</label>
+                <label
+                  htmlFor="wa-strategy"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Metode pembagian
+                </label>
                 <select
+                  id="wa-strategy"
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white"
                   value={settingDraft.strategy}
-                  onChange={(e) => setSettingDraft({ ...settingDraft, strategy: e.target.value })}
+                  onChange={(e) =>
+                    setSettingDraft({
+                      ...settingDraft,
+                      strategy: e.target.value,
+                    })
+                  }
                 >
                   {STRATEGIES.map((s) => (
                     <option key={s.value} value={s.value}>
@@ -255,46 +327,78 @@ export default function SalesWaPage() {
                   ))}
                 </select>
                 {currentStrategy && (
-                  <p className="text-xs text-gray-500 mt-1">{currentStrategy.desc}</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {currentStrategy.desc}
+                  </p>
                 )}
               </div>
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="wa-sticky-days"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Pengunjung kembali ke sales yang sama selama (hari)
                 </label>
                 <input
+                  id="wa-sticky-days"
                   type="number"
                   min={0}
                   max={365}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
                   value={settingDraft.stickyDays}
-                  onChange={(e) => setSettingDraft({ ...settingDraft, stickyDays: e.target.value })}
+                  onChange={(e) =>
+                    setSettingDraft({
+                      ...settingDraft,
+                      stickyDays: e.target.value,
+                    })
+                  }
                 />
                 <p className="text-xs text-gray-500">
-                  0 = nonaktif. Pengunjung yang klik lagi dalam rentang ini diarahkan ke sales yang
-                  sama, supaya percakapan tidak terpecah ke dua sales.
+                  0 = nonaktif. Pengunjung yang klik lagi dalam rentang ini
+                  diarahkan ke sales yang sama, supaya percakapan tidak terpecah
+                  ke dua sales. Klik ulang ini tidak memakai giliran.
                 </p>
               </div>
               <div className="space-y-1 md:col-span-2">
-                <label className="text-sm font-medium text-gray-700">Pesan pembuka otomatis</label>
+                <label
+                  htmlFor="wa-greeting"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Pesan pembuka otomatis
+                </label>
                 <textarea
+                  id="wa-greeting"
                   rows={2}
                   maxLength={500}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
                   value={settingDraft.greeting || ""}
-                  onChange={(e) => setSettingDraft({ ...settingDraft, greeting: e.target.value })}
+                  onChange={(e) =>
+                    setSettingDraft({
+                      ...settingDraft,
+                      greeting: e.target.value,
+                    })
+                  }
                 />
               </div>
               <div className="space-y-1 md:col-span-2">
-                <label className="text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="wa-fallback"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Nomor fallback (dipakai jika tidak ada sales aktif)
                 </label>
                 <input
+                  id="wa-fallback"
                   type="text"
                   placeholder="08xxxxxxxxxx"
                   className="w-full md:w-72 border border-gray-300 rounded-md px-3 py-2 text-sm"
                   value={settingDraft.fallbackPhone || ""}
-                  onChange={(e) => setSettingDraft({ ...settingDraft, fallbackPhone: e.target.value })}
+                  onChange={(e) =>
+                    setSettingDraft({
+                      ...settingDraft,
+                      fallbackPhone: e.target.value,
+                    })
+                  }
                 />
               </div>
             </div>
@@ -304,7 +408,9 @@ export default function SalesWaPage() {
         {/* Agents table */}
         <div className="bg-white rounded-lg border border-gray-200">
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Daftar Sales</h2>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Daftar Sales
+            </h2>
             <select
               className="border border-gray-300 rounded-md px-2 py-1 text-sm bg-white"
               value={days}
@@ -319,7 +425,8 @@ export default function SalesWaPage() {
             <div className="p-8 text-center text-gray-500">Memuat...</div>
           ) : agents.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
-              Belum ada sales. Klik "Tambah Sales" untuk mendaftarkan nomor WhatsApp sales.
+              Belum ada sales. Klik tombol Tambah Sales untuk mendaftarkan nomor
+              WhatsApp sales.
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -327,19 +434,31 @@ export default function SalesWaPage() {
                 <thead className="bg-gray-50 text-gray-600">
                   <tr>
                     <th className="text-left px-4 py-3 font-medium">Nama</th>
-                    <th className="text-left px-4 py-3 font-medium">Nomor WA</th>
+                    <th className="text-left px-4 py-3 font-medium">
+                      Nomor WA
+                    </th>
                     <th className="text-center px-4 py-3 font-medium">Bobot</th>
-                    <th className="text-right px-4 py-3 font-medium">Klik {days}h</th>
-                    <th className="text-left px-4 py-3 font-medium w-48">Porsi (aktual / ideal)</th>
-                    <th className="text-left px-4 py-3 font-medium">Terakhir</th>
-                    <th className="text-center px-4 py-3 font-medium">Status</th>
+                    <th className="text-right px-4 py-3 font-medium">
+                      Lead baru {days}h
+                    </th>
+                    <th className="text-left px-4 py-3 font-medium w-48">
+                      Porsi (aktual / ideal)
+                    </th>
+                    <th className="text-left px-4 py-3 font-medium">
+                      Terakhir
+                    </th>
+                    <th className="text-center px-4 py-3 font-medium">
+                      Status
+                    </th>
                     <th className="px-4 py-3"></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {agents.map((a) => (
                     <tr key={a.id} className={!a.isActive ? "opacity-60" : ""}>
-                      <td className="px-4 py-3 font-medium text-gray-900">{a.name}</td>
+                      <td className="px-4 py-3 font-medium text-gray-900">
+                        {a.name}
+                      </td>
                       <td className="px-4 py-3 text-gray-700 font-mono">
                         <a
                           href={`https://wa.me/${a.phone}`}
@@ -351,11 +470,23 @@ export default function SalesWaPage() {
                         </a>
                       </td>
                       <td className="px-4 py-3 text-center">{a.weight}</td>
-                      <td className="px-4 py-3 text-right font-semibold">{a.clicksInWindow}</td>
-                      <td className="px-4 py-3">
-                        <ShareBar actual={a.sharePct} expected={a.expectedSharePct} />
+                      <td className="px-4 py-3 text-right">
+                        <span className="font-semibold">{a.newInWindow}</span>
+                        {a.returningInWindow > 0 && (
+                          <span className="block text-xs text-gray-400">
+                            +{a.returningInWindow} kembali
+                          </span>
+                        )}
                       </td>
-                      <td className="px-4 py-3 text-gray-600">{formatDateTime(a.lastAssignedAt)}</td>
+                      <td className="px-4 py-3">
+                        <ShareBar
+                          actual={a.sharePct}
+                          expected={a.expectedSharePct}
+                        />
+                      </td>
+                      <td className="px-4 py-3 text-gray-600">
+                        {formatDateTime(a.lastAssignedAt)}
+                      </td>
                       <td className="px-4 py-3 text-center">
                         <button
                           onClick={() => toggleActive(a)}
@@ -371,13 +502,21 @@ export default function SalesWaPage() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex justify-end gap-1">
-                          <Button variant="outline" size="sm" onClick={() => openEdit(a)}>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => openEdit(a)}
+                            aria-label={`Edit ${a.name}`}
+                            title="Edit"
+                          >
                             <Edit className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => removeAgent(a)}
+                            aria-label={`Hapus ${a.name}`}
+                            title="Hapus"
                             className="text-red-600 hover:bg-red-50"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -388,6 +527,11 @@ export default function SalesWaPage() {
                   ))}
                 </tbody>
               </table>
+              <p className="px-4 py-3 text-xs text-gray-500 border-t border-gray-100">
+                Porsi dihitung dari lead baru. Klik pengunjung kembali dicatat,
+                tapi tidak memakai giliran. Porsi ideal mengikuti metode yang
+                tersimpan.
+              </p>
             </div>
           )}
         </div>
@@ -395,7 +539,9 @@ export default function SalesWaPage() {
         {/* Recent clicks */}
         <div className="bg-white rounded-lg border border-gray-200">
           <div className="p-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Klik Terakhir</h2>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Klik Terakhir
+            </h2>
           </div>
           {clicks.length === 0 ? (
             <div className="p-8 text-center text-gray-500">Belum ada klik.</div>
@@ -407,7 +553,9 @@ export default function SalesWaPage() {
                     <th className="text-left px-4 py-2 font-medium">Waktu</th>
                     <th className="text-left px-4 py-2 font-medium">Sales</th>
                     <th className="text-left px-4 py-2 font-medium">Halaman</th>
-                    <th className="text-left px-4 py-2 font-medium">Pengunjung</th>
+                    <th className="text-left px-4 py-2 font-medium">
+                      Pengunjung
+                    </th>
                     <th className="text-left px-4 py-2 font-medium">Jenis</th>
                   </tr>
                 </thead>
@@ -417,8 +565,12 @@ export default function SalesWaPage() {
                       <td className="px-4 py-2 text-gray-600 whitespace-nowrap">
                         {formatDateTime(c.createdAt)}
                       </td>
-                      <td className="px-4 py-2 font-medium">{c.sales?.name || "-"}</td>
-                      <td className="px-4 py-2 text-gray-600 truncate max-w-[200px]">{c.page || "-"}</td>
+                      <td className="px-4 py-2 font-medium">
+                        {c.sales?.name || "-"}
+                      </td>
+                      <td className="px-4 py-2 text-gray-600 truncate max-w-[200px]">
+                        {c.page || "-"}
+                      </td>
                       <td className="px-4 py-2 text-gray-500 font-mono text-xs">
                         {c.visitorId ? c.visitorId.slice(0, 8) : "-"}
                       </td>
@@ -444,23 +596,46 @@ export default function SalesWaPage() {
 
       {/* Modal add/edit */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="wa-sales-modal-title"
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setModalOpen(false);
+          }}
+        >
           <form
             onSubmit={submitForm}
             className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 space-y-4"
           >
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold flex items-center gap-2">
+              <h3
+                id="wa-sales-modal-title"
+                className="text-lg font-semibold flex items-center gap-2"
+              >
                 <MessageCircle className="h-5 w-5 text-[#25D366]" />
                 {editing ? "Edit Sales" : "Tambah Sales"}
               </h3>
-              <button type="button" onClick={() => setModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+              <button
+                type="button"
+                onClick={() => setModalOpen(false)}
+                aria-label="Tutup"
+                className="text-gray-400 hover:text-gray-600"
+              >
                 <X className="h-5 w-5" />
               </button>
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">Nama</label>
+              <label
+                htmlFor="wa-sales-name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Nama
+              </label>
               <input
+                id="wa-sales-name"
+                maxLength={80}
                 className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -468,19 +643,34 @@ export default function SalesWaPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">Nomor WhatsApp</label>
+              <label
+                htmlFor="wa-sales-phone"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Nomor WhatsApp
+              </label>
               <input
+                id="wa-sales-phone"
+                inputMode="tel"
                 className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
                 placeholder="08xxxxxxxxxx atau 628xxxxxxxxx"
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
               />
-              <p className="text-xs text-gray-500">Disimpan otomatis dalam format 62xxxx.</p>
+              <p className="text-xs text-gray-500">
+                Disimpan otomatis dalam format 62xxxx.
+              </p>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-700">Bobot</label>
+                <label
+                  htmlFor="wa-sales-weight"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Bobot
+                </label>
                 <input
+                  id="wa-sales-weight"
                   type="number"
                   min={1}
                   max={100}
@@ -488,22 +678,32 @@ export default function SalesWaPage() {
                   value={form.weight}
                   onChange={(e) => setForm({ ...form, weight: e.target.value })}
                 />
-                <p className="text-xs text-gray-500">Dipakai di metode berbobot / random.</p>
+                <p className="text-xs text-gray-500">
+                  Dipakai di metode berbobot / random.
+                </p>
               </div>
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-700">Status</label>
+                <span className="block text-sm font-medium text-gray-700">
+                  Status
+                </span>
                 <label className="flex items-center gap-2 mt-2 text-sm">
                   <input
                     type="checkbox"
                     checked={form.isActive}
-                    onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
+                    onChange={(e) =>
+                      setForm({ ...form, isActive: e.target.checked })
+                    }
                   />
                   Aktif menerima chat
                 </label>
               </div>
             </div>
             <div className="flex justify-end gap-2 pt-2">
-              <Button type="button" variant="outline" onClick={() => setModalOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setModalOpen(false)}
+              >
                 Batal
               </Button>
               <Button type="submit" disabled={saving}>
@@ -532,7 +732,9 @@ function StatCard({ icon: Icon, color, label, value, hint }) {
           <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
           {hint && <p className="text-xs text-gray-400 mt-0.5">{hint}</p>}
         </div>
-        <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${colors[color]}`}>
+        <div
+          className={`w-12 h-12 rounded-lg flex items-center justify-center ${colors[color]}`}
+        >
           <Icon className="h-6 w-6" />
         </div>
       </div>
