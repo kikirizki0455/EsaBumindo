@@ -14,5 +14,9 @@
   },
   "footer": {
     "copyright": "© 2024 ESABOND. All rights reserved."
+  },
+  "whatsapp": {
+    "chatSales": "Chat Sales",
+    "title": "Contact Sales via WhatsApp"
   }
 }

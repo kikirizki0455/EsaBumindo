@@ -24,6 +24,7 @@ import {
   Sun,
   Moon,
   ChevronLeft,
+  MessageCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -52,6 +53,12 @@ const menuItems = [
     icon: DollarSign,
     href: "/admin/finance",
     description: "Gaji & keuangan",
+  },
+  {
+    title: "Sales WhatsApp",
+    icon: MessageCircle,
+    href: "/admin/sales-wa",
+    description: "Rotasi tombol chat WA",
   },
 ];
 
