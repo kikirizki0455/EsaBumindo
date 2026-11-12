@@ -16,6 +16,7 @@ import { EmployeesModule } from './employees/employees.module';
 import { AttendancesModule } from './attendances/attendances.module';
 import { SalariesModule } from './salaries/salaries.module';
 import { EmailModule } from './email/email.module';
+import { WhatsAppSalesModule } from './whatsapp-sales/whatsapp-sales.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { EmailModule } from './email/email.module';
     EmployeesModule,
     AttendancesModule,
     SalariesModule,
+    WhatsAppSalesModule,
     // ServeStaticModule HARUS PALING AKHIR untuk menghindari conflict
     // dengan API routes
     ServeStaticModule.forRoot({

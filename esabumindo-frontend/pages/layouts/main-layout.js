@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { memo } from "react";
+import WhatsAppFloatButton from "@/components/whatsapp-float-button";
 
 // Lazy load Navigation - critical tapi bisa di-optimize
 const Navigation = dynamic(() => import("@/components/navigation"), {
@@ -43,6 +44,7 @@ function MainLayout({ children }) {
       <Navigation />
       <main>{children}</main>
       <Footer />
+      <WhatsAppFloatButton />
     </>
   );
 }
