@@ -424,15 +424,15 @@ model StockMovement {
 
 enum WaRotationStrategy {
   ROUND_ROBIN          // giliran berurutan (least-recently-assigned)
-  WEIGHTED_ROUND_ROBIN // giliran berbobot: klik 30 hari / weight terkecil
-  LEAST_ASSIGNED       // sales dengan klik 30 hari paling sedikit
+  WEIGHTED_ROUND_ROBIN // giliran berbobot: lead baru / weight terkecil
+  LEAST_ASSIGNED       // sales dengan lead baru paling sedikit sejak rotationEpoch
   RANDOM               // acak berbobot
 }
 
 model SalesAgent {
   id             String    @id @default(uuid())
   name           String
-  phone          String    // tersimpan normal: 62xxxxxxxxxx
+  phone          String    @unique // tersimpan normal: 62xxxxxxxxxx
   isActive       Boolean   @default(true)
   weight         Int       @default(1) // bobot untuk strategi weighted / random
   sortOrder      Int       @default(0)
@@ -452,8 +452,8 @@ model WaClick {
   visitorId String?    // id anonim dari localStorage browser pengunjung
   page      String?    // halaman asal klik
   userAgent String?
-  ipHash    String?    // sha256(ip) — bukan IP mentah
-  sticky    Boolean    @default(false) // true jika dikembalikan ke sales yang sama (returning visitor)
+  ipHash    String?    // HMAC-SHA256(ip, rahasia server) — bukan IP mentah
+  sticky    Boolean    @default(false) // true = pengunjung kembali ke sales yang sama; tidak dihitung sebagai beban rotasi
   createdAt DateTime   @default(now())
 
   @@index([salesId, createdAt])
@@ -466,5 +466,8 @@ model WaSetting {
   stickyDays    Int                @default(7) // 0 = nonaktif
   greeting      String             @default("Halo, saya ingin bertanya tentang produk ESABOND.")
   fallbackPhone String?            // dipakai jika tidak ada sales aktif
+  // Awal hitungan beban untuk LEAST_ASSIGNED / WEIGHTED_ROUND_ROBIN.
+  // Digeser ke "sekarang" saat susunan sales, bobot, atau metode berubah.
+  rotationEpoch DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
 }
