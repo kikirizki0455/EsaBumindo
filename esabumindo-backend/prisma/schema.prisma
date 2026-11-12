@@ -417,3 +417,54 @@ model StockMovement {
  *   }
  * ]
  */
+// ============================================================
+// WhatsApp Sales Rotation
+// Tombol "Chat via WhatsApp" di website → dirotasi ke sales terdaftar
+// ============================================================
+
+enum WaRotationStrategy {
+  ROUND_ROBIN          // giliran berurutan (least-recently-assigned)
+  WEIGHTED_ROUND_ROBIN // giliran berbobot: klik 30 hari / weight terkecil
+  LEAST_ASSIGNED       // sales dengan klik 30 hari paling sedikit
+  RANDOM               // acak berbobot
+}
+
+model SalesAgent {
+  id             String    @id @default(uuid())
+  name           String
+  phone          String    // tersimpan normal: 62xxxxxxxxxx
+  isActive       Boolean   @default(true)
+  weight         Int       @default(1) // bobot untuk strategi weighted / random
+  sortOrder      Int       @default(0)
+  totalClicks    Int       @default(0)
+  lastAssignedAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  clicks         WaClick[]
+
+  @@index([isActive, sortOrder])
+}
+
+model WaClick {
+  id        String     @id @default(uuid())
+  salesId   String
+  sales     SalesAgent @relation(fields: [salesId], references: [id], onDelete: Cascade)
+  visitorId String?    // id anonim dari localStorage browser pengunjung
+  page      String?    // halaman asal klik
+  userAgent String?
+  ipHash    String?    // sha256(ip) — bukan IP mentah
+  sticky    Boolean    @default(false) // true jika dikembalikan ke sales yang sama (returning visitor)
+  createdAt DateTime   @default(now())
+
+  @@index([salesId, createdAt])
+  @@index([visitorId, createdAt])
+}
+
+model WaSetting {
+  id            String             @id @default("default")
+  strategy      WaRotationStrategy @default(ROUND_ROBIN)
+  stickyDays    Int                @default(7) // 0 = nonaktif
+  greeting      String             @default("Halo, saya ingin bertanya tentang produk ESABOND.")
+  fallbackPhone String?            // dipakai jika tidak ada sales aktif
+  updatedAt     DateTime           @updatedAt
+}
